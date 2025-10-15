@@ -23,7 +23,8 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    // 明确指定基础路径为根目录，增强可读性
+    history: createWebHistory('/'),
     routes,
 });
 
