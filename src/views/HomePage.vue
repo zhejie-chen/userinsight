@@ -13,9 +13,6 @@ import NewReleaseCard from '../components/cards/NewReleaseCard.vue';
       <PressConferenceCard />
       <OtaMapCard />
       <SalesCard />
-      <RegulationsCard />
-      <OverseasMapCard />
-      <NewReleaseCard />
-    </div>
+      <RegulationsCard /> <OverseasMapCard /> <NewReleaseCard />  </div>
   </main>
 </template>

@@ -32,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <a href="CoR.html" class="block">
+  <router-link to="/regulation" class="block">
     <div ref="interactiveCard" class="grid-item relative flex flex-col items-center pt-12 text-center overflow-hidden" style="background-color:#e0f2f7;">
       <svg class="background-wave" viewBox="0 0 1440 320">
         <path d="M0,224L60,208C120,192,240,160,360,165.3C480,171,600,213,720,208C840,203,960,155,1080,149.3C1200,144,1320,171,1380,184L1440,197L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
@@ -60,15 +60,13 @@ onMounted(() => {
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <style scoped>
-/* 【新增】还原放大镜鼠标指针效果 */
 .grid-item {
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%231d1d1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>'), auto;
 }
-
 .layered-card-container { perspective: 1000px; }
 .scene { width: 160px; height: 208px; position: relative; }
 @media (min-width: 768px) { .scene { width: 220px; height: 280px; } }

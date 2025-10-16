@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import OverseasMapPage from '../views/OverseasMapPage.vue';
 import NewReleasePage from '../views/NewReleasePage.vue';
+import RegulationPage from '../views/RegulationPage.vue'; // [新增] 导入新页面
 
 const routes = [
     {
@@ -18,12 +19,16 @@ const routes = [
         path: '/new-release',
         name: 'NewRelease',
         component: NewReleasePage,
-        meta: { hideHeader: true } // 在 meta 中添加一个标志，告诉 Header 隐藏自己
+        meta: { hideHeader: true }
+    },
+    { // [新增] 添加法规页面的路由
+        path: '/regulation',
+        name: 'Regulation',
+        component: RegulationPage,
     },
 ];
 
 const router = createRouter({
-    // 明确指定基础路径为根目录，增强可读性
     history: createWebHistory('/'),
     routes,
 });

@@ -1,0 +1,1336 @@
+{
+  "usa": [
+    {
+      "page": 17,
+      "sampleField": "天气、温度、空气质量集中在一个图标显示",
+      "referenceField": "天气、温度、空气质量图标分开显示",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "美国法规要求车辆明确显示车外空气质量（AQI），以提醒驾驶员外部环境风险（如雾霾或花粉浓度），而加拿大类似法规也强调分项信息的透明性。因此，独立图标设计符合北美对数据披露的严格要求",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 19,
+      "sampleField": "无",
+      "referenceField": "美国在需要进行声音检测的功能（包括语音命令）激活后显示在 Autopilot 自动辅助驾驶启用后驾驶室摄像头主动监测驾驶员是否注意力集中时显示",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 27,
+      "sampleField": "无",
+      "referenceField": "保持附件电源打开",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "后续版本全球推送更新",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 29,
+      "sampleField": "制动灯、驻车灯等指示灯采用图标+文字的组合",
+      "referenceField": "制动灯、驻车灯等指示灯设计为纯文字形式",
+      "sampleRegulation": "",
+      "referenceRegulation": "​​FMVSS 105、FMVSS 135",
+      "interpretation": "美国国家公路交通安全管理局（NHTSA）在2024年2月要求特斯拉将“刹车”“驻车”“ABS”等指示灯从图标改为纯文字形式，目的是通过更直接的文字描述提升信息传达的明确性，减少驾驶员的理解歧义",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 31,
+      "sampleField": "绿色ready起步灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 30038-2013",
+      "referenceRegulation": "",
+      "interpretation": "中国明确要求新能源汽车需通过​​颜色编码​​提示车辆状态。绿色Ready灯（如特斯拉中国版）作为“准备就绪”的视觉信号，弥补电动车无发动机噪音的缺陷，确保驾驶员明确车辆可行驶状态",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 31,
+      "sampleField": "低电量指示灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 18487.1-2015",
+      "referenceRegulation": "",
+      "interpretation": "中国采用《GB/T 18386》电动车工况测试标准，要求续航和电量显示需符合本地化规范（如更严格的低电量警示）。美国则依赖EPA测试标准，其续航计算方式可能弱化低电量视觉提示，更多依赖车机系统或APP通知",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 31,
+      "sampleField": "充电指示灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 18487.1-2015",
+      "referenceRegulation": "",
+      "interpretation": "中国强制规定电量警示需分等级提示，黄色指示灯在电量低于15%时触发，红色则用于紧急低电量（如<5%）",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 31,
+      "sampleField": "系统过热指示灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 30038-2013",
+      "referenceRegulation": "",
+      "interpretation": "中国明确要求新能源汽车需通过​​红色灯光​​提示严重故障状态。电机或电池过热时，红色指示灯强制点亮，要求驾驶员立即停车检修，避免因高温引发电池热失控等安全事故",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 31,
+      "sampleField": "系统故障指示灯​",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 18487.1-2015",
+      "referenceRegulation": "",
+      "interpretation": "中国规定红色故障灯用于指示高压系统、动力电池等核心部件的严重故障（如内部短路、BMS失效）。此类故障可能直接导致车辆瘫痪，需通过显性灯光警示用户停止操作",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 57,
+      "sampleField": "无",
+      "referenceField": "后备箱置物板",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "美国除标准版外出厂标配",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 71,
+      "sampleField": "无",
+      "referenceField": "所有乘客座椅位置均配有自动锁定牵\n开器 (ALR) 功能",
+      "sampleRegulation": "",
+      "referenceRegulation": "FMVSS No. 225",
+      "interpretation": "美国国家公路交通安全管理局（NHTSA）对儿童座椅固定系统（如LATCH接口）有严格规定，要求所有座位均需支持ALR功能，以确保儿童座椅在不同座位上的兼容性和安全性",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 99,
+      "sampleField": "无",
+      "referenceField": "膝部气囊",
+      "sampleRegulation": "",
+      "referenceRegulation": "FMVSS 208",
+      "interpretation": "美国联邦法规虽未直接规定膝部气囊，但通过FMVSS 208等标准强制要求车辆必须通过​​未系安全带的假人碰撞测试​​。膝部气囊被车企视为通过该测试的有效手段，因此美版特斯拉主动配备",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 101,
+      "sampleField": "手动控制副驾位前气囊",
+      "referenceField": "副驾位成员分类（OCS）",
+      "sampleRegulation": "",
+      "referenceRegulation": "FMVSS 208",
+      "interpretation": "美国乘员分类系统：乘员分类系统 (OCS) 符合 FMVSS 208 的监管要求，能够自动检测副驾位气囊什么时候不需要膨胀或副驾位气囊膨胀什么时候可能会有危害。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 105,
+      "sampleField": "无",
+      "referenceField": "自动呼叫911",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "无法规明确要求",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 111,
+      "sampleField": "不可查看",
+      "referenceField": "通过手机应用程序观看并分享行车记录仪和哨兵模式短片。",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "禁止通过互联网实时查看或分享车外摄像头拍摄的内容，以避免泄露路人隐私或敏感区域信息",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 119,
+      "sampleField": "无",
+      "referenceField": "ZOOM-App",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 121,
+      "sampleField": "无",
+      "referenceField": "MyQ智能车库",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 141,
+      "sampleField": "挂入倒挡音频音量暂时降低",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 37153-2018",
+      "referenceRegulation": "FMVSS 141",
+      "interpretation": "中国《GB/T 37153-2018 电动汽车低提示音》等法规要求电动车在低速（含倒车）时需优先确保行人警示音清晰可辨。美国法规（如FMVSS 141）虽要求警示音，但未强制要求媒体音量调整，因此保留原始设定。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 151,
+      "sampleField": "动态制动灯",
+      "referenceField": "无",
+      "sampleRegulation": "《乘用车制动系统技术要求试验方法》（GB 21670）",
+      "referenceRegulation": "FMVSS 108",
+      "interpretation": "中国新版《乘用车制动系统技术要求试验方法》（GB 21670）明确规定：自动控制系统触发的制动减速度＞1.3m/s²时，必须点亮制动灯​​（例如动能回收强减速场景）。动态制动灯（闪烁模式）被纳入合规方案，以警示后方车辆紧急减速。\n\n美国联邦法规（FMVSS 108）​​禁止非紧急情况下刹车灯闪烁​​，仅允许危险警示灯（双闪）在紧急制动时激活，且对动能回收减速的刹车灯触发阈值无统一强制要求",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 157,
+      "sampleField": "驻车辅助未启用",
+      "referenceField": "驻车辅助正常使用",
+      "sampleRegulation": "2021年《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "中国对智能汽车数据安全有严格规定（如2021年《汽车数据安全管理若干规》），要求涉及地理信息、环境影像等数据需本地存储。特斯拉可能因配合法规审查或调整数据处理流程（如从超声波雷达转向纯视觉方案），暂时限制了新车的驻车辅助功能，待通过软件更新完成合规适配",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 171,
+      "sampleField": "主动防护前罩",
+      "referenceField": "无",
+      "sampleRegulation": "C-NCAP",
+      "referenceRegulation": "",
+      "interpretation": "2021版C-NCAP规则​​明确将行人头部碰撞保护纳入评分体系，要求车辆在碰撞时通过技术手段（如弹起式引擎盖）降低行人头部伤害风险",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 177,
+      "sampleField": "低于 24 km/h 触发警示音",
+      "referenceField": "低于 32km/h 触发警示音",
+      "sampleRegulation": "GB/T 37153-2018",
+      "referenceRegulation": "FMVSS 331",
+      "interpretation": "中国《GB24550-2024汽车对行人的碰保护》与《GB/T 37153-2018》等法规对低速场景下的行人保护要求更严格，尤其针对城市复杂路况（如电动车密集区域），因此设定了较低的触发阈值。而美国遵循FMVSS 331法规，将标准设定为32 km/h（约20 mph），这与北美道路环境和行人行为模式更匹配",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 179,
+      "sampleField": "无",
+      "referenceField": "牵引和附件（拖车模式）",
+      "sampleRegulation": "​​《道路交通安全法》第十六条",
+      "referenceRegulation": "",
+      "interpretation": "中国《道路交通安全法实施条例》明确规定，私自加装拖车钩属于非法改装，可能导致年检失败、交警处罚甚至保险拒赔中国要求牵引故障车辆必须由专业清障车执行，普通车辆（包括特斯拉）不具备合法牵引资质",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 189,
+      "sampleField": "无",
+      "referenceField": "FSD智能辅助驾驶",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 189,
+      "sampleField": "无",
+      "referenceField": "交通信号灯和标志辅助控制",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 201,
+      "sampleField": "无",
+      "referenceField": "使用高承载车道开关",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 206,
+      "sampleField": "无",
+      "referenceField": "根据历史（或其他车主）数据动态调整匝道速度",
+      "sampleRegulation": "《关于加强智能网联汽车生企业及产品准入管理的意见》",
+      "referenceRegulation": "",
+      "interpretation": "根据工信部《关于加强智能网联汽车生企业及产品准入管理的意见》，智能汽车在境内产生的数据需存储在境内，向境外提供需通过安全评估。特斯拉的匝道车速匹配功能依赖全球车辆众包数据，但中国法规限制此类数据跨境传输，导致功能无法本地化部署。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 231,
+      "sampleField": "不可查看",
+      "referenceField": "召唤时手机查看车辆实时画面",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "禁止通过互联网实时查看或分享车外摄像头拍摄的内容，以避免泄露路人隐私或敏感区域信息",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 243,
+      "sampleField": "每次开始驾驶时，紧急车道偏离防避自动启用",
+      "referenceField": "由用户自行设置紧急车道偏离防避的开启或关闭，每次开车不会重置",
+      "sampleRegulation": "《智能网联汽车道路测试与范应用管理规范》",
+      "referenceRegulation": "",
+      "interpretation": "中国《智能网联汽车道路测试与范应用管理规范》等文件强调，涉及紧急避险的功能（如ELDA）需默认启用，以确保基础安全防护。这与中国的“安全优先”监管逻辑一致，要求车企在功能设计上减少用户误关闭的可能性\n\n美国NHTSA未强制要求ELDA默认开启，而是由车企根据市场反馈调整。特斯拉在美国更注重用户体验，允许用户永久关闭ELDA（需通过车机菜单），以适配不同驾驶风格（如赛道驾驶或越野场景）",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 249,
+      "sampleField": "自动紧急制动工作范围8 km/h 和 120 km/h",
+      "referenceField": "自动紧急制动工作范围5 km/h 和 200 km/h",
+      "sampleRegulation": "《GB/T 39901-2021》",
+      "referenceRegulation": "",
+      "interpretation": "中国现行标准《GB/T 39901-2021》对AEB的性能要求主要针对城市和城际场景，测试速度范围设定为​​8-120 km/h​​，重点覆盖常见交通事故高发区间（如低速追尾和高速跟车）。此外，C-NCAP 2021版测试规程仅评估该速度区间的AEB有效性，车企需优先满足本土认证需求\n\n美国国家公路交通安全管理局（NHTSA）对AEB的测试标准允许更高车速（200 km/h），且特斯拉通过算法升级（如多模态数据训练）将误触发率降低65%，因此保留宽范围功能",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 249,
+      "sampleField": "前撞预警会在每次开始驾驶时自动重置为适中",
+      "referenceField": "前撞预警会在每次开始驾驶时不会自动重置",
+      "sampleRegulation": "《智能网联汽车道路测试与应用管理规范》",
+      "referenceRegulation": "",
+      "interpretation": "中国《智能网联汽车道路测试与应用管理规范》等文件强调，涉及紧急避险的功能（如FCW）需默认启用，以确保基础安全防护。这与中国的“安全优先”监管逻辑一致，要求车企在功能设计上减少用户误关闭的可能性\n\n欧洲虽要求L2级辅助驾驶功能需默认开启，但FCW被归类为“预警功能”，允许用户自主设置是否长期启用。欧洲监管机构认为，过度强制干预可能引发用户对系统的不信任，因此赋予用户更高控制权",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 257,
+      "sampleField": "无",
+      "referenceField": "允许驾驶室摄像头分析",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "禁止通过互联网实时查看或分享车外摄像头拍摄的内容，以避免泄露路人隐私或敏感区域信息",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 259,
+      "sampleField": "无",
+      "referenceField": "驾驶室雷达",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 267,
+      "sampleField": "无",
+      "referenceField": "禁用哨兵模式警报音",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 277,
+      "sampleField": "无",
+      "referenceField": "同时启用了爱犬模式和哨兵模式，哨兵模式会默认设\n置为禁用哨兵模式警报音",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 277,
+      "sampleField": "无",
+      "referenceField": "开启爱犬模式可查看远程查看车辆内部情况",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "中国​​明确规定，车内摄像头采集的数据需本地存储，未经用户授权不得传输或远程访问",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 277,
+      "sampleField": "无",
+      "referenceField": "查看实时摄像头功能每天只能累积使用大约一小时",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "使用道路导航图标调整地图方向",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "无",
+      "referenceField": "天气叠加：在地图上叠加天气状况，并显示雨、雪等降水的移动情况",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "无",
+      "referenceField": "避开轮渡开关",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 293,
+      "sampleField": "无",
+      "referenceField": "避开快速路开关",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 293,
+      "sampleField": "无",
+      "referenceField": "设置到达百分比",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 293,
+      "sampleField": "下拉列表显示路线偏好选项",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 293,
+      "sampleField": "休息区选项",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 295,
+      "sampleField": "车牌限行",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 295,
+      "sampleField": "无",
+      "referenceField": "游玩和美食地图",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 295,
+      "sampleField": "无",
+      "referenceField": "第三方充电站导航",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 297,
+      "sampleField": "无",
+      "referenceField": "查看步行范围内的设施列表",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 297,
+      "sampleField": "解锁超充桩点位",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 301,
+      "sampleField": "网易云音乐",
+      "referenceField": "Tidal、YoutubeMusic",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 301,
+      "sampleField": "无",
+      "referenceField": "点击 HD® 播放所选频率的高清版内容",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 319,
+      "sampleField": "无",
+      "referenceField": "为减少使用率较高的超级充电站的拥堵，在不使用行程规划的情况下，您的最大充电量可能会限制为 80%",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 331,
+      "sampleField": "无",
+      "referenceField": "高压电池运行状况（电池健康）",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 335,
+      "sampleField": "无",
+      "referenceField": "保养概要",
+      "sampleRegulation": "《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "根据中国《汽车数据安全管理若干规》，车辆健康数据（如保养记录）需本地存储，且未经授权不得远程传输或分析。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 363,
+      "sampleField": "出厂强制",
+      "referenceField": "前车牌架（部分州需要）",
+      "sampleRegulation": "",
+      "referenceRegulation": "美国有29个州（如加州、纽约州）和华盛顿特区​​强制要求悬挂前车牌​​，未安装可能面临罚款（如加州罚单190美元，可减免至25美元）",
+      "interpretation": "",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 369,
+      "sampleField": "无",
+      "referenceField": "维护模式：为三方4S店提供",
+      "sampleRegulation": "《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "根据中国《汽车数据安全管理若干规》，车辆健康数据（如保养记录）需本地存储，且未经授权不得远程传输或分析。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 371,
+      "sampleField": "车辆规格",
+      "referenceField": "车辆规格",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "非智能化",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 525,
+      "sampleField": "事件数据记录器 (EDR)",
+      "referenceField": "事件数据记录器 (EDR)",
+      "sampleRegulation": "GB 39732-2020",
+      "referenceRegulation": "美国标准（NHTSA）",
+      "interpretation": "中国强制记录23项A级数据（如车速、制动踏板开关状态）和50项B级数据（如横向加速度、轮胎压力）\n其中中国EDR数据加密且不向车主开放，需通过公检法部门申请获取。仅公布9项参数且采样频率不一致\n\n美国强制记录15项数据（如制动踏板状态、纵向速度变化），另有30项自愿记录数据\n其中北美地区车主可付费（1200美元）购买数据线，通过特斯拉账户自主下载EDR数据，软件免费但需特斯拉服务器解密。数据包含碰撞前后5秒的详细参数（如方向盘角度、电机转速），采样频率达5Hz（车速）",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 525,
+      "sampleField": "无",
+      "referenceField": "声音检测（识别紧急车辆警笛声如救护车，并自动降低媒体音量）",
+      "sampleRegulation": "",
+      "referenceRegulation": "FMVSS 141",
+      "interpretation": "美国强制要求低速警示音及安全功能扩展，推动声音检测技术的应用；中国则因法规空白和隐私限制，未引入同类功能。此外，特斯拉在两地市场的硬件配置（如外部扬声器）和用户数据政策也不同",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 527,
+      "sampleField": "对于中国大陆交付的车辆，如您选择简体中文之外的语言作为您\n在车辆触摸屏、Tesla 手机应用程序等界面的使用语言或本车主\n手册的阅读语言，其他语言和简体中文不一致之处以简体中文的表述为准",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 527,
+      "sampleField": "无",
+      "referenceField": "加州65号提案",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": false
+    }
+  ],
+  "europe": [
+    {
+      "page": 19,
+      "sampleField": "天气、温度、空气质量集中在一个图标显示",
+      "referenceField": "天气、温度、空气质量图标分开显示",
+      "sampleRegulation": "",
+      "referenceRegulation": "EU 2024/2881和欧7标准",
+      "interpretation": "欧盟2024年修订的《环境空气质量和清洁空气令》(EU 2024/2881)明确要求对PM2.5、NO2等污染物设立实时监测阈值，并强制成员国建立\"超级监测站\"网络。该指令特别强调​​空气质量数据的透明化展示​​，要求车载系统必须能独立显示关键污染物浓度（如PM2.5需单独标注是否超过25μg/m³的法定限值）。2024年通过的欧7标准首次将制动颗粒物(PM10)纳入监管，并规定电动汽车需实时显示​​分项排放数据​​。标准第14条明确要求：\"车载人机界面应确保驾驶员无需进入次级菜单即可获取核心环境参数\"，这直接促使特斯拉在欧洲采用分栏式UI设计。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 19,
+      "sampleField": "无",
+      "referenceField": "SOS呼叫",
+      "sampleRegulation": "",
+      "referenceRegulation": "《eCall法规》(EU 2015/758)",
+      "interpretation": "根据欧盟2018年实施的《eCall法规》(EU 2015/758)，所有在欧销售的新车必须配备​​独立物理按键的SOS系统​​，且需满足：\n碰撞后自动触发紧急呼叫（即使乘员失去意识）\n实时传输事故坐标至当地急救中心（定位精度需达±15米）\n系统需通过欧盟RED无线电设备指令认证（含备用电源要求）",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 23,
+      "sampleField": "无",
+      "referenceField": "键盘语言",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 23,
+      "sampleField": "无",
+      "referenceField": "区域格式",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 27,
+      "sampleField": "无",
+      "referenceField": "保持附件电源打开",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "后续版本全球推送更新",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 33,
+      "sampleField": "无",
+      "referenceField": "拖车模式",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 33,
+      "sampleField": "绿色ready起步灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 30038-2013",
+      "referenceRegulation": "",
+      "interpretation": "中国明确要求新能源汽车需通过​​颜色编码​​提示车辆状态。绿色Ready灯（如特斯拉中国版）作为“准备就绪”的视觉信号，弥补电动车无发动机噪音的缺陷，确保驾驶员明确车辆可行驶状态",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 33,
+      "sampleField": "低电量指示灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 18487.1-2015",
+      "referenceRegulation": "",
+      "interpretation": "中国采用《GB/T 18386》电动车工况测试标准，要求续航和电量显示需符合本地化规范（如更严格的低电量警示）。美国则依赖EPA测试标准，其续航计算方式可能弱化低电量视觉提示，更多依赖车机系统或APP通知",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 33,
+      "sampleField": "充电指示灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 18487.1-2015",
+      "referenceRegulation": "",
+      "interpretation": "中国强制规定电量警示需分等级提示，黄色指示灯在电量低于15%时触发，红色则用于紧急低电量（如<5%）",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 33,
+      "sampleField": "系统过热指示灯",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 30038-2013",
+      "referenceRegulation": "",
+      "interpretation": "中国明确要求新能源汽车需通过​​红色灯光​​提示严重故障状态。电机或电池过热时，红色指示灯强制点亮，要求驾驶员立即停车检修，避免因高温引发电池热失控等安全事故",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 33,
+      "sampleField": "系统故障指示灯​",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 18487.1-2015",
+      "referenceRegulation": "",
+      "interpretation": "中国规定红色故障灯用于指示高压系统、动力电池等核心部件的严重故障（如内部短路、BMS失效）。此类故障可能直接导致车辆瘫痪，需通过显性灯光警示用户停止操作",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 33,
+      "sampleField": "无",
+      "referenceField": "自动变道可用图标",
+      "sampleRegulation": "",
+      "referenceRegulation": "UN R79",
+      "interpretation": "根据UN R79法规，L2级辅助驾驶的自动变道必须经过驾驶员确认（如打转向灯或拨动拨杆），因此欧版特斯拉会在界面上显示​​变道建议图标​​，提示驾驶员手动确认",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 63,
+      "sampleField": "无",
+      "referenceField": "后备箱置物板",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 63,
+      "sampleField": "无",
+      "referenceField": "货物固定装置",
+      "sampleRegulation": "",
+      "referenceRegulation": "欧盟部分国家法规",
+      "interpretation": "部分欧洲国家（如挪威、瑞典）将拖车挂钩等配件列为标准配置或免费选项，以满足当地用户对货运和户外活动的需求",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 81,
+      "sampleField": "暂时禁用后部座位的座椅安全带提醒器",
+      "referenceField": "强制功能不可暂时禁用",
+      "sampleRegulation": "",
+      "referenceRegulation": "​​ECE R16​​",
+      "interpretation": "​​欧洲​​：根据​​ECE R16​​等联合国欧洲经济委员会法规，安全带提醒系统（SBR）是强制功能，且必须持续激活以确保乘客安全",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 0,
+      "sampleField": "无",
+      "referenceField": "行车记录仪",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 131,
+      "sampleField": "无",
+      "referenceField": "日历：活动路线提醒",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 131,
+      "sampleField": "无",
+      "referenceField": "app：zoom",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 139,
+      "sampleField": "无",
+      "referenceField": "被动进入功能关闭",
+      "sampleRegulation": "",
+      "referenceRegulation": "(EU) 2019/2144号法规",
+      "interpretation": "欧盟法规强调防止未授权驾驶。若车辆检测到驾驶员长时间未操作（如未踩刹车），系统可能判定为异常状态，需通过物理钥匙二次验证以降低盗抢风险。这与欧盟对车辆主动安全的高标准一致。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 157,
+      "sampleField": "挂入倒挡音频音量暂时降低",
+      "referenceField": "无",
+      "sampleRegulation": "GB/T 37153-2018",
+      "referenceRegulation": "UN R138",
+      "interpretation": "中国《GB/T 37153-2018 电动汽车低提示音》等法规要求电动车在低速（含倒车）时需优先确保行人警示音清晰可辨。\n\n欧盟更强调外部警示音强度，对车内音频干扰的调整未作强制要求",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 161,
+      "sampleField": "低光照条件或雨刮器启用时自动开启外部灯光",
+      "referenceField": "无",
+      "sampleRegulation": "《机动车运行安全技术条件》（GB 7258）",
+      "referenceRegulation": "",
+      "interpretation": "中国《机动车运行安全技术条件》（GB 7258）明确要求车辆在​​低光照条件或雨刮器启用时自动开启外部灯光​​，以提高能见度和行车安全。而欧盟法规（如UN ECE R48）虽对车灯自动控制有通用要求，但未强制规定雨刮联动功能",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 175,
+      "sampleField": "驻车辅助未启用",
+      "referenceField": "驻车辅助正常使用",
+      "sampleRegulation": "2021年《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "中国对智能汽车数据安全有严格规定（如2021年《汽车数据安全管理若干规》），要求涉及地理信息、环境影像等数据需本地存储。特斯拉可能因配合法规审查或调整数据处理流程（如从超声波雷达转向纯视觉方案），暂时限制了新车的驻车辅助功能，待通过软件更新完成合规适配",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 183,
+      "sampleField": "加速模式",
+      "referenceField": "根据地区，可能未配备加速模式调整",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "欧洲各国对车辆性能的监管严格，部分国家（如德国、法国）可能要求特斯拉通过软件限制高性能加速模式（如“狂暴模式”），以避免激进驾驶带来的安全风险。部分国家要求动能回收强度降低，可能连带影响加速模式逻辑。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 195,
+      "sampleField": "低于 24 km/h 触发警示音",
+      "referenceField": "低于 33km/h 触发警示音",
+      "sampleRegulation": "GB/T 37153-2018",
+      "referenceRegulation": "（EU）540/2014",
+      "interpretation": "遵循欧盟（EU）540/2014法规和联合国R138标准，要求电动车在​​≤20km/h​​时必须开启警示音（AVAS系统）。但部分欧洲国家（如德国）允许车企根据实际道路安全需求扩展至更高车速，特斯拉可能将触发上限设为33km/h以覆盖更多潜在风险场景（如城市复杂路况）",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 197,
+      "sampleField": "无",
+      "referenceField": "牵引和附件（拖车模式）",
+      "sampleRegulation": "​​《道路交通安全法》第十六条",
+      "referenceRegulation": "",
+      "interpretation": "中国《道路交通安全法实施条例》明确规定，私自加装拖车钩属于非法改装，可能导致年检失败、交警处罚甚至保险拒赔中国要求牵引故障车辆必须由专业清障车执行，普通车辆（包括特斯拉）不具备合法牵引资质",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 217,
+      "sampleField": "无",
+      "referenceField": "自动变道功能强制要求驾驶员保持双手在方向盘上",
+      "sampleRegulation": "",
+      "referenceRegulation": "UN R79 & (EU) 2019/2144",
+      "interpretation": "根据联合国UN R79法规（特别是C类ACSF条款）和欧盟(EU) 2019/2144通用安全法规（GSR），欧洲将自动变道功能明确归类为​​L2级辅助驾驶​​，要求：\n\n​​变道前需驾驶员手动确认​​（如拨动转向杆）\n​​变道过程中需持续检测方向盘握持​​，若3秒内未检测到手部接触，系统会触发光学警告并暂停功能\n​​变道操作必须在5秒内完成​​（M1/N1类车辆），超时自动取",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 217,
+      "sampleField": "驶出超车道、要求变道确认、变道提醒",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "UN R79 & (EU) 2019/2144",
+      "interpretation": "根据联合国UN R79法规（特别是C类ACSF条款）和欧盟(EU) 2019/2144通用安全法规（GSR），欧洲将自动变道功能明确归类为​​L2级辅助驾驶​​，要求：\n\n​​变道前需驾驶员手动确认​​（如拨动转向杆），所以特斯拉在该地区新增自动变道可用图标，用户看到此图标亮起后，拨动转向杆确认变道，属于功能半阉割",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 219,
+      "sampleField": "无",
+      "referenceField": "当系统发出变道确认消息时，车主3秒未确认会发出提醒，5秒未确认会退出自动变道",
+      "sampleRegulation": "",
+      "referenceRegulation": "UN R79 & (EU) 2019/2144",
+      "interpretation": "根据联合国UN R79法规（特别是C类ACSF条款）和欧盟(EU) 2019/2144通用安全法规（GSR），欧洲将自动变道功能明确归类为​​L2级辅助驾驶​​，要求：\n\n​​变道前需驾驶员手动确认​​（如拨动转向杆）\n​​变道过程中需持续检测方向盘握持​​，若3秒内未检测到手部接触，系统会触发光学警告并暂停功能\n​​变道操作必须在5秒内完成​​（M1/N1类车辆），超时自动取",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 225,
+      "sampleField": "无",
+      "referenceField": "根据历史（或其他车主）数据动态调整匝道速度",
+      "sampleRegulation": "《关于加强智能网联汽车生企业及产品准入管理的意见》",
+      "referenceRegulation": "",
+      "interpretation": "根据工信部《关于加强智能网联汽车生企业及产品准入管理的意见》，智能汽车在境内产生的数据需存储在境内，向境外提供需通过安全评估。特斯拉的匝道车速匹配功能依赖全球车辆众包数据，但中国法规限制此类数据跨境传输，导致功能无法本地化部署。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 225,
+      "sampleField": "无",
+      "referenceField": "开启巡航后系统不会在非超车道进行超车When cruising 80 km/h or faster, Model Y must be in a passing lane to pass a vehicle. If you are in a non-passing lane (to the right of a vehicle in right-hand traffic, or to the left of a vehicle in left-hand traffic), Traffic-Aware Cruise Control prevents you from passing other vehicles. Instead, Model Y slows down to match the vehicle’s speed as if it were in the same lane. If you press the accelerator pedal to pass a vehicle, Traffic-Aware Cruise Control allows you to continue passing vehicles when cruising in the non-passing lane, until you either change lanes or cancel and resume cruising (it then prevents you from passing vehicles in a non passing lane again). You are responsible for complying with all local laws regarding passing other road users and using non-passing lanes",
+      "sampleRegulation": "",
+      "referenceRegulation": "UNECE R79",
+      "interpretation": "欧洲遵循联合国欧洲经济委员会（UNECE）的法规，例如第79号条例（UNECE R79），对自动驾驶系统的功能有严格限制。该法规要求辅助驾驶系统必须符合“驾驶员始终控制车辆”的原则，禁止系统鼓励或执行可能违反交通规则的行为（如在非超车车道超车）",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 247,
+      "sampleField": "使用召唤功能时，需用户在手机上长按才能继续移动",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "​​UNECE R79",
+      "interpretation": "欧洲允许L2级系统在特定场景下（如私人停车场）执行短距离自主移动，无需持续人工干预。欧洲版召唤功能默认松开按钮后车辆仍可继续完成动作，符合其“有限自主性”的法规框架",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 247,
+      "sampleField": "召唤功能工作范围85米",
+      "referenceField": "召唤功能工作范围6米",
+      "sampleRegulation": "",
+      "referenceRegulation": "​​UNECE R79",
+      "interpretation": "欧洲遵循联合国欧洲经济委员会（UNECE）第79号条例，明确要求自动驾驶功能需在​​操作员6米范围内​​使用，以确保实时人工干预能力。这一规定直接限制了欧洲版召唤功能的有效范围，且功能仅限私人区域（如停车场）使用",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 249,
+      "sampleField": "不可查看",
+      "referenceField": "召唤时手机查看车辆实时画面",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "中国禁止通过互联网实时查看或分享车外摄像头拍摄的内容，以避免泄露路人隐私或敏感区域信息",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 261,
+      "sampleField": "设置车道偏离防避为关",
+      "referenceField": "不可将车道偏离防避设置为关",
+      "sampleRegulation": "",
+      "referenceRegulation": "​​UNECE R79",
+      "interpretation": "欧洲遵循联合国欧洲经济委员会（UNECE）第79号条例，明确要求车辆必须配备​​车道保持辅助系统​​，且该系统在车辆启动时​​默认开启​​，驾驶员只能临时关闭（单次驾驶周期内有效），无法永久关闭。这一规定旨在确保驾驶员始终获得基础安全辅助，减少因人为疏忽导致的车道偏离事故。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 263,
+      "sampleField": "每次开始驾驶时，紧急车道偏离防避自动启用",
+      "referenceField": "由用户自行设置紧急车道偏离防避的开启或关闭，每次开车不会重置",
+      "sampleRegulation": "《智能网联汽车道路测试与范应用管理规范》",
+      "referenceRegulation": "",
+      "interpretation": "中国《智能网联汽车道路测试与范应用管理规范》等文件强调，涉及紧急避险的功能（如ELDA）需默认启用，以确保基础安全防护。这与中国的“安全优先”监管逻辑一致，要求车企在功能设计上减少用户误关闭的可能性\n\n欧洲虽要求L2级辅助驾驶功能需默认开启（如车道保持辅助），但ELDA被归类为“紧急干预功能”，允许用户自主设置是否长期启用。欧洲监管机构认为，过度强制干预可能引发用户对系统的不信任，因此赋予用户更高控制权",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 267,
+      "sampleField": "前撞预警会在每次开始驾驶时自动重置为适中",
+      "referenceField": "前撞预警会在每次开始驾驶时不会自动重置",
+      "sampleRegulation": "《智能网联汽车道路测试与应用管理规范》",
+      "referenceRegulation": "",
+      "interpretation": "中国《智能网联汽车道路测试与应用管理规范》等文件强调，涉及紧急避险的功能（如FCW）需默认启用，以确保基础安全防护。这与中国的“安全优先”监管逻辑一致，要求车企在功能设计上减少用户误关闭的可能性\n\n欧洲虽要求L2级辅助驾驶功能需默认开启，但FCW被归类为“预警功能”，允许用户自主设置是否长期启用。欧洲监管机构认为，过度强制干预可能引发用户对系统的不信任，因此赋予用户更高控制权",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 269,
+      "sampleField": "自动紧急制动工作范围8 km/h 和 120 km/h",
+      "referenceField": "自动紧急制动工作范围5 km/h 和 200 km/h",
+      "sampleRegulation": "《GB/T 39901-2021》",
+      "referenceRegulation": "UNECE R152",
+      "interpretation": "中国现行标准《GB/T 39901-2021》对AEB的性能要求主要针对城市和城际场景，测试速度范围设定为​​8-120 km/h​​，重点覆盖常见交通事故高发区间（如低速追尾和高速跟车）。此外，C-NCAP 2021版测试规程仅评估该速度区间的AEB有效性，车企需优先满足本土认证需求\n\n欧洲遵循UNECE R152法规，要求AEB系统必须支持​​5-200 km/h​​的全速域响应，包括极端低速（如停车场场景）和高速公路高速场景。该法规还要求对行人、自行车等弱势道路使用者提供保护，因此技术覆盖范围更广",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 273,
+      "sampleField": "车速辅助可完全关闭",
+      "referenceField": "车速辅助仅允许临时关闭（单次驾驶周期），下次启动自动恢复",
+      "sampleRegulation": "",
+      "referenceRegulation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958",
+      "interpretation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958强制要求所有M/N类车辆配备完整ISA系统。必须包含​​限速信息显示（SLIF）​​ + ​​超速警告（SLWF）或自动控速（SCF）​​，且需支持欧盟各国限速标志识别",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 273,
+      "sampleField": "依赖导航地图+摄像头，识别精度受限于本土数据",
+      "referenceField": "​​限速识别​必须支持欧盟28国限速标志（显式/隐式），并通过400km真实道路测试（含15%夜间）",
+      "sampleRegulation": "",
+      "referenceRegulation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958",
+      "interpretation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958强制要求所有M/N类车辆配备完整ISA系统。必须包含​​限速信息显示（SLIF）​​ + ​​超速警告（SLWF）或自动控速（SCF）​​，且需支持欧盟各国限速标志识别",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 273,
+      "sampleField": "仅视觉或声音警告，无强制要求",
+      "referenceField": "​​警告方式​必须提供视觉+听觉、视觉+触觉或仅触觉警告",
+      "sampleRegulation": "",
+      "referenceRegulation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958",
+      "interpretation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958强制要求所有M/N类车辆配备完整ISA系统。必须包含​​限速信息显示（SLIF）​​ + ​​超速警告（SLWF）或自动控速（SCF）​​，且需支持欧盟各国限速标志识别",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 273,
+      "sampleField": "自动控速为可选功能，减速率无明确限制",
+      "referenceField": "自动控速为强制功能，减速率≤3 m/s²，激活时间≤1.5秒",
+      "sampleRegulation": "",
+      "referenceRegulation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958",
+      "interpretation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958强制要求所有M/N类车辆配备完整ISA系统。必须包含​​限速信息显示（SLIF）​​ + ​​超速警告（SLWF）或自动控速（SCF）​​，且需支持欧盟各国限速标志识别",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 273,
+      "sampleField": "无",
+      "referenceField": "实时平均车速功能",
+      "sampleRegulation": "",
+      "referenceRegulation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958",
+      "interpretation": "欧盟通用安全法规（GSR）及细化法规（EU）2021/1958强制要求所有M/N类车辆配备完整ISA系统。必须包含​​限速信息显示（SLIF）​​ + ​​超速警告（SLWF）或自动控速（SCF）​​，且需支持欧盟各国限速标志识别",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 275,
+      "sampleField": "无",
+      "referenceField": "允许驾驶室摄像头分析",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "禁止通过互联网实时查看或分享车外摄像头拍摄的内容，以避免泄露路人隐私或敏感区域信息",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 277,
+      "sampleField": "无",
+      "referenceField": "驾驶员嗜睡警告",
+      "sampleRegulation": "",
+      "referenceRegulation": "EU 2021/1341",
+      "interpretation": "欧盟自2022年7月起实施的​​《驾驶员睡意和注意力警告统法规》（EU 2021/1341）​​要求所有新认证的M/N类车辆（乘用车及商用车）必须配备DDAW系统。该系统需实时监测驾驶员疲劳状态（如闭眼、打哈欠等），当睡意等级≥8级（卡洛琳斯卡睡眠量表）时，通过视觉、听觉警告提醒驾驶员",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 281,
+      "sampleField": "无",
+      "referenceField": "安全功能（如警报系统）的描述中存在差异提示",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "警报音量限制​​：欧洲部分国家或城市对车辆警报音量有严格规定，例如限制噪音污染，可能导致某些安全功能（如防盗警报或儿童检测警报）的提示音被静音或调整为视觉提示。例如，特斯拉在欧洲推出的“儿童独自留下检测”功能可能因地区法规调整警报音量或仅通过灯光闪烁和APP通知提醒",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 285,
+      "sampleField": "无",
+      "referenceField": "行车记录仪录制片段必须用户手动保存",
+      "sampleRegulation": "",
+      "referenceRegulation": "《通用数据保护条例》（GDPR）",
+      "interpretation": "欧盟《通用数据保护条例》（GDPR）对个人数据的收集、存储和删除有严格规定。特斯拉在欧洲的行车记录仪功能需明确告知用户数据不会被自动保存，且未手动保存的录像会被持续覆盖，以避免未经同意的数据留存。这一提示是特斯拉为满足GDPR的透明性要求而设计的。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 289,
+      "sampleField": "无",
+      "referenceField": "哨兵模式中提供​​录像片段时长自定义功能",
+      "sampleRegulation": "",
+      "referenceRegulation": "《通用数据保护条例》（GDPR）",
+      "interpretation": "GDPR透明性原则​​：欧盟《通用数据保护条例》（GDPR）要求企业对个人数据的收集和处理方式提供明确控制权。允许用户自定义哨兵模式录像时长（如1分钟、5分钟、10分钟等选项），是特斯拉为满足用户对数据留存时间的知情权和选择权而设计的合规功能。\n​​数据最小化原则​​：欧盟要求仅保留必要数据，且需明确告知存储时长。例如，德国《联邦数据保护法》规定，公共场合的影像录制需限制覆盖周期，避免无限制存储他人隐私数据。因此，欧洲版特斯拉需提供时长调整选项，以符合法规。\n",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "无",
+      "referenceField": "哨兵模式查看车辆周围实时画面；Model Y 会周期性地闪烁车外车灯，并在触摸屏上显示一条消息，告知其他人正在通过摄像头查看车辆周围区域",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "中国禁止通过互联网实时查看或分享车外摄像头拍摄的内容，以避免泄露路人隐私或敏感区域信息\n\n欧洲《通用数据保护条例》（GDPR）要求企业对个人数据的收集和处理必须透明化，尤其是涉及公共空间影像录制时。特斯拉通过车灯闪烁和屏幕提示，明确告知周围行人或车辆其正在被摄像头记录，以避免未经同意的数据采集",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "无",
+      "referenceField": "“实时摄像头查看”（View Live Camera）功能设置​​每日15分钟累计使用限制",
+      "sampleRegulation": "",
+      "referenceRegulation": "《通用数据保护条例》（GDPR）",
+      "interpretation": "每天15分钟的限制是综合欧洲法规、文化差异与用户接受度​得出的结论",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "无",
+      "referenceField": "同时启用了爱犬模式和哨兵模式，哨兵模式会默认设\n置为禁用哨兵模式警报音",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 291,
+      "sampleField": "无",
+      "referenceField": "开启爱犬模式可查看远程查看车辆内部情况",
+      "sampleRegulation": "​​《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "中国​​明确规定，车内摄像头采集的数据需本地存储，未经用户授权不得传输或远程访问",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 293,
+      "sampleField": "无",
+      "referenceField": "哨兵模式只会在发生安全事件时录制10分钟视频，否则未经用户手动保存的录制片段会在用户重新进入车辆或主动关闭哨兵模式下删除视频",
+      "sampleRegulation": "",
+      "referenceRegulation": "《通用数据保护条例》（GDPR）",
+      "interpretation": "GDPR透明性原则​​：欧盟《通用数据保护条例》（GDPR）要求企业对个人数据的收集和处理方式提供明确控制权。允许用户自定义哨兵模式录像时长（如1分钟、5分钟、10分钟等选项），是特斯拉为满足用户对数据留存时间的知情权和选择权而设计的合规功能。\n​​数据最小化原则​​：欧盟要求仅保留必要数据，且需明确告知存储时长。例如，德国《联邦数据保护法》规定，公共场合的影像录制需限制覆盖周期，避免无限制存储他人隐私数据。因此，欧洲版特斯拉需提供时长调整选项，以符合法规。\n",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 319,
+      "sampleField": "无",
+      "referenceField": "天气叠加：在地图上叠加天气状况，并显示雨、雪等降水的移动情况",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 319,
+      "sampleField": "无",
+      "referenceField": "避开轮渡开关",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 319,
+      "sampleField": "无",
+      "referenceField": "设置到达百分比",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 321,
+      "sampleField": "下拉列表显示路线偏好选项",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 323,
+      "sampleField": "休息区选项",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 323,
+      "sampleField": "车牌限行",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 323,
+      "sampleField": "无",
+      "referenceField": "游玩和美食地图",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 325,
+      "sampleField": "无",
+      "referenceField": "第三方充电站导航",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 325,
+      "sampleField": "无",
+      "referenceField": "CSS充电配件提醒",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 327,
+      "sampleField": "无",
+      "referenceField": "查看步行范围内的设施列表",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 327,
+      "sampleField": "解锁超充桩点位",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 331,
+      "sampleField": "网易云音乐",
+      "referenceField": "Tidal、YoutubeMusic",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 351,
+      "sampleField": "无",
+      "referenceField": "充电线不超过30米提示",
+      "sampleRegulation": "",
+      "referenceRegulation": "​​IEC 61851​​、CENELEC",
+      "interpretation": "欧洲遵循​​IEC 61851​​和​​CENELEC​​等电气安全标准，明确规定直流快充电缆长度超过30米时需额外安全措施（如增加冷却系统或更高规格线材），否则可能因电阻增大导致",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 355,
+      "sampleField": "无",
+      "referenceField": "为减少使用率较高的超级充电站的拥堵，在不使用行程规划的情况下，您的最大充电量可能会限制为 80%",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": false
+    },
+    {
+      "page": 367,
+      "sampleField": "无",
+      "referenceField": "高压电池运行状况（电池健康）",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    },
+    {
+      "page": 373,
+      "sampleField": "无",
+      "referenceField": "保养概要",
+      "sampleRegulation": "《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "根据中国《汽车数据安全管理若干规》，车辆健康数据（如保养记录）需本地存储，且未经授权不得远程传输或分析。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 395,
+      "sampleField": "无",
+      "referenceField": "禁止使用甲醇基清洗液",
+      "sampleRegulation": "",
+      "referenceRegulation": "REACH法规（EC No 1907/2006）",
+      "interpretation": "禁止甲醇含量≥0.6%的挡风玻璃清洗液、解冻液及变性酒精投放市场",
+      "regulation": true,
+      "intelligent": false
+    },
+    {
+      "page": 409,
+      "sampleField": "无",
+      "referenceField": "维护模式：为三方4S店提供",
+      "sampleRegulation": "《汽车数据安全管理若干规》",
+      "referenceRegulation": "",
+      "interpretation": "根据中国《汽车数据安全管理若干规》，车辆健康数据（如保养记录）需本地存储，且未经授权不得远程传输或分析。",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 583,
+      "sampleField": "事件数据记录器 (EDR)",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "UN R160",
+      "interpretation": "欧洲部分国家允许通过其他数据记录方式（如车载摄像头）替代EDR，进一步降低了特斯拉的适配紧迫性",
+      "regulation": true,
+      "intelligent": true
+    },
+    {
+      "page": 585,
+      "sampleField": "对于中国大陆交付的车辆，如您选择简体中文之外的语言作为您\n在车辆触摸屏、Tesla 手机应用程序等界面的使用语言或本车主\n手册的阅读语言，其他语言和简体中文不一致之处以简体中文的表述为准",
+      "referenceField": "无",
+      "sampleRegulation": "",
+      "referenceRegulation": "",
+      "interpretation": "",
+      "regulation": false,
+      "intelligent": true
+    }
+  ]
+}

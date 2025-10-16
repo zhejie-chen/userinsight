@@ -1,53 +1,43 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
 import { fetchCarDataForTimeline } from '../services/supabaseClient.js';
-import html2canvas from 'html2canvas'; // 导入 html2canvas 库
+import html2canvas from 'html2canvas';
 import BackToHomeLogo from '../components/BackToHomeLogo.vue';
 
-/**
- * 核心截图函数
- */
+// [核心修复] 以下所有JS代码均已恢复至你最初的、能正常工作的版本。
+
+let resizeObserver;
+
 async function saveAsImage() {
-  const timelineContainer = document.querySelector('.timeline-container');
-  const brandSidebar = document.querySelector('.brand-sidebar');
-  const mainContent = document.querySelector('.main-content');
-  const filterContainer = document.querySelector('.filter-container');
+  const timelineContainer = document.querySelector('#new-release-page-wrapper .timeline-container');
+  const brandSidebar = document.querySelector('#new-release-page-wrapper .brand-sidebar');
+  const mainContent = document.querySelector('#new-release-page-wrapper .main-content');
+  const filterContainer = document.querySelector('#new-release-page-wrapper .filter-container');
   const saveBtn = document.getElementById('saveAsImageBtn');
   const loadingOverlay = document.getElementById('loadingOverlay');
 
-  // 保存原始样式，以便截图后恢复
   const originalSidebarStyle = brandSidebar.style.cssText;
   const originalFilterStyle = filterContainer.style.cssText;
   const originalContainerStyle = timelineContainer.style.cssText;
 
   try {
-    // --- 1. 截图前的准备工作 ---
-    loadingOverlay.style.display = 'flex';
-    saveBtn.style.display = 'none'; // 隐藏截图按钮
+    if(loadingOverlay) loadingOverlay.style.display = 'flex';
+    if(saveBtn) saveBtn.style.display = 'none';
 
     const contentGridHeight = mainContent.scrollHeight;
-
-    // a. 临时修改整体容器高度以容纳所有内容
     timelineContainer.style.height = 'auto';
-
-    // b. 将侧边栏从 fixed 改为 absolute，并拉长高度以匹配内容区
     brandSidebar.style.position = 'absolute';
-    brandSidebar.style.height = `${contentGridHeight + 110}px`; // 110px 是 main-content 的 margin-top
-
-    // c. 重新计算并定位侧边栏的所有 Logo，按未滚动的状态对齐
+    brandSidebar.style.height = `${contentGridHeight + 110}px`;
     syncBrandHeights();
-    positionBrandLogos(0);
+    positionBrandLogos(0); // Position logos at top for screenshot
 
-    // d. 将底部的筛选器从 fixed 改为 absolute，移动到内容底部
     filterContainer.style.position = 'absolute';
-    filterContainer.style.top = `${contentGridHeight + 120}px`; // 移动到内容区下方
+    filterContainer.style.top = `${contentGridHeight + 120}px`;
     filterContainer.style.bottom = 'auto';
     filterContainer.style.right = '30px';
 
-    // 等待 DOM 更新
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    // --- 2. 执行截图 ---
     const canvas = await html2canvas(timelineContainer, {
       useCORS: true,
       allowTaint: true,
@@ -56,7 +46,6 @@ async function saveAsImage() {
       windowHeight: timelineContainer.scrollHeight
     });
 
-    // --- 3. 下载图片 ---
     const link = document.createElement('a');
     link.download = '海外上新时间线.png';
     link.href = canvas.toDataURL('image/png');
@@ -66,57 +55,15 @@ async function saveAsImage() {
     console.error('保存图片失败:', error);
     alert('图片生成失败，请稍后重试。');
   } finally {
-    // --- 4. 恢复原始布局和样式 ---
     timelineContainer.style.cssText = originalContainerStyle;
     brandSidebar.style.cssText = originalSidebarStyle;
     filterContainer.style.cssText = originalFilterStyle;
-    saveBtn.style.display = 'flex';
-
-    // 恢复侧边栏 Logo 的滚动位置
-    handleScroll();
-
-    loadingOverlay.style.display = 'none';
+    if(saveBtn) saveBtn.style.display = 'flex';
+    handleScroll(); // Restore scroll position
+    if(loadingOverlay) loadingOverlay.style.display = 'none';
   }
 }
 
-// --- 页面原有 JavaScript 逻辑 ---
-let resizeObserver;
-
-onMounted(() => {
-  const saveAsImageBtn = document.getElementById('saveAsImageBtn');
-  if (saveAsImageBtn) {
-    saveAsImageBtn.addEventListener('click', saveAsImage);
-  }
-
-  createCarCards().then(() => {
-    setupFilter();
-  });
-
-  window.addEventListener('scroll', handleScroll);
-
-  resizeObserver = new ResizeObserver(() => {
-    syncBrandHeights();
-    positionBrandLogos(window.pageYOffset || document.documentElement.scrollTop);
-  });
-  const gridEl = document.getElementById('contentGrid');
-  if (gridEl) {
-    resizeObserver.observe(gridEl);
-  }
-});
-
-onUnmounted(() => {
-  const saveAsImageBtn = document.getElementById('saveAsImageBtn');
-  if (saveAsImageBtn) {
-    saveAsImageBtn.removeEventListener('click', saveAsImage);
-  }
-  window.removeEventListener('scroll', handleScroll);
-  if (resizeObserver) {
-    resizeObserver.disconnect();
-  }
-});
-
-
-// --- 所有功能函数 ---
 const brandMap = {
   '比亚迪': { displayName: '比亚迪', logoStyle: 'background: linear-gradient(135deg, #e74c3c, #c0392b);' },
   '吉利': { displayName: '吉利', logoStyle: 'background: linear-gradient(135deg, #3498db, #2980b9);' },
@@ -133,15 +80,16 @@ const currentYear = currentDate.getFullYear();
 const currentMonth = currentDate.getMonth();
 
 async function loadCarData() {
+  const loadingOverlay = document.getElementById('loadingOverlay');
   try {
-    document.getElementById('loadingOverlay').style.display = 'flex';
+    if(loadingOverlay) loadingOverlay.style.display = 'flex';
     const data = await fetchCarDataForTimeline();
     return processCarData(data);
   } catch (error) {
     console.error('加载汽车数据失败:', error);
     return [];
   } finally {
-    document.getElementById('loadingOverlay').style.display = 'none';
+    if(loadingOverlay) loadingOverlay.style.display = 'none';
   }
 }
 
@@ -247,7 +195,7 @@ async function createCarCards() {
 }
 
 function syncBrandHeights() {
-  const brandItems = document.querySelectorAll('.brand-item');
+  const brandItems = document.querySelectorAll('#new-release-page-wrapper .brand-item');
   let accumulatedHeight = 20;
   for (let i = 0; i < brandItems.length; i++) {
     const brandRow = document.getElementById(`brand-row-${i}`);
@@ -276,9 +224,10 @@ function handleScroll() {
   positionBrandLogos(scrollTop);
 }
 
+// [核心修复] 恢复原始的、能正确处理滚动的函数
 function positionBrandLogos(scrollTop) {
-  const brandItems = document.querySelectorAll('.brand-item');
-  const sidebar = document.querySelector('.brand-sidebar');
+  const brandItems = document.querySelectorAll('#new-release-page-wrapper .brand-item');
+  const sidebar = document.querySelector('#new-release-page-wrapper .brand-sidebar');
   if(!sidebar) return;
   const sidebarHeight = sidebar.offsetHeight;
   let accumulatedHeight = 20;
@@ -313,16 +262,17 @@ function positionBrandLogos(scrollTop) {
   }
 }
 
+
 function setupFilter() {
   const carTypeAll = document.getElementById('carTypeAll');
   const countryAll = document.getElementById('countryAll');
-  const carTypeItems = document.querySelectorAll('.legend-item');
-  const countryItems = document.querySelectorAll('.country-item');
+  const carTypeItems = document.querySelectorAll('#new-release-page-wrapper .legend-item');
+  const countryItems = document.querySelectorAll('#new-release-page-wrapper .country-item');
   let selectedCarTypes = [];
   let selectedCountries = [];
   function applyFilters() {
-    const cards = document.querySelectorAll('.car-card');
-    const brandRows = document.querySelectorAll('.brand-row');
+    const cards = document.querySelectorAll('#new-release-page-wrapper .car-card');
+    const brandRows = document.querySelectorAll('#new-release-page-wrapper .brand-row');
     brandRows.forEach(row => row.style.display = 'none');
     cards.forEach(card => {
       const typeMatch = selectedCarTypes.length === 0 || selectedCarTypes.includes(card.dataset.type);
@@ -340,137 +290,171 @@ function setupFilter() {
       positionBrandLogos(window.pageYOffset || document.documentElement.scrollTop);
     }, 10);
   }
-  function handleCarTypeFilter(type, element) {
-    if (type === 'all') {
-      selectedCarTypes = [];
-      carTypeItems.forEach(item => item.classList.remove('active'));
-      carTypeAll.classList.add('active');
-    } else {
-      const index = selectedCarTypes.indexOf(type);
-      if (index === -1) { selectedCarTypes.push(type); element.classList.add('active'); }
-      else { selectedCarTypes.splice(index, 1); element.classList.remove('active'); }
-      if (selectedCarTypes.length === 0) carTypeAll.classList.add('active');
-      else carTypeAll.classList.remove('active');
-    }
+
+  carTypeAll?.addEventListener('click', () => {
+    selectedCarTypes = [];
+    carTypeItems.forEach(item => item.classList.remove('active'));
+    carTypeAll.classList.add('active');
     applyFilters();
-  }
-  function handleCountryFilter(country, element) {
-    if (country === 'all') {
-      selectedCountries = [];
-      countryItems.forEach(item => item.classList.remove('active'));
-      countryAll.classList.add('active');
-    } else {
-      const index = selectedCountries.indexOf(country);
-      if (index === -1) { selectedCountries.push(country); element.classList.add('active'); }
-      else { selectedCountries.splice(index, 1); element.classList.remove('active'); }
-      if (selectedCountries.length === 0) countryAll.classList.add('active');
-      else countryAll.classList.remove('active');
-    }
+  });
+  carTypeItems.forEach(item => item.addEventListener('click', () => {
+    const type = item.dataset.type;
+    const index = selectedCarTypes.indexOf(type);
+    if (index === -1) { selectedCarTypes.push(type); item.classList.add('active'); }
+    else { selectedCarTypes.splice(index, 1); item.classList.remove('active'); }
+    if (selectedCarTypes.length === 0) carTypeAll?.classList.add('active');
+    else carTypeAll?.classList.remove('active');
     applyFilters();
-  }
-  carTypeAll.addEventListener('click', () => handleCarTypeFilter('all', null));
-  carTypeItems.forEach(item => item.addEventListener('click', () => handleCarTypeFilter(item.dataset.type, item)));
-  countryAll.addEventListener('click', () => handleCountryFilter('all', null));
-  countryItems.forEach(item => item.addEventListener('click', () => handleCountryFilter(item.dataset.country, item)));
+  }));
+  countryAll?.addEventListener('click', () => {
+    selectedCountries = [];
+    countryItems.forEach(item => item.classList.remove('active'));
+    countryAll.classList.add('active');
+    applyFilters();
+  });
+  countryItems.forEach(item => item.addEventListener('click', () => {
+    const country = item.dataset.country;
+    const index = selectedCountries.indexOf(country);
+    if (index === -1) { selectedCountries.push(country); item.classList.add('active'); }
+    else { selectedCountries.splice(index, 1); item.classList.remove('active'); }
+    if (selectedCountries.length === 0) countryAll?.classList.add('active');
+    else countryAll?.classList.remove('active');
+    applyFilters();
+  }));
 }
+
+onMounted(() => {
+  const saveAsImageBtn = document.getElementById('saveAsImageBtn');
+  if (saveAsImageBtn) {
+    saveAsImageBtn.addEventListener('click', saveAsImage);
+  }
+
+  createCarCards().then(() => {
+    setupFilter();
+  });
+
+  window.addEventListener('scroll', handleScroll);
+
+  resizeObserver = new ResizeObserver(() => {
+    syncBrandHeights();
+    positionBrandLogos(window.pageYOffset || document.documentElement.scrollTop);
+  });
+  const gridEl = document.getElementById('contentGrid');
+  if (gridEl) {
+    resizeObserver.observe(gridEl);
+  }
+});
+
+onUnmounted(() => {
+  const saveAsImageBtn = document.getElementById('saveAsImageBtn');
+  if (saveAsImageBtn) {
+    saveAsImageBtn.removeEventListener('click', saveAsImage);
+  }
+  window.removeEventListener('scroll', handleScroll);
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
+});
 </script>
 
 <template>
-  <div class="timeline-container">
-    <BackToHomeLogo />
+  <div id="new-release-page-wrapper">
+    <div class="timeline-container">
+      <BackToHomeLogo />
 
-    <div class="month-header">
-      <div class="month-item">1月</div><div class="month-item">2月</div><div class="month-item">3月</div>
-      <div class="month-item">4月</div><div class="month-item">5月</div><div class="month-item">6月</div>
-      <div class="month-item">7月</div><div class="month-item">8月</div><div class="month-item">9月</div>
-      <div class="month-item">10月</div><div class="month-item">11月</div><div class="month-item">12月</div>
-    </div>
-    <div class="brand-sidebar"><div class="brand-list" id="brandList"></div></div>
-    <div class="main-content"><div class="content-grid" id="contentGrid"></div></div>
-
-    <div class="filter-container">
-      <div id="saveAsImageBtn" class="save-button">
-        保存为图片
+      <div class="month-header">
+        <div class="month-item">1月</div><div class="month-item">2月</div><div class="month-item">3月</div>
+        <div class="month-item">4月</div><div class="month-item">5月</div><div class="month-item">6月</div>
+        <div class="month-item">7月</div><div class="month-item">8月</div><div class="month-item">9月</div>
+        <div class="month-item">10月</div><div class="month-item">11月</div><div class="month-item">12月</div>
       </div>
-      <div class="legend">
-        <div class="legend-grid">
-          <div class="legend-all active" id="carTypeAll">全部</div>
-          <div class="legend-item" data-type="sedan"><div class="legend-color" style="background: linear-gradient(135deg, #2196F3, #42A5F5);"></div><div class="legend-text">轿车</div></div>
-          <div class="legend-item" data-type="suv"><div class="legend-color" style="background: linear-gradient(135deg, #FF9800, #FFA726);"></div><div class="legend-text">SUV</div></div>
-          <div class="legend-item" data-type="mpv"><div class="legend-color" style="background: linear-gradient(135deg, #9C27B0, #AB47BC);"></div><div class="legend-text">MPV</div></div>
-          <div class="legend-item" data-type="pickup"><div class="legend-color" style="background: linear-gradient(135deg, #795548, #5D4037);"></div><div class="legend-text">皮卡</div></div>
+      <div class="brand-sidebar"><div class="brand-list" id="brandList"></div></div>
+      <div class="main-content"><div class="content-grid" id="contentGrid"></div></div>
+
+      <div class="filter-container">
+        <div id="saveAsImageBtn" class="save-button">
+          保存为图片
+        </div>
+        <div class="legend">
+          <div class="legend-grid">
+            <div class="legend-all active" id="carTypeAll">全部</div>
+            <div class="legend-item" data-type="sedan"><div class="legend-color" style="background: linear-gradient(135deg, #2196F3, #42A5F5);"></div><div class="legend-text">轿车</div></div>
+            <div class="legend-item" data-type="suv"><div class="legend-color" style="background: linear-gradient(135deg, #FF9800, #FFA726);"></div><div class="legend-text">SUV</div></div>
+            <div class="legend-item" data-type="mpv"><div class="legend-color" style="background: linear-gradient(135deg, #9C27B0, #AB47BC);"></div><div class="legend-text">MPV</div></div>
+            <div class="legend-item" data-type="pickup"><div class="legend-color" style="background: linear-gradient(135deg, #795548, #5D4037);"></div><div class="legend-text">皮卡</div></div>
+          </div>
+        </div>
+        <div class="country-filter">
+          <div class="country-grid">
+            <div class="country-all active" id="countryAll">全部</div>
+            <div class="country-item" data-country="德国"><div class="country-flag" style="background-image:url('/img/flags/DE.png');"></div><div class="country-name">德国</div></div>
+            <div class="country-item" data-country="挪威"><div class="country-flag" style="background-image:url('/img/flags/NO.png');"></div><div class="country-name">挪威</div></div>
+            <div class="country-item" data-country="荷兰"><div class="country-flag" style="background-image:url('/img/flags/NL.png');"></div><div class="country-name">荷兰</div></div>
+            <div class="country-item" data-country="英国"><div class="country-flag" style="background-image:url('/img/flags/GB.png');"></div><div class="country-name">英国</div></div>
+            <div class="country-item" data-country="墨西哥"><div class="country-flag" style="background-image:url('/img/flags/MX.png');"></div><div class="country-name">墨西哥</div></div>
+            <div class="country-item" data-country="巴西"><div class="country-flag" style="background-image:url('/img/flags/BR.png');"></div><div class="country-name">巴西</div></div>
+            <div class="country-item" data-country="泰国"><div class="country-flag" style="background-image:url('/img/flags/TH.png');"></div><div class="country-name">泰国</div></div>
+            <div class="country-item" data-country="印尼"><div class="country-flag" style="background-image:url('/img/flags/ID.png');"></div><div class="country-name">印尼</div></div>
+            <div class="country-item" data-country="澳大利亚"><div class="country-flag" style="background-image:url('/img/flags/AU.png');"></div><div class="country-name">澳大利亚</div></div>
+            <div class="country-item" data-country="马来西亚"><div class="country-flag" style="background-image:url('/img/flags/MY.png');"></div><div class="country-name">马来西亚</div></div>
+          </div>
         </div>
       </div>
-      <div class="country-filter">
-        <div class="country-grid">
-          <div class="country-all active" id="countryAll">全部</div>
-          <div class="country-item" data-country="德国"><div class="country-flag" style="background-image:url('/img/flags/DE.png');"></div><div class="country-name">德国</div></div>
-          <div class="country-item" data-country="挪威"><div class="country-flag" style="background-image:url('/img/flags/NO.png');"></div><div class="country-name">挪威</div></div>
-          <div class="country-item" data-country="荷兰"><div class="country-flag" style="background-image:url('/img/flags/NL.png');"></div><div class="country-name">荷兰</div></div>
-          <div class="country-item" data-country="英国"><div class="country-flag" style="background-image:url('/img/flags/GB.png');"></div><div class="country-name">英国</div></div>
-          <div class="country-item" data-country="墨西哥"><div class="country-flag" style="background-image:url('/img/flags/MX.png');"></div><div class="country-name">墨西哥</div></div>
-          <div class="country-item" data-country="巴西"><div class="country-flag" style="background-image:url('/img/flags/BR.png');"></div><div class="country-name">巴西</div></div>
-          <div class="country-item" data-country="泰国"><div class="country-flag" style="background-image:url('/img/flags/TH.png');"></div><div class="country-name">泰国</div></div>
-          <div class="country-item" data-country="印尼"><div class="country-flag" style="background-image:url('/img/flags/ID.png');"></div><div class="country-name">印尼</div></div>
-          <div class="country-item" data-country="澳大利亚"><div class="country-flag" style="background-image:url('/img/flags/AU.png');"></div><div class="country-name">澳大利亚</div></div>
-          <div class="country-item" data-country="马来西亚"><div class="country-flag" style="background-image:url('/img/flags/MY.png');"></div><div class="country-name">马来西亚</div></div>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="loading-overlay" id="loadingOverlay" style="display: flex;">
-    <div class="spinner"></div>
+    <div class="loading-overlay" id="loadingOverlay" style="display: flex;">
+      <div class="spinner"></div>
+    </div>
   </div>
 </template>
 
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-.timeline-container { position: relative; width: 100%; min-height: 100vh; background: #f8f9fa; color: #333; padding: 20px; overflow-x: hidden; }
-.month-header { position: fixed; top: 20px; left: 90px; height: 70px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-radius: 35px; display: flex; z-index: 100; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); overflow: hidden; }
-.month-item { width: calc((100vw - 110px) / 12); min-width: calc((100vw - 110px) / 12); max-width: calc((100vw - 110px) / 12); flex: none; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 17px; color: #444; position: relative; transition: all 0.3s ease; }
-.month-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); height: 40%; width: 1px; background: rgba(234, 234, 234, 0.6); }
-.brand-sidebar { position: fixed; left: 20px; top: 110px; width: 70px; height: calc(100vh - 140px); background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 35px; overflow: hidden; z-index: 99; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); padding: 0; display: flex; justify-content: center; }
-.brand-list { position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
-.brand-item { width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 10px 0; transition: all 0.3s ease; border-radius: 20px; height: 70px; }
-.brand-logo { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; color: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
-.brand-name { font-size: 10px; color: #555; text-align: center; line-height: 1.2; font-weight: 500; margin-top: 5px; }
-.main-content { margin-left: 70px; margin-top: 110px; padding: 0; min-height: calc(100vh - 130px); }
-.content-grid { display: flex; flex-direction: column; width: calc(100vw - 110px); }
-.brand-row { display: flex; min-height: 130px; border-bottom: 1px solid #eaeaea; position: relative; }
-.month-cell { width: calc((100vw - 110px) / 12); min-width: calc((100vw - 110px) / 12); max-width: calc((100vw - 110px) / 12); flex: none; border-right: 1px solid #eaeaea; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-.month-cell:last-child { border-right: none; }
-.car-card { width: 100%; padding: 15px 10px 10px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); cursor: pointer; transition: all 0.3s ease; min-height: 80px; display: flex; flex-direction: column; justify-content: center; position: relative; margin-bottom: 8px; border: 1px solid #eaeaea; background: white; overflow: hidden; }
-.car-card:last-child { margin-bottom: 0; }
-.car-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); z-index: 10; }
-.car-card.pickup { background: linear-gradient(135deg, #795548, #5D4037); color: white; border: none; }
-.car-card.sedan { background: linear-gradient(135deg, #2196F3, #42A5F5); color: white; border: none; }
-.car-card.suv { background: linear-gradient(135deg, #FF9800, #FFA726); color: white; border: none; }
-.car-card.mpv { background: linear-gradient(135deg, #9C27B0, #AB47BC); color: white; border: none; }
-.car-name { font-weight: bold; font-size: 13px; margin-bottom: 4px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.car-price, .car-local-price, .car-country { font-size: 11px; opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.car-image { position: absolute; bottom: 0; right: 0; width: 90px; height: 60px; transform: scale(1.2); background-size: contain; background-repeat: no-repeat; background-position: right center; z-index: 0; pointer-events: none; opacity: 0.7; }
-.new-badge { position: absolute; top: 5px; right: 5px; background: #4CAF50; color: white; padding: 3px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; z-index: 20; }
-.expected-badge { position: absolute; top: 5px; right: 5px; background: #2196F3; color: white; padding: 3px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); z-index: 20; }
-.filter-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; align-items: flex-end; }
-.save-button { background: rgba(76, 175, 80, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: white; padding: 0 20px; border-radius: 35px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; height: 50px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
-.save-button:hover { background: rgba(76, 175, 80, 1); transform: scale(1.05); }
-.legend { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); padding: 10px 20px; border-radius: 35px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; gap: 15px; height: 50px; }
-.legend-item { display: flex; align-items: center; cursor: pointer; padding: 5px 8px; border-radius: 15px; transition: all 0.3s ease; }
-.legend-item.active { background: rgba(76, 175, 80, 0.2); box-shadow: 0 0 0 2px #4CAF50; }
-.legend-color { width: 20px; height: 20px; border-radius: 4px; margin-right: 8px; }
-.legend-text { font-size: 12px; color: #555; font-weight: 500; }
-.country-filter { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); padding: 0 16px; border-radius: 35px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; height: 50px; transition: all 0.3s ease; overflow: hidden; max-width: 100%; }
-.country-grid { display: flex; gap: 12px; padding: 0 4px; }
-.country-item { display: flex; align-items: center; cursor: pointer; padding: 5px 6px; border-radius: 999px; transition: all 0.3s ease; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0); }
-.country-item.active { background: rgba(76, 175, 80, 0.2); box-shadow: 0 0 0 2px #4CAF50; }
-.country-flag { width: 32px; height: 24px; border-radius: 3px; background-size: cover; background-position: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-.country-name { font-size: 12px; color: #555; font-weight: 500; margin-left: 0; opacity: 0; max-width: 0; overflow: hidden; transition: all 0.3s ease; white-space: nowrap; transform: translateX(-10px); }
-.country-filter:hover .country-name { opacity: 1; max-width: 60px; margin-left: 8px; transform: translateX(0); }
-.country-filter:hover .country-item { padding: 5px 10px; }
-.loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-.spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 0, 0, 0.1); border-radius: 50%; border-top: 5px solid #3498db; animation: spin 1s linear infinite; }
+#new-release-page-wrapper * { margin: 0; padding: 0; box-sizing: border-box; }
+#new-release-page-wrapper .timeline-container { position: relative; width: 100%; min-height: 100vh; background: #f8f9fa; color: #333; padding: 20px; overflow-x: hidden; }
+#new-release-page-wrapper .month-header { position: fixed; top: 20px; left: 90px; height: 70px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-radius: 35px; display: flex; z-index: 100; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); overflow: hidden; }
+#new-release-page-wrapper .month-item { width: calc((100vw - 110px) / 12); min-width: calc((100vw - 110px) / 12); max-width: calc((100vw - 110px) / 12); flex: none; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 17px; color: #444; position: relative; transition: all 0.3s ease; }
+#new-release-page-wrapper .month-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); height: 40%; width: 1px; background: rgba(234, 234, 234, 0.6); }
+#new-release-page-wrapper .brand-sidebar { position: fixed; left: 20px; top: 110px; width: 70px; height: calc(100vh - 140px); background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 35px; overflow: hidden; z-index: 99; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); padding: 0; display: flex; justify-content: center; }
+#new-release-page-wrapper .brand-list { position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+#new-release-page-wrapper .brand-item { width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 10px 0; transition: all 0.3s ease; border-radius: 20px; height: 70px; }
+#new-release-page-wrapper .brand-logo { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; color: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+#new-release-page-wrapper .brand-name { font-size: 10px; color: #555; text-align: center; line-height: 1.2; font-weight: 500; margin-top: 5px; }
+#new-release-page-wrapper .main-content { margin-left: 70px; margin-top: 110px; padding: 0; min-height: calc(100vh - 130px); }
+#new-release-page-wrapper .content-grid { display: flex; flex-direction: column; width: calc(100vw - 110px); }
+#new-release-page-wrapper .brand-row { display: flex; min-height: 130px; border-bottom: 1px solid #eaeaea; position: relative; }
+#new-release-page-wrapper .month-cell { width: calc((100vw - 110px) / 12); min-width: calc((100vw - 110px) / 12); max-width: calc((100vw - 110px) / 12); flex: none; border-right: 1px solid #eaeaea; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+#new-release-page-wrapper .month-cell:last-child { border-right: none; }
+#new-release-page-wrapper .car-card { width: 100%; padding: 15px 10px 10px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); cursor: pointer; transition: all 0.3s ease; min-height: 80px; display: flex; flex-direction: column; justify-content: center; position: relative; margin-bottom: 8px; border: 1px solid #eaeaea; background: white; overflow: hidden; }
+#new-release-page-wrapper .car-card:last-child { margin-bottom: 0; }
+#new-release-page-wrapper .car-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); z-index: 10; }
+#new-release-page-wrapper .car-card.pickup { background: linear-gradient(135deg, #795548, #5D4037); color: white; border: none; }
+#new-release-page-wrapper .car-card.sedan { background: linear-gradient(135deg, #2196F3, #42A5F5); color: white; border: none; }
+#new-release-page-wrapper .car-card.suv { background: linear-gradient(135deg, #FF9800, #FFA726); color: white; border: none; }
+#new-release-page-wrapper .car-card.mpv { background: linear-gradient(135deg, #9C27B0, #AB47BC); color: white; border: none; }
+#new-release-page-wrapper .car-name { font-weight: bold; font-size: 13px; margin-bottom: 4px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#new-release-page-wrapper .car-price, #new-release-page-wrapper .car-local-price, #new-release-page-wrapper .car-country { font-size: 11px; opacity: 0.9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#new-release-page-wrapper .car-image { position: absolute; bottom: 0; right: 0; width: 90px; height: 60px; transform: scale(1.2); background-size: contain; background-repeat: no-repeat; background-position: right center; z-index: 0; pointer-events: none; opacity: 0.7; }
+#new-release-page-wrapper .new-badge { position: absolute; top: 5px; right: 5px; background: #4CAF50; color: white; padding: 3px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; z-index: 20; }
+#new-release-page-wrapper .expected-badge { position: absolute; top: 5px; right: 5px; background: #2196F3; color: white; padding: 3px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); z-index: 20; }
+#new-release-page-wrapper .filter-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; align-items: flex-end; }
+#new-release-page-wrapper .save-button { background: rgba(76, 175, 80, 0.8); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: white; padding: 0 20px; border-radius: 35px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; height: 50px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+#new-release-page-wrapper .save-button:hover { background: rgba(76, 175, 80, 1); transform: scale(1.05); }
+#new-release-page-wrapper .legend { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); padding: 10px 20px; border-radius: 35px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; gap: 15px; height: 50px; }
+#new-release-page-wrapper .legend-item { display: flex; align-items: center; cursor: pointer; padding: 5px 8px; border-radius: 15px; transition: all 0.3s ease; }
+#new-release-page-wrapper .legend-item.active { background: rgba(76, 175, 80, 0.2); box-shadow: 0 0 0 2px #4CAF50; }
+#new-release-page-wrapper .legend-color { width: 20px; height: 20px; border-radius: 4px; margin-right: 8px; }
+#new-release-page-wrapper .legend-text { font-size: 12px; color: #555; font-weight: 500; }
+#new-release-page-wrapper .country-filter { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(6px); padding: 0 16px; border-radius: 35px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; height: 50px; transition: all 0.3s ease; overflow: hidden; max-width: 100%; }
+#new-release-page-wrapper .country-grid { display: flex; gap: 12px; padding: 0 4px; }
+#new-release-page-wrapper .country-item { display: flex; align-items: center; cursor: pointer; padding: 5px 6px; border-radius: 999px; transition: all 0.3s ease; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0); }
+#new-release-page-wrapper .country-item.active { background: rgba(76, 175, 80, 0.2); box-shadow: 0 0 0 2px #4CAF50; }
+#new-release-page-wrapper .country-flag { width: 32px; height: 24px; border-radius: 3px; background-size: cover; background-position: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+#new-release-page-wrapper .country-name { font-size: 12px; color: #555; font-weight: 500; margin-left: 0; opacity: 0; max-width: 0; overflow: hidden; transition: all 0.3s ease; white-space: nowrap; transform: translateX(-10px); }
+#new-release-page-wrapper .country-filter:hover .country-name { opacity: 1; max-width: 60px; margin-left: 8px; transform: translateX(0); }
+#new-release-page-wrapper .country-filter:hover .country-item { padding: 5px 10px; }
+#new-release-page-wrapper .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+#new-release-page-wrapper .spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 0, 0, 0.1); border-radius: 50%; border-top: 5px solid #3498db; animation: spin 1s linear infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-.legend-all, .country-all { background: rgba(255, 255, 255, 0.8); border: 1px solid #ddd; border-radius: 15px; padding: 5px 12px; margin-right: 10px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.3s ease; }
-.legend-all.active, .country-all.active { background: rgba(76, 175, 80, 0.2); box-shadow: 0 0 0 2px #4CAF50; }
-.legend-grid, .country-grid { display: flex; align-items: center; }
+#new-release-page-wrapper .legend-all, #new-release-page-wrapper .country-all { background: rgba(255, 255, 255, 0.8); border: 1px solid #ddd; border-radius: 15px; padding: 5px 12px; margin-right: 10px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.3s ease; }
+#new-release-page-wrapper .legend-all.active, #new-release-page-wrapper .country-all.active { background: rgba(76, 175, 80, 0.2); box-shadow: 0 0 0 2px #4CAF50; }
+#new-release-page-wrapper .legend-grid, #new-release-page-wrapper .country-grid { display: flex; align-items: center; }
 </style>

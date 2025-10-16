@@ -128,7 +128,7 @@ const handleHeaderMouseEnter = () => {
               </div>
               <div>
                 <h3 class="text-xs text-gray-500 font-semibold uppercase mb-4">法规与政策</h3>
-                <a href="#" class="text-2xl font-semibold text-gray-800 hover:text-blue-600 mb-2 block">智能化法规</a>
+                <router-link to="/regulation" class="text-2xl font-semibold text-gray-800 hover:text-blue-600 mb-2 block">法规对比</router-link>
               </div>
             </div>
           </div>
