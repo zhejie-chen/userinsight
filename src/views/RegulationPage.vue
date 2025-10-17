@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref, nextTick } from 'vue';
+import { onMounted, onUnmounted, ref, nextTick, watch } from 'vue';
 
 // --- Refs ---
 const pdfContainer = ref(null);
@@ -23,29 +23,39 @@ let resizeTimeout = null;
 let currentCountry = null;
 let activeFilter = 'all';
 let comparisonData = null;
+const isInitialized = ref(false);
 
 const countryNames = {
   usa: { sample: "中国", reference: "美国" },
   europe: { sample: "中国", reference: "欧盟" }
 };
 
-// --- Lifecycle Hooks ---
-onMounted(() => {
-  if (typeof pdfjsLib === 'undefined') {
-    console.error('PDF.js library is not loaded. Please check index.html.');
+function initializeDesktopView() {
+  if (isInitialized.value || isMobile.value) {
     return;
   }
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js`;
+  nextTick(() => {
+    if (typeof pdfjsLib === 'undefined') {
+      console.error('PDF.js library is not loaded. Please check index.html.');
+      return;
+    }
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js`;
 
-  initPDFViewer();
-  loadComparisonData().then(data => { comparisonData = data; });
+    initPDFViewer();
+    loadComparisonData().then(data => { comparisonData = data; });
 
-  countrySelector.value?.addEventListener('change', handleCountryChange);
-  comparisonBtn.value?.addEventListener('click', openComparisonModal);
-  pdfContainer.value?.addEventListener('scroll', renderVisiblePages);
+    countrySelector.value?.addEventListener('change', handleCountryChange);
+    comparisonBtn.value?.addEventListener('click', openComparisonModal);
+    pdfContainer.value?.addEventListener('scroll', renderVisiblePages);
+
+    isInitialized.value = true;
+  });
+}
+
+// --- Lifecycle Hooks ---
+onMounted(() => {
   window.addEventListener('resize', handleResize);
-
-  handleResize();
+  initializeDesktopView();
 });
 
 onUnmounted(() => {
@@ -59,7 +69,12 @@ onUnmounted(() => {
   }
   clearTimeout(resizeTimeout);
   renderedPages.clear();
-  console.log("RegulationPage unmounted and cleaned up.");
+});
+
+watch(isMobile, (isNowMobile) => {
+  if (!isNowMobile) {
+    initializeDesktopView();
+  }
 });
 
 // --- Event Handlers ---
@@ -86,6 +101,19 @@ function handleCountryChange(event) {
     initPDFViewer();
     return;
   }
+
+  // [目录修复] 当切换国家时，重置父容器的flex居中样式，以保证目录能垂直排列
+  if (pdfContainer.value) {
+    pdfContainer.value.style.display = 'block'; // 改回 block
+    pdfContainer.value.style.alignItems = '';
+    pdfContainer.value.style.justifyContent = '';
+  }
+  if (sidebarContent.value) {
+    sidebarContent.value.style.display = 'block'; // 改回 block
+    sidebarContent.value.style.alignItems = '';
+    sidebarContent.value.style.justifyContent = '';
+  }
+
   showLoading();
   currentCountry = country;
   if (comparisonBtnContainer.value) comparisonBtnContainer.value.style.display = 'block';
@@ -144,8 +172,23 @@ function handleFilterClick(event) {
 function initPDFViewer() {
   if (pdfDoc) { pdfDoc.destroy(); pdfDoc = null; }
   if (countrySelector.value) countrySelector.value.value = 'default';
-  if (pdfContainer.value) pdfContainer.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-file-pdf"></i></div><h3 class="text-xl font-medium mb-2">请在左侧下拉栏中选择对标国家</h3><p class="text-gray-500 mb-4">选择后将加载对应国家的PDF对比文档</p></div>`;
-  if (sidebarContent.value) sidebarContent.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-book"></i></div><h3 class="text-lg font-medium mb-2">请先选择国家</h3><p class="text-gray-500">选择后将显示对应目录</p></div>`;
+
+  if (pdfContainer.value) {
+    pdfContainer.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-file-pdf"></i></div><h3 class="text-xl font-medium mb-2">请在左侧下拉栏中选择对标国家</h3><p class="text-gray-500 mb-4">选择后将加载对应国家的PDF对比文档</p></div>`;
+    // [目录修复] 当显示placeholder时，恢复flex居中
+    pdfContainer.value.style.display = 'flex';
+    pdfContainer.value.style.alignItems = 'center';
+    pdfContainer.value.style.justifyContent = 'center';
+  }
+
+  if (sidebarContent.value) {
+    sidebarContent.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-book"></i></div><h3 class="text-lg font-medium mb-2">请先选择国家</h3><p class="text-gray-500">选择后将显示对应目录</p></div>`;
+    // [目录修复] 当显示placeholder时，恢复flex居中
+    sidebarContent.value.style.display = 'flex';
+    sidebarContent.value.style.alignItems = 'center';
+    sidebarContent.value.style.justifyContent = 'center';
+  }
+
   if (comparisonBtnContainer.value) comparisonBtnContainer.value.style.display = 'none';
 }
 
@@ -170,7 +213,14 @@ async function loadComparisonData() {
 function renderTOC(toc) {
   if (!sidebarContent.value) return;
   sidebarContent.value.innerHTML = '';
-  if (toc.length === 0) { return; }
+  if (toc.length === 0) {
+    sidebarContent.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-folder-open"></i></div><h3 class="text-lg font-medium mb-2">暂无目录数据</h3></div>`;
+    // 如果没有目录数据，也要保持居中
+    sidebarContent.value.style.display = 'flex';
+    sidebarContent.value.style.alignItems = 'center';
+    sidebarContent.value.style.justifyContent = 'center';
+    return;
+  }
 
   toc.forEach(section => {
     const sectionDiv = document.createElement('div');
@@ -320,7 +370,6 @@ async function loadPDF(url) {
 function scrollToPage(pageNum) {
   if (!pdfDoc || !pdfContainer.value) return;
   showLoading();
-  // [核心修复] 使用正确的公式计算分组索引
   const groupIndex = Math.ceil(Number(pageNum) / 2);
   const groupElement = document.getElementById(`group-${groupIndex}`);
   if (groupElement) {
@@ -488,8 +537,18 @@ function renderComparisonTable(country) {
   gap: 20px;
   box-sizing: border-box;
 }
-#sidebar, .pdf-viewer-container { display: flex; flex-direction: column; min-height: 0; position: relative; }
-#pdf-container, .sidebar-content { flex: 1 1 auto; overflow-y: auto; }
+#sidebar, .pdf-viewer-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* [目录修复] 移除CSS中的display:flex，交由JS动态控制 */
+#pdf-container, .sidebar-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
 #sidebar {
   flex: 0 0 280px;
   background: white;
@@ -523,12 +582,8 @@ function renderComparisonTable(country) {
 .sidebar-content { padding: 5px 16px 16px; }
 #pdf-container { background: #f1f5f9; padding: 20px; }
 
-/* [核心修复] 更新 placeholder 样式以确保居中和图标大小 */
+/* 移除绝对定位相关样式 */
 .page-placeholder {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 90%;
   padding: 20px;
   box-sizing: border-box;
@@ -539,8 +594,13 @@ function renderComparisonTable(country) {
   text-align: center;
   color: #64748b;
 }
+
+/* 使用 :deep() 穿透 Scoped CSS，确保样式能应用到图标上 */
+:deep(.placeholder-icon i) {
+  font-size: 64px;
+}
+
 .placeholder-icon {
-  font-size: 48px;
   margin-bottom: 16px;
   color: #cbd5e1;
 }
