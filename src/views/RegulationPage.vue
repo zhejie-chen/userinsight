@@ -386,11 +386,21 @@ function showLoading() { if(loadingIndicator.value) loadingIndicator.value.style
 function hideLoading() { if(loadingIndicator.value) loadingIndicator.value.style.display = 'none'; }
 async function getPDFUrl(country) {
   try {
+    // 步骤 1: 正常获取json文件
     const response = await fetch('/pdf-versions.json');
     const versions = await response.json();
-    return versions[country]?.file || null;
+    const relativePath = versions[country]?.file || null;
+
+    // 步骤 2: 如果获取到了相对路径，则构建一个完整的绝对URL
+    if (relativePath) {
+      // new URL() 会根据当前页面的源(origin)来安全地拼接URL
+      return new URL(relativePath, window.location.origin).href;
+    }
+
+    return null;
   } catch (error) {
-    console.error('获取PDF URL失败:', error); return null;
+    console.error('获取PDF URL失败:', error);
+    return null;
   }
 }
 function renderComparisonTable(country) {

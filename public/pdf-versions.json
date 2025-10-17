@@ -1,14 +1,8 @@
 {
   "usa": {
-    "file": "public/pdfs/china2025.2.12-usa2025.14-chinese.pdf",
-    "version": "1.0"
-  },
-  "thailand": {
-    "file": "public/pdfs/Owners_Manual_CN_cn.pdf",
-    "version": "1.0"
+    "file": "pdfs/china2025.2.12-usa2025.14-chinese.pdf"
   },
   "europe": {
-    "file": "public/pdfs/china2025.2.12-europe2025.14-english.pdf",
-    "version": "1.0"
+    "file": "pdfs/china2025.2.12-europe2025.14-english.pdf"
   }
 }
