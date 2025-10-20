@@ -33,7 +33,7 @@ onMounted(() => {
 
 <template>
   <a href="#" class="block">
-    <div class="grid-item relative flex flex-col items-center pt-12 text-center" style="background-color:#f5f5f7; overflow: hidden;">
+    <div class="grid-item relative flex flex-col items-center pt-12 text-center" style="background-color:#ffffff; overflow: hidden;">
       <div class="relative z-10">
         <h2 class="text-4xl font-bold">海外销量</h2>
         <p class="text-xl mt-2">借助强大的CAnswer，主要市场销量一屏洞察</p>
