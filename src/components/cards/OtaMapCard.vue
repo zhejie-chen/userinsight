@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="block">
+  <div class="block group relative">
     <div class="grid-item relative flex flex-col items-center pt-12 text-center overflow-hidden" style="background-color:#ffffff;">
       <div class="relative z-10">
         <h2 class="text-4xl font-bold">OTA地图</h2>
@@ -12,11 +12,20 @@
           <div class="ota-card-rect ota-card-rect-3"></div>
         </div>
       </div>
-      <div class="card-hover-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+
+      <div class="card-hover-icon absolute bottom-4 right-4 z-10">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
       </div>
+
+      <div class="absolute inset-0 z-20 flex items-center justify-center">
+        <div class="absolute inset-0 bg-gray-500 opacity-60"></div>
+        <span class="text-white text-3xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 relative">
+            即将上线
+          </span>
+      </div>
+
     </div>
-  </a>
+  </div>
 </template>
 
 <style scoped>
@@ -50,16 +59,29 @@
   background-color: #ef4444;
   transform: translateX(30%) translateZ(60px);
 }
-a:hover .ota-card-animation {
+
+/* 将悬停选择器从 a:hover 改为 .block:hover
+  (您也可以用 .group:hover，效果相同)
+*/
+.block:hover .ota-card-animation {
   transform: scale(0.85) rotateY(-15deg) rotateX(10deg);
 }
-a:hover .ota-card-rect-1 {
+.block:hover .ota-card-rect-1 {
   transform: translateX(-45%) translateZ(-80px) rotateY(5deg) rotateZ(10deg);
 }
-a:hover .ota-card-rect-2 {
+.block:hover .ota-card-rect-2 {
   transform: translateZ(0) rotateZ(5deg);
 }
-a:hover .ota-card-rect-3 {
+.block:hover .ota-card-rect-3 {
   transform: translateX(45%) translateZ(80px) rotateY(-5deg);
+}
+
+/* 添加图标的悬停显示效果 */
+.card-hover-icon {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.block:hover .card-hover-icon {
+  opacity: 1;
 }
 </style>
