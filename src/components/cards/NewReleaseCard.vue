@@ -1,40 +1,41 @@
 <template>
-  <router-link to="/new-release" class="block">
-    <div class="grid-item flex flex-col items-center pt-12 text-center" style="background-color:#ffffff; position: relative; overflow: hidden;">
-      <h2 class="text-4xl font-bold">海外上新</h2>
-      <p class="text-xl mt-2">友商海外动态及时掌握</p>
+  <router-link to="/new-release" class="block h-full">
+    <div class="grid-item flex flex-col h-full text-center" style="background-color:#F3F4F6; position: relative; overflow: hidden;">
+
+      <div class="pt-12">
+        <h2 class="text-4xl font-bold">海外上新</h2>
+        <p class="text-xl mt-2">友商海外动态及时掌握</p>
+      </div>
+
       <div class="card-hover-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
       </div>
 
-      <div class="animation-container">
-        <div class="info-card" :class="{ 'active': showInfo }">
-          <div class="text-info">
-            <p class="car-name">{{ currentCar.name }}</p>
-            <p class="country">{{ currentCar.country }}</p>
-            <p class="price-local">{{ currentCar.localPrice }}</p>
-            <p class="price-rmb">{{ currentCar.rmbPrice }}</p>
-          </div>
-          <div class="car-image-container">
-            <img :src="currentCar.image" class="car-image" />
-          </div>
-        </div>
-
-        <div class="text-scroller" :style="{ transform: `translateY(-${carIndex * 100}px)` }">
-          <div v-for="(car, index) in carData" :key="`text-${index}`" class="text-item">
-            <p class="car-name">{{ car.name }}</p>
-            <p class="country">{{ car.country }}</p>
-            <p class="price-local">{{ car.localPrice }}</p>
-            <p class="price-rmb">{{ car.rmbPrice }}</p>
-          </div>
-        </div>
-
-        <div class="image-scroller" :style="{ transform: `translateX(-${carIndex * 200}px)` }">
-          <div v-for="(car, index) in carData" :key="`image-${index}`" class="image-item">
-            <img :src="car.image" />
+      <div
+          class="card-carousel-container"
+          @mouseenter="pauseCarousel"
+          @mouseleave="resumeCarousel"
+      >
+        <div class="card-stack">
+          <div
+              v-for="(car, index) in carData"
+              :key="car.name"
+              class="info-card"
+              :style="getCardStyle(index)"
+          >
+            <div class="text-info">
+              <p class="car-name">{{ car.name }}</p>
+              <p class="country">{{ car.country }}</p>
+              <p class="price-local">{{ car.localPrice }}</p>
+              <p class="price-rmb">{{ car.rmbPrice }}</p>
+            </div>
+            <div class="car-image-container">
+              <img :src="car.image" class="car-image" />
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </router-link>
 </template>
@@ -46,89 +47,123 @@ export default {
   data() {
     return {
       carData: newReleaseCarData,
-      currentCar: {},
-      showInfo: false,
-      carIndex: 0,
+      currentIndex: 0,
+      intervalId: null,
+      isPaused: false,
     };
   },
   methods: {
-    startAnimation() {
-      // Initialize with the first car
-      this.currentCar = this.carData[0];
+    getCardStyle(index) {
+      const total = this.carData.length;
+      const offset = (this.currentIndex - index + total) % total;
 
-      const animate = () => {
-        this.showInfo = false; // First, hide the card
+      let transform = '';
 
-        // After a delay (for the exit animation), update the content and start the entrance animation
-        setTimeout(() => {
-          this.carIndex = (this.carIndex + 1) % this.carData.length;
-          this.currentCar = this.carData[this.carIndex];
-          this.showInfo = true; // Then, show the card with new content
-        }, 1500); // This should match the transition duration
+      if (offset < 5) {
+        const scale = 1 - offset * 0.05;
+        const translateY = offset * -25;
+        const zIndex = total - offset;
+        const opacity = 1 - offset * 0.2;
+
+        transform = `translateY(${translateY}px) scale(${scale})`;
+
+        if (this.isPaused && offset === 0) {
+          transform += ' scale(1.05)';
+        }
+
+        return {
+          transform: transform,
+          zIndex: zIndex,
+          opacity: opacity,
+        };
+      }
+
+      return {
+        transform: 'translateY(-125px) scale(0.75)',
+        opacity: 0,
+        zIndex: 0,
       };
-
-      // Initial display
-      setTimeout(() => {
-        this.showInfo = true;
-      }, 100);
-
-      // Set interval for subsequent animations
-      setInterval(animate, 4000); // Time each car is displayed + animation time
+    },
+    startCarousel() {
+      clearInterval(this.intervalId);
+      this.intervalId = setInterval(() => {
+        this.currentIndex = (this.currentIndex - 1 + this.carData.length) % this.carData.length;
+      }, 3000);
+    },
+    pauseCarousel() {
+      this.isPaused = true;
+      clearInterval(this.intervalId);
+    },
+    resumeCarousel() {
+      this.isPaused = false;
+      this.startCarousel();
     }
   },
   mounted() {
     if (this.carData.length > 0) {
-      this.startAnimation();
+      this.currentIndex = this.carData.length - 1;
+      this.startCarousel();
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   }
 };
 </script>
 
 <style scoped>
-.animation-container {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  width: 280px;
-  height: 100px;
+/* Main container is now a flex column that fills height */
+.grid-item {
+  height: 100%;
+}
+
+.card-carousel-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.card-stack {
+  position: relative;
+  width: 320px;
+  height: 115px;
 }
 
 .info-card {
   position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 15px;
+  background-color: #FFFFFF;
+  border-radius: 18px;
   display: flex;
   align-items: center;
-  padding: 10px;
-  opacity: 0;
-  transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.info-card.active {
-  opacity: 1;
+  padding: 15px;
+  color: #333;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  will-change: transform, opacity;
 }
 
 .text-info {
-  width: 50%;
-  color: white;
+  width: 55%;
   text-align: left;
+  padding-left: 10px;
 }
 
 .car-name {
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .country, .price-local, .price-rmb {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
 }
 
 .car-image-container {
-  width: 50%;
+  width: 45%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,55 +171,16 @@ export default {
 
 .car-image {
   max-width: 100%;
-  max-height: 80px;
-  object-fit: contain;
-}
-
-/* Scrollers are visible again to create the sliding effect */
-.text-scroller, .image-scroller {
-  position: absolute;
-  opacity: 0; /* Start hidden */
-  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-.info-card.active + .text-scroller,
-.info-card.active ~ .image-scroller {
-  opacity: 1;
-}
-
-.text-scroller {
-  top: 100px; /* Start below the card */
-  left: 10px;
-  color: transparent; /* Hide text, only use for positioning */
-}
-
-.info-card.active + .text-scroller {
-  transform: translateY(-100px); /* Move up into the card's position */
-}
-
-.image-scroller {
-  top: 10px;
-  left: 280px; /* Start to the right of the card */
-  display: flex;
-}
-
-.info-card.active ~ .image-scroller {
-  transform: translateX(-280px); /* Move left into the card's position */
-}
-
-.text-item, .image-item {
-  height: 100px;
-}
-
-.image-item {
-  width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-item img {
-  max-width: 180px;
   max-height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+}
+
+/* FIX: Positioned the icon at the bottom right and restored its color */
+.card-hover-icon {
+  position: absolute;
+  bottom: 16px; /* Changed from top to bottom */
+  right: 16px;
+  color: #374151; /* Restored to a solid, dark gray color */
 }
 </style>

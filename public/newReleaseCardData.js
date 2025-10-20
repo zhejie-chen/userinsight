@@ -20,5 +20,19 @@ export const newReleaseCarData = [
         localPrice: '€42,990',
         rmbPrice: '约 35万 RMB',
         image: '/img/cars/XPeng_X9.png'
+    },
+    {
+        name: '蔚来 ET5',
+        country: '德国',
+        localPrice: '€47,500',
+        rmbPrice: '约 39万 RMB',
+        image: '/img/cars/Han.png'
+    },
+    {
+        name: '小鹏 G6',
+        country: '法国',
+        localPrice: '€42,990',
+        rmbPrice: '约 35万 RMB',
+        image: '/img/cars/XPeng_X9.png'
     }
 ];
