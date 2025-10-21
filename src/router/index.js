@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import OverseasMapPage from '../views/OverseasMapPage.vue';
 import NewReleasePage from '../views/NewReleasePage.vue';
-import RegulationPage from '../views/RegulationPage.vue'; // [新增] 导入新页面
+import RegulationPage from '../views/RegulationPage.vue';
+import PressConferencePage from '../views/PressConferencePage.vue';
 
 const routes = [
     {
@@ -26,6 +27,11 @@ const routes = [
         name: 'Regulation',
         component: RegulationPage,
     },
+    {
+        path: '/press-conference',
+        name: 'press-conference',
+        component: PressConferencePage
+    }
 ];
 
 const router = createRouter({
