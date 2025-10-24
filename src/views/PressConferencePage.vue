@@ -1,13 +1,47 @@
 <template>
-  <main id="main-content" class="pt-11 bg-gray-100 min-h-screen">
+  <main id="main-content" class="pt-11 bg-gray-50 min-h-screen">
     <div class="main-layout">
       <div class="left-panel">
-        <div class="fixed-image-wrapper">
-          <img
-              src="/img/cover-press-conference/乐道L90上市发布会-头图.png"
-              alt="Upcoming Conference Teaser"
-              class="teaser-image"
-          />
+        <div class="timeline-card">
+          <h2 class="timeline-title">发布会日程</h2>
+          <div class="timeline-scroll-area">
+            <div
+                v-for="(group, monthKey) in groupedTimelineEvents"
+                :key="monthKey"
+                class="month-group-timeline"
+            >
+              <div class="month-header">{{ monthKey }}</div>
+              <div class="timeline">
+                <div
+                    v-for="item in group"
+                    :key="item.id"
+                    class="timeline-item"
+                    :class="{ 'has-report': item.hasReport, 'is-past': item.isPast }"
+                    @click="item.hasReport && scrollToConference(item.reportId)"
+                    :tabindex="item.hasReport ? 0 : -1"
+                >
+                  <div class="date-marker">
+                    <span class="day">{{ item.day }}</span>
+                    <span class="weekday">{{ item.weekday }}</span>
+                  </div>
+                  <div class="event-details">
+                    <p class="event-title">{{ item.title }}</p>
+                    <div class="badges-container">
+                      <span v-if="item.isPast && item.hasReport" class="report-badge report-badge-archived">
+                        报告
+                      </span>
+                      <span v-if="!item.isPast" class="report-badge report-badge-upcoming">
+                        预计
+                      </span>
+                      <span v-if="!item.isPast && item.hasReport" class="report-badge hover-badge">
+                        查看报告
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -16,42 +50,29 @@
           <div class="page-header mb-12">
             <h1 class="text-4xl font-bold text-gray-800">新车发布会</h1>
           </div>
-
-          <div class="timeline-container space-y-16">
+          <div class="space-y-16">
             <div
                 v-for="(group, month) in groupedConferences"
                 :key="month"
-                class="month-group"
+                class="month-group-reports"
             >
               <div class="month-divider">
                 <span class="month-text">{{ month }}</span>
               </div>
-
-              <div
-                  class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8"
-              >
+              <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
                 <div
-                    v-for="conference in conferences"
+                    v-for="conference in group"
                     :key="conference.id"
-                    class="conference-card bg-white rounded-lg shadow-md overflow-hidden"
+                    :ref="el => { if (el) conferenceCardRefs[conference.id] = el }"
+                    class="conference-card bg-white rounded-lg shadow-md"
                 >
                   <div class="relative" style="padding-bottom: 42.6%">
-                    <img
-                        :src="conference.image"
-                        :alt="conference.title"
-                        class="absolute h-full w-full object-cover"
-                    />
+                    <img :src="conference.image" :alt="conference.title" class="absolute h-full w-full object-cover"/>
                   </div>
                   <div class="p-5">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">
-                      {{ conference.title }}
-                    </h3>
-                    <p class="text-gray-600 text-sm h-14 overflow-hidden mb-4">
-                      {{ conference.description }}
-                    </p>
-                    <div
-                        class="card-meta flex justify-between items-center text-xs text-gray-500"
-                    >
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ conference.title }}</h3>
+                    <p class="text-gray-600 text-sm h-14 overflow-hidden mb-4">{{ conference.description }}</p>
+                    <div class="card-meta flex justify-between items-center text-xs text-gray-500">
                       <span>{{ conference.date }}</span>
                       <span>用户洞察</span>
                     </div>
@@ -67,184 +88,191 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeUpdate, reactive } from 'vue';
 
+// --- DATA SOURCES (No changes needed here) ---
+const timelineEvents = ref([
+  { id: 'evt-009', date: '2025-12-10', title: '蔚来 ET9 行政版发布', reportId: null },
+  { id: 'evt-010', date: '2025-11-20', title: '极氪 007 性能版发布', reportId: null },
+  { id: 'evt-011', date: '2025-11-05', title: '理想 L8 Pro 升级款发布', reportId: null },
+  { id: 'evt-012', date: '2025-10-30', title: '小米 SU7 Pro 答谢会', reportId: null },
+  { id: 'evt-001', date: '2025-05-20', title: '全新小鹏P7上市发布会', reportId: 2 },
+  { id: 'evt-002', date: '2025-05-15', title: '乐道L90上市发布会', reportId: 1 },
+  { id: 'evt-003', date: '2025-04-22', title: '极氪9X技术发布会', reportId: 3 },
+  { id: 'evt-004', date: '2025-04-18', title: '深蓝L07P7亮相发布会', reportId: 4 },
+  { id: 'evt-005', date: '2025-04-10', title: '比亚迪汉新车型技术分享会', reportId: null },
+  { id: 'evt-006', date: '2025-03-25', title: '零跑B01上市发布会', reportId: 6 },
+  { id: 'evt-007', date: '2025-03-11', title: '理想i8上市发布会', reportId: 5 },
+  { id: 'evt-008', date: '2025-02-28', title: '蔚来资本日', reportId: null },
+]);
 const conferences = ref([
-  {
-    id: 1,
-    title: '乐道L90上市发布会',
-    description:
-        '全新乐道L90，智能电动新标杆，开启未来出行新篇章。创新科技，卓越性能，邀您共同见证。',
-    image: '/img/cover-press-conference/乐道L90上市发布会-头图.png',
-    date: '2025-05-15',
-    personnel: '艾铁成'
-  },
-  {
-    id: 2,
-    title: '全新小鹏P7上市发布会',
-    description:
-        '见证全新小鹏P7的非凡魅力，智能轿跑新定义。集优雅设计与前沿科技于一身，带来极致驾驶体验。',
-    image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png',
-    date: '2025-05-20',
-    personnel: '何小鹏'
-  },
-  {
-    id: 3,
-    title: '极氪9X技术发布会',
-    description:
-        '极氪9X，颠覆性技术震撼发布。探索未来出行新可能，体验前所未有的智能与性能，开启新纪元。',
-    image: '/img/cover-press-conference/极氪9X技术发布会.png',
-    date: '2025-04-22',
-    personnel: '安聪慧'
-  },
-  {
-    id: 4,
-    title: '深蓝L07P7亮相发布会',
-    description:
-        '深蓝L07P7，双子星闪耀登场。设计美学与智能科技的完美融合， redefine 您的驾驶想象。',
-    image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png',
-    date: '2025-04-18',
-    personnel: '邓承浩'
-  },
-  {
-    id: 5,
-    title: '理想i8上市发布会',
-    description:
-        '理想i8，为家庭打造的智能旗舰SUV。更大空间，更强智能，更舒适的驾乘体验，幸福出行再升级。',
-    image: '/img/cover-press-conference/理想i8上市发布会-头图.png',
-    date: '2025-03-11',
-    personnel: '李想'
-  },
-  {
-    id: 6,
-    title: '零跑B01上市发布会',
-    description:
-        '零跑B01，开启智能纯电新纪元。越级配置，亲民价格，让豪华体验触手可及，期待您的莅临。',
-    image: '/img/cover-press-conference/零跑B01上市发布会-头图.png',
-    date: '2025-03-25',
-    personnel: '朱江明'
+  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15' },
+  { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20' },
+  { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22' },
+  { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18' },
+  { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11' },
+  { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25' },
+]);
+
+// --- SCROLLING LOGIC (No changes needed here) ---
+const conferenceCardRefs = reactive({});
+onBeforeUpdate(() => {
+  Object.keys(conferenceCardRefs).forEach(key => delete conferenceCardRefs[key]);
+});
+const scrollToConference = (reportId) => {
+  const cardElement = conferenceCardRefs[reportId];
+  if (cardElement) {
+    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
-])
+};
 
+// --- COMPUTED PROPERTIES (No changes needed here) ---
+const groupedTimelineEvents = computed(() => {
+  const today = new Date('2025-10-24T00:00:00');
+  const conferenceIdsWithReports = new Set(conferences.value.map(c => c.id));
+  const processed = [...timelineEvents.value]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .map(event => {
+        const eventDate = new Date(event.date);
+        return { ...event, day: eventDate.getDate(), weekday: eventDate.toLocaleString('zh-CN', { weekday: 'short' }), isPast: eventDate < today, hasReport: event.reportId !== null && conferenceIdsWithReports.has(event.reportId), };
+      });
+  return processed.reduce((acc, event) => {
+    const date = new Date(event.date);
+    const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(event);
+    return acc;
+  }, {});
+});
 const groupedConferences = computed(() => {
-  const sorted = [...conferences.value].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-  )
-  return sorted.reduce((acc, conference) => {
-    const date = new Date(conference.date)
-    const year = date.getFullYear()
-    const month = date.toLocaleString('zh-CN', { month: 'long' })
-    const key = `${year}年 ${month}`
-
-    if (!acc[key]) {
-      acc[key] = []
-    }
-    acc[key].push(conference)
-    return acc
-  }, {})
-})
+  return [...conferences.value]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .reduce((acc, conference) => {
+        const date = new Date(conference.date);
+        const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(conference);
+        return acc;
+      }, {});
+});
 </script>
 
 <style scoped>
 /* Main Layout */
 .main-layout {
   display: flex;
+  gap: 2rem; /* 恢复 gap，解决巨大空间问题 */
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-/* Left Fixed Panel */
+/* Left Panel */
 .left-panel {
-  flex: 0 0 30%; /* Left panel takes up 30% of the width */
-  max-width: 400px; /* But not more than 400px */
-  position: relative;
-}
-.fixed-image-wrapper {
-  position: fixed;
-  top: 80px; /* Adjust based on header height */
-  left: 40px; /* A fixed gap from the left edge */
-  width: calc(30% - 60px); /* Adjust width considering gaps */
-  max-width: 380px;
-  height: calc(100vh - 120px); /* Adjust height to fit screen */
-  border-radius: 0.75rem; /* 12px */
-  overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
-}
-.teaser-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  flex: 0 0 300px;
+  /* position: relative; (这个不再需要) */
 }
 
-/* Right Scrollable Content */
+/* --- 修改点: 修复 Bug 的核心 --- */
+.timeline-card {
+  position: sticky; /* 使用 sticky 替代 fixed */
+  top: 88px; /* 定义它何时开始“粘住” */
+  height: calc(100vh - 112px); /* 限制最大高度，避免超出屏幕 */
+
+  /* 以下是卡片的原有样式，保持不变 */
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-title {
+  font-size: 1.25rem; font-weight: 700; color: #1f2937; padding: 1.5rem 1.5rem 1rem; flex-shrink: 0;
+}
+.timeline-scroll-area {
+  flex-grow: 1; overflow-y: auto; padding: 0 0.5rem 1.5rem 1.5rem; scrollbar-width: none; -ms-overflow-style: none;
+}
+.timeline-scroll-area::-webkit-scrollbar { display: none; }
+
+/* Timeline Design */
+.month-group-timeline { margin-bottom: 1.5rem; }
+.month-header {
+  font-size: 0.8rem; font-weight: 600; color: #9ca3af; text-transform: uppercase;
+  padding-bottom: 0.75rem; border-bottom: 1px solid #f3f4f6; margin-bottom: 0.75rem;
+}
+.timeline-item {
+  display: flex; align-items: center; padding: 0.75rem; border-radius: 0.5rem; transition: background-color 0.2s ease;
+}
+.timeline-item.has-report { cursor: pointer; }
+.timeline-item.has-report:hover { background-color: #f9fafb; }
+.timeline-item.has-report:focus-visible { outline: 2px solid #3b82f6; background-color: #f9fafb; }
+
+.date-marker {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 48px; height: 48px; border-radius: 0.5rem; background-color: #f3f4f6; color: #4b5563;
+  margin-right: 1rem; transition: all 0.3s ease;
+}
+.date-marker .day { font-size: 1.25rem; font-weight: 600; line-height: 1.2; }
+.date-marker .weekday { font-size: 0.75rem; color: #6b7280; }
+.timeline-item.has-report:not(.is-past):hover .date-marker { background-color: #3b82f6; color: white; }
+.timeline-item.has-report:not(.is-past):hover .date-marker .weekday { color: rgba(255,255,255,0.8); }
+
+.event-details { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.event-title {
+  font-weight: 600; color: #374151; font-size: 0.9rem; line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
+}
+.badges-container { margin-top: 0.25rem; display: flex; gap: 0.5rem; }
+
+/* Badge Styles */
+.report-badge {
+  font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 999px; line-height: 1.2;
+}
+.report-badge-archived {
+  background-color: #dcfce7;
+  color: #166534;
+}
+.report-badge-upcoming {
+  background-color: #fef3c7; color: #b45309;
+}
+.hover-badge {
+  background-color: #eff6ff; color: #3b82f6; opacity: 0; transition: opacity 0.3s ease; position: absolute;
+}
+.timeline-item.has-report:not(.is-past):hover .hover-badge { opacity: 1; }
+.timeline-item.has-report:not(.is-past):hover .report-badge-upcoming { opacity: 0; }
+
+/* Past Event Styling */
+.timeline-item.is-past { opacity: 0.7; }
+.timeline-item.is-past:not(.has-report) { opacity: 0.5; }
+.timeline-item.is-past.has-report:hover { opacity: 1; }
+.timeline-item.is-past.has-report .date-marker { background-color: #e5e7eb; }
+.timeline-item.is-past.has-report:hover .date-marker { background-color: #6b7280; color: white; }
+.timeline-item.is-past.has-report:hover .date-marker .weekday { color: rgba(255,255,255,0.8); }
+
+/* Right Panel */
 .right-panel {
   flex: 1;
-  min-width: 0; /* Important for flexbox to prevent overflow */
-  padding-left: 2rem; /* Add some space next to the fixed panel */
+  min-width: 0;
 }
-
-.page-header h1 {
-  letter-spacing: 1px;
-}
-
-/* Month Divider */
-.month-divider {
-  display: flex;
-  align-items: center;
-  text-align: left;
-  margin-bottom: 2.5rem; /* 40px */
-}
-.month-divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #e5e7eb; /* gray-200 */
-  margin-left: 1.5em;
-}
-.month-text {
-  font-size: 1.25rem; /* 20px */
-  font-weight: 600;
-  color: #4b5563; /* gray-600 */
-  padding-right: 1.5rem;
-}
-
-/* --- Card Styles Start: HERE ARE THE CHANGES --- */
+.page-header h1 { letter-spacing: 1px; }
+.month-divider { display: flex; align-items: center; margin-bottom: 2.5rem; }
+.month-divider::after { content: ''; flex: 1; border-bottom: 1px solid #e5e7eb; margin-left: 1.5em; }
+.month-text { font-size: 1.25rem; font-weight: 600; color: #4b5563; padding-right: 1.5rem; }
 
 .conference-card {
-  /* The transition now only targets the box-shadow. */
-  transition: box-shadow 0.3s ease-in-out;
-  border: 1px solid #e5e7eb;
-  /* overflow: hidden is crucial to contain the scaled image */
-  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; border: 1px solid #e5e7eb; overflow: hidden;
 }
+.conference-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07); }
+.conference-card img { transition: transform 0.3s ease; }
+.conference-card:hover img { transform: scale(1.05); }
+.card-meta { border-top: 1px solid #f3f4f6; padding-top: 1rem; }
 
-.conference-card:hover {
-  /* We removed 'transform: translateY(-8px)' */
-  /* We keep the shadow change for a nice depth effect. */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
-}
-
-/* We target the image inside the card directly. */
-.conference-card img {
-  /* Add a transition to the image itself for a smooth zoom effect. */
-  transition: transform 0.3s ease-in-out;
-}
-
-.conference-card:hover img {
-  /* On hover, we scale the image up by 5%. */
-  transform: scale(1.05);
-}
-
-.card-meta {
-  border-top: 1px solid #f3f4f6;
-  padding-top: 1rem;
-}
-/* --- Card Styles End --- */
-
-/* Responsive adjustments */
+/* Responsive Adjustments */
 @media (max-width: 1024px) {
-  .left-panel {
-    display: none; /* Hide left panel on smaller screens */
-  }
-  .right-panel {
-    padding-left: 0;
-  }
+  .left-panel { display: none; }
+  .right-panel { padding-left: 0; }
+  .main-layout { padding: 0 1rem; gap: 0; }
 }
 </style>
