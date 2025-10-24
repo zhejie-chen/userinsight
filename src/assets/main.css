@@ -78,3 +78,7 @@ a:hover .card-hover-icon {
 #main-content.blurred {
     filter: blur(8px);
 }
+html {
+    overflow-y: scroll;
+}
+

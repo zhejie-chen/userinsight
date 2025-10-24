@@ -28,10 +28,10 @@
               </div>
 
               <div
-                  class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+                  class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8"
               >
                 <div
-                    v-for="conference in group"
+                    v-for="conference in conferences"
                     :key="conference.id"
                     class="conference-card bg-white rounded-lg shadow-md overflow-hidden"
                 >
@@ -53,7 +53,7 @@
                         class="card-meta flex justify-between items-center text-xs text-gray-500"
                     >
                       <span>{{ conference.date }}</span>
-                      <span>主讲人: {{ conference.personnel }}</span>
+                      <span>用户洞察</span>
                     </div>
                   </div>
                 </div>
@@ -205,19 +205,38 @@ const groupedConferences = computed(() => {
   padding-right: 1.5rem;
 }
 
-/* Card Styles */
+/* --- Card Styles Start: HERE ARE THE CHANGES --- */
+
 .conference-card {
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  /* The transition now only targets the box-shadow. */
+  transition: box-shadow 0.3s ease-in-out;
   border: 1px solid #e5e7eb;
+  /* overflow: hidden is crucial to contain the scaled image */
+  overflow: hidden;
 }
+
 .conference-card:hover {
-  transform: translateY(-8px);
+  /* We removed 'transform: translateY(-8px)' */
+  /* We keep the shadow change for a nice depth effect. */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
 }
+
+/* We target the image inside the card directly. */
+.conference-card img {
+  /* Add a transition to the image itself for a smooth zoom effect. */
+  transition: transform 0.3s ease-in-out;
+}
+
+.conference-card:hover img {
+  /* On hover, we scale the image up by 5%. */
+  transform: scale(1.05);
+}
+
 .card-meta {
   border-top: 1px solid #f3f4f6;
   padding-top: 1rem;
 }
+/* --- Card Styles End --- */
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
