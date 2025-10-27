@@ -11,7 +11,9 @@
             :style="{ left: timelineLeftPos }"
         >
           <div class="timeline-card">
-            <h2 class="timeline-title">发布会日程</h2>
+            <div class="timeline-header">
+              <h2 class="timeline-title">发布会日程</h2>
+            </div>
             <div class="timeline-scroll-area">
               <div
                   v-for="(group, monthKey) in upcomingEventGroups"
@@ -24,8 +26,11 @@
                       v-for="item in group"
                       :key="item.id"
                       class="timeline-item"
-                      :class="{ 'has-report': item.hasReport }"
-                      @click="item.hasReport && scrollToConference(item.reportId)"
+                      :class="{
+                      'has-report': item.hasReport,
+                      'is-active': item.id === activeTimelineEventId
+                    }"
+                      @click="item.hasReport && scrollToConference(item.reportId, item.id)"
                       :tabindex="item.hasReport ? 0 : -1"
                   >
                     <div class="date-marker">
@@ -56,8 +61,11 @@
                         v-for="item in group"
                         :key="item.id"
                         class="timeline-item is-past"
-                        :class="{ 'has-report': item.hasReport }"
-                        @click="item.hasReport && scrollToConference(item.reportId)"
+                        :class="{
+                        'has-report': item.hasReport,
+                        'is-active': item.id === activeTimelineEventId
+                      }"
+                        @click="item.hasReport && scrollToConference(item.reportId, item.id)"
                         :tabindex="item.hasReport ? 0 : -1"
                     >
                       <div class="date-marker">
@@ -80,7 +88,7 @@
       </Teleport>
 
       <div class="right-panel">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="right-panel-content-area">
           <div class="page-header mb-12">
             <h1 class="text-4xl font-bold text-gray-800">新车发布会</h1>
           </div>
@@ -98,7 +106,8 @@
                     v-for="conference in group"
                     :key="conference.id"
                     :ref="el => { if (el) conferenceCardRefs[conference.id] = el }"
-                    class="conference-card bg-white rounded-lg shadow-md"
+                    class="conference-card bg-white rounded-lg"
+                    :class="{ 'is-active': conference.id === activeConferenceId }"
                 >
                   <div class="relative" style="padding-bottom: 42.6%">
                     <img :src="conference.image" :alt="conference.title" class="absolute h-full w-full object-cover"/>
@@ -124,6 +133,11 @@
 <script setup>
 import { ref, computed, onBeforeUpdate, reactive, onMounted, onUnmounted } from 'vue';
 
+// --- Highlighting Logic ---
+const activeConferenceId = ref(null);
+const activeTimelineEventId = ref(null);
+let highlightTimer = null;
+
 // --- Layout & Blur Sync Logic ---
 const isDesktop = ref(window.innerWidth > 1024);
 const mainLayoutRef = ref(null);
@@ -134,7 +148,7 @@ let observer = null;
 const updateTimelinePosition = () => {
   if (mainLayoutRef.value && isDesktop.value) {
     const rect = mainLayoutRef.value.getBoundingClientRect();
-    timelineLeftPos.value = `${rect.left + 32}px`; // 32px is 2rem
+    timelineLeftPos.value = `${rect.left + 32}px`;
   }
 };
 
@@ -167,6 +181,7 @@ onUnmounted(() => {
   };
   window.removeEventListener('resize', handleResize);
   if (observer) observer.disconnect();
+  if (highlightTimer) clearTimeout(highlightTimer);
 });
 
 // --- DATA SOURCES ---
@@ -174,13 +189,26 @@ const timelineEvents = ref([
   { id: 'evt-009', date: '2025-12-10', title: '蔚来 ET9 行政版发布', reportId: null }, { id: 'evt-010', date: '2025-11-20', title: '极氪 007 性能版发布', reportId: null }, { id: 'evt-011', date: '2025-11-05', title: '理想 L8 Pro 升级款发布', reportId: null }, { id: 'evt-012', date: '2025-10-30', title: '小米 SU7 Pro 答谢会', reportId: null }, { id: 'evt-001', date: '2025-05-20', title: '全新小鹏P7上市发布会', reportId: 2 }, { id: 'evt-002', date: '2025-05-15', title: '乐道L90上市发布会', reportId: 1 }, { id: 'evt-003', date: '2025-04-22', title: '极氪9X技术发布会', reportId: 3 }, { id: 'evt-004', date: '2025-04-18', title: '深蓝L07P7亮相发布会', reportId: 4 }, { id: 'evt-005', date: '2025-04-10', title: '比亚迪汉新车型技术分享会', reportId: null }, { id: 'evt-006', date: '2025-03-25', title: '零跑B01上市发布会', reportId: 6 }, { id: 'evt-007', date: '2025-03-11', title: '理想i8上市发布会', reportId: 5 }, { id: 'evt-008', date: '2025-02-28', title: '蔚来资本日', reportId: null },
 ]);
 const conferences = ref([
-  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-09-15' }, { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20' }, { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22' }, { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18' }, { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11' }, { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25' },
+  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15' }, { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20' }, { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22' }, { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18' }, { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11' }, { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25' },
 ]);
 
-// --- SCROLLING LOGIC ---
+// --- Scrolling & Highlighting Logic ---
 const conferenceCardRefs = reactive({});
 onBeforeUpdate(() => { Object.keys(conferenceCardRefs).forEach(key => delete conferenceCardRefs[key]); });
-const scrollToConference = (reportId) => { const cardElement = conferenceCardRefs[reportId]; if (cardElement) cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+
+const scrollToConference = (reportId, eventId) => {
+  const cardElement = conferenceCardRefs[reportId];
+  if (cardElement) {
+    cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    activeConferenceId.value = reportId;
+    activeTimelineEventId.value = eventId;
+    if (highlightTimer) clearTimeout(highlightTimer);
+    highlightTimer = setTimeout(() => {
+      activeConferenceId.value = null;
+      activeTimelineEventId.value = null;
+    }, 2500);
+  }
+};
 
 // --- COMPUTED PROPERTIES ---
 const processAndGroupEvents = (events, isPastFilter) => {
@@ -212,27 +240,33 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
   display: flex; flex-direction: column;
 }
 
-.timeline-title { font-size: 1.25rem; font-weight: 700; color: #1f2937; padding: 1.5rem 1.5rem 1rem; flex-shrink: 0; }
-.timeline-scroll-area { flex-grow: 1; overflow-y: auto; padding: 0 0.5rem 1.5rem 1.5rem; scrollbar-width: none; -ms-overflow-style: none; }
+.timeline-header {
+  padding: 1.5rem 1.5rem 1rem; flex-shrink: 0; border-bottom: 1px solid #e5e7eb;
+}
+.timeline-title {
+  font-size: 1.25rem; font-weight: 700; color: #1f2937;
+}
+.timeline-scroll-area {
+  flex-grow: 1; overflow-y: auto; padding: 1.5rem 0.5rem 1.5rem 1.5rem;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
 .timeline-scroll-area::-webkit-scrollbar { display: none; }
 
 /* Timeline Design */
 .month-group-timeline { margin-bottom: 1.5rem; }
 .month-header { font-size: 0.8rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; padding-bottom: 0.75rem; border-bottom: 1px solid #f3f4f6; margin-bottom: 0.75rem; }
 
-/* --- "过往发布会" 标题样式更新 --- */
 .past-events-section { margin-top: 2.5rem; }
 .past-events-title {
-  font-size: 1.25rem; /* 增大字号 */
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  padding-left: 0; /* 修改点：与月份标题左对齐 */
+  font-size: 1.25rem; font-weight: 700; color: #1f2937;
+  margin-bottom: 1.5rem; padding-left: 0;
 }
 
 .timeline-item { display: flex; align-items: center; padding: 0.75rem; border-radius: 0.5rem; transition: all 0.2s ease; }
 .timeline-item.has-report { cursor: pointer; }
+.timeline-item:not(.has-report) { cursor: default; }
 .timeline-item.has-report:not(.is-past):hover { background-color: #f9fafb; }
+.timeline-item.is-active { background-color: #eff6ff; }
 
 /* Date Marker */
 .date-marker {
@@ -242,8 +276,14 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
 }
 .date-marker .day { font-size: 1.25rem; font-weight: 600; line-height: 1.2; }
 .date-marker .weekday { font-size: 0.75rem; color: #6b7280; }
-.timeline-item.has-report:not(.is-past):hover .date-marker { background-color: #3b82f6; color: white; }
-.timeline-item.has-report:not(.is-past):hover .date-marker .weekday { color: rgba(255,255,255,0.8); }
+.timeline-item.has-report:not(.is-past):hover .date-marker,
+.timeline-item.is-active:not(.is-past) .date-marker {
+  background-color: #3b82f6; color: white;
+}
+.timeline-item.has-report:not(.is-past):hover .date-marker .weekday,
+.timeline-item.is-active:not(.is-past) .date-marker .weekday {
+  color: rgba(255,255,255,0.8);
+}
 
 /* Event Details */
 .event-details { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
@@ -258,37 +298,62 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
 .timeline-item.has-report:not(.is-past):hover .hover-badge { opacity: 1; }
 .timeline-item.has-report:not(.is-past):hover .report-badge-upcoming { opacity: 0; }
 
-/* --- Past Event Styling & Enhanced Hover Effect --- */
+/* Past Event Styling & Enhanced Hover Effect */
 .timeline-item.is-past { opacity: 0.6; }
 .timeline-item.is-past .date-marker { background-color: #e5e7eb; }
-
-.timeline-item.is-past:hover {
-  opacity: 1;
-  background-color: #eff6ff; /* 修改点：浅蓝色 hover 背景 */
+.timeline-item.is-past.has-report:hover {
+  opacity: 1; background-color: #eff6ff;
 }
-.timeline-item.is-past:hover .date-marker {
-  background-color: #6b7280;
-  color: white;
+.timeline-item.is-past.has-report:hover .date-marker,
+.timeline-item.is-past.is-active .date-marker {
+  background-color: #6b7280; color: white;
 }
-.timeline-item.is-past:hover .date-marker .weekday { color: rgba(255,255,255,0.8); }
-.timeline-item.is-past:hover .event-title { color: #1f2937; }
+.timeline-item.is-past.has-report:hover .date-marker .weekday,
+.timeline-item.is-past.is-active .date-marker .weekday {
+  color: rgba(255,255,255,0.8);
+}
+.timeline-item.is-past.has-report:hover .event-title,
+.timeline-item.is-past.is-active .event-title {
+  color: #1f2937;
+}
 
 /* Right Panel */
 .right-panel { flex: 1; min-width: 0; padding-left: 2rem; }
+.right-panel-content-area {
+  padding-top: 3rem;
+  padding-bottom: 24px;
+}
+.container { padding-top: 0 !important; padding-bottom: 0 !important; }
 .page-header h1 { letter-spacing: 1px; }
 .month-divider { display: flex; align-items: center; margin-bottom: 2.5rem; }
 .month-divider::after { content: ''; flex: 1; border-bottom: 1px solid #e5e7eb; margin-left: 1.5em; }
 .month-text { font-size: 1.25rem; font-weight: 600; color: #4b5563; padding-right: 1.5rem; }
 
-.conference-card { transition: box-shadow 0.3s ease, transform 0.3s ease; border: 1px solid #e5e7eb; overflow: hidden; }
-.conference-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07); }
+/* Conference Card Effects */
+.conference-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  /* --- 修改点：统一阴影效果 --- */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.conference-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
+}
+.conference-card.is-active {
+  transform: scale(1.03) translateY(0) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5), 0 12px 24px rgba(0, 0, 0, 0.1);
+}
 .conference-card img { transition: transform 0.3s ease; }
 .conference-card:hover img { transform: scale(1.05); }
+.conference-card.is-active img { transform: scale(1.05); }
 .card-meta { border-top: 1px solid #f3f4f6; padding-top: 1rem; }
 
 @media (max-width: 1024px) {
   .left-panel-spacer { display: none; }
   .right-panel { padding-left: 0; }
+  .right-panel-content-area { padding-bottom: 3rem; }
   .main-layout { padding: 0 1rem; }
 }
 </style>
