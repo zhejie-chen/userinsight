@@ -106,7 +106,7 @@
                     v-for="conference in group"
                     :key="conference.id"
                     :ref="el => { if (el) conferenceCardRefs[conference.id] = el }"
-                    class="conference-card bg-white rounded-lg"
+                    class="conference-card group bg-white rounded-lg"
                     :class="{ 'is-active': conference.id === activeConferenceId }"
                     @click="openConferenceModal(conference)"
                 >
@@ -118,7 +118,23 @@
                     <p class="text-gray-600 text-sm h-14 overflow-hidden mb-4">{{ conference.description }}</p>
                     <div class="card-meta flex justify-between items-center text-xs text-gray-500">
                       <span>{{ conference.date }}</span>
-                      <span>用户洞察</span>
+
+                      <div class="meta-action">
+                        <span class="default-text">用户洞察</span>
+                        <a
+                            v-if="conference.replayUrl"
+                            :href="conference.replayUrl"
+                            target="_blank"
+                            class="hover-link"
+                            @click.stop
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="link-icon">
+                            <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.665l3-3z" />
+                            <path d="M8.603 14.397a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 005.656 5.656l3-3a4 4 0 00-.225-5.865.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.665l-3 3z" />
+                          </svg>
+                          直播回放
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -150,14 +166,10 @@ function openConferenceModal(conference) {
     details: conferenceDetails[conference.id] || { team: '未知团队', images: [] }
   };
   isModalOpen.value = true;
-  // --- 修改点：移除这里的 body 样式操作 ---
-  // document.body.style.overflow = 'hidden';
 }
 
 function closeConferenceModal() {
   isModalOpen.value = false;
-  // --- 修改点：移除这里的 body 样式操作 ---
-  // document.body.style.overflow = '';
 }
 
 
@@ -217,7 +229,12 @@ const timelineEvents = ref([
   { id: 'evt-009', date: '2025-12-10', title: '蔚来 ET9 行政版发布', reportId: null }, { id: 'evt-010', date: '2025-11-20', title: '极氪 007 性能版发布', reportId: null }, { id: 'evt-011', date: '2025-11-05', title: '理想 L8 Pro 升级款发布', reportId: null }, { id: 'evt-012', date: '2025-10-30', title: '小米 SU7 Pro 答谢会', reportId: null }, { id: 'evt-001', date: '2025-05-20', title: '全新小鹏P7上市发布会', reportId: 2 }, { id: 'evt-002', date: '2025-05-15', title: '乐道L90上市发布会', reportId: 1 }, { id: 'evt-003', date: '2025-04-22', title: '极氪9X技术发布会', reportId: 3 }, { id: 'evt-004', date: '2025-04-18', title: '深蓝L07P7亮相发布会', reportId: 4 }, { id: 'evt-005', date: '2025-04-10', title: '比亚迪汉新车型技术分享会', reportId: null }, { id: 'evt-006', date: '2025-03-25', title: '零跑B01上市发布会', reportId: 6 }, { id: 'evt-007', date: '2025-03-11', title: '理想i8上市发布会', reportId: 5 }, { id: 'evt-008', date: '2025-02-28', title: '蔚来资本日', reportId: null },
 ]);
 const conferences = ref([
-  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15' }, { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20' }, { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22' }, { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18' }, { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11' }, { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25' },
+  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15', replayUrl: 'https://www.nio.cn/' },
+  { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20', replayUrl: 'https://www.xiaopeng.com/' },
+  { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22', replayUrl: null },
+  { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18', replayUrl: 'https://www.deepal.com.cn/' },
+  { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11', replayUrl: null },
+  { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25', replayUrl: 'https://www.leapmotor.com/' },
 ]);
 
 // --- Scrolling & Highlighting Logic ---
@@ -363,8 +380,9 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
   border: 1px solid #e5e7eb;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  cursor: pointer;
 }
+.conference-card:has(.hover-link:hover) { cursor: default; }
+.conference-card:not(:has(.hover-link:hover)) { cursor: pointer; }
 .conference-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
@@ -376,7 +394,49 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
 .conference-card img { transition: transform 0.3s ease; }
 .conference-card:hover img { transform: scale(1.05); }
 .conference-card.is-active img { transform: scale(1.05); }
-.card-meta { border-top: 1px solid #f3f4f6; padding-top: 1rem; }
+.card-meta { border-top: 1px solid #f3f4f6; padding-top: 1rem; position: relative; }
+
+/* --- 卡片右下角交互样式更新 --- */
+.meta-action {
+  position: relative;
+  height: 16px;
+  display: flex;
+  align-items: center;
+}
+.default-text, .hover-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.hover-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(5px);
+  color: #6b7280; /* 改为灰色 */
+  text-decoration: none;
+  white-space: nowrap; /* 防止换行 */
+}
+.link-icon {
+  width: 14px;
+  height: 14px;
+}
+/* 修复：只有当卡片内存在.hover-link时，才应用消失效果 */
+.group:has(.hover-link):hover .default-text {
+  opacity: 0;
+  transform: translateY(-5px);
+}
+.group:has(.hover-link):hover .hover-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* 更新：链接本身的 hover 效果改为放大 */
+.hover-link:hover {
+  transform: translateY(0) scale(1.1); /* 保持Y轴位置，只放大 */
+  color: #1d1d1f; /* hover时变深色 */
+}
 
 @media (max-width: 1024px) {
   .left-panel-spacer { display: none; }

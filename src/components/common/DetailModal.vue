@@ -76,6 +76,12 @@ onUnmounted(() => {
             leave-to-class="opacity-0 translate-y-4 sm:scale-95"
         >
           <div class="modal-container" v-if="isOpen">
+            <button @click="closeModal" class="close-button" aria-label="Close modal">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
             <div class="modal-content">
               <header class="modal-header">
                 <h1 class="modal-title">{{ conference?.title }}</h1>
@@ -119,19 +125,17 @@ onUnmounted(() => {
 }
 
 .modal-container {
+  position: relative; /* 为关闭按钮提供定位参考 */
   width: 90%;
-  /* 修改点 1：缩小最大宽度 */
-  max-width: 1152px; /* 对应 Tailwind 的 max-w-6xl */
+  max-width: 1152px;
   margin: 0 auto;
   background-color: white;
-  /* 修改点 2：增大圆角 */
   border-radius: 28px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
 .modal-content {
-  /* 修改点 3：增大内边距 */
   padding: 76px;
 }
 
@@ -170,13 +174,45 @@ onUnmounted(() => {
   display: block;
 }
 
-/* 新增：响应式调整，用于小屏幕下的内边距 */
+/* --- 新增：关闭按钮样式 --- */
+.close-button {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  --button-size: 36px;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: 50%;
+  background-color: #1d1d1f; /* 黑色背景 */
+  color: white; /* 白色叉号 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  z-index: 10;
+  transition: transform 0.3s ease-in-out;
+}
+.close-button .icon {
+  width: 16px;
+  height: 16px;
+}
+.close-button:hover {
+  transform: scale(1.1);
+}
+
+
+/* 响应式调整 */
 @media (max-width: 768px) {
   .modal-content {
     padding: 32px;
   }
   .modal-title {
-    font-size: 1.875rem; /* 30px */
+    font-size: 1.875rem;
+  }
+  .close-button {
+    top: 20px;
+    right: 20px;
   }
 }
 </style>
