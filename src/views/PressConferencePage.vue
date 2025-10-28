@@ -108,6 +108,7 @@
                     :ref="el => { if (el) conferenceCardRefs[conference.id] = el }"
                     class="conference-card bg-white rounded-lg"
                     :class="{ 'is-active': conference.id === activeConferenceId }"
+                    @click="openConferenceModal(conference)"
                 >
                   <div class="relative" style="padding-bottom: 42.6%">
                     <img :src="conference.image" :alt="conference.title" class="absolute h-full w-full object-cover"/>
@@ -127,11 +128,38 @@
         </div>
       </div>
     </div>
+
+    <DetailModal :isOpen="isModalOpen" :conference="selectedConference" @close="closeConferenceModal" />
+
   </main>
 </template>
 
 <script setup>
 import { ref, computed, onBeforeUpdate, reactive, onMounted, onUnmounted } from 'vue';
+import DetailModal from '@/components/common/DetailModal.vue';
+import { conferenceDetails } from '@/data/conferenceDetails.js';
+
+
+// --- 弹窗状态管理 ---
+const isModalOpen = ref(false);
+const selectedConference = ref(null);
+
+function openConferenceModal(conference) {
+  selectedConference.value = {
+    ...conference,
+    details: conferenceDetails[conference.id] || { team: '未知团队', images: [] }
+  };
+  isModalOpen.value = true;
+  // --- 修改点：移除这里的 body 样式操作 ---
+  // document.body.style.overflow = 'hidden';
+}
+
+function closeConferenceModal() {
+  isModalOpen.value = false;
+  // --- 修改点：移除这里的 body 样式操作 ---
+  // document.body.style.overflow = '';
+}
+
 
 // --- Highlighting Logic ---
 const activeConferenceId = ref(null);
@@ -241,7 +269,7 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
 }
 
 .timeline-header {
-  padding: 1.5rem 1.5rem 1rem; flex-shrink: 0; border-bottom: 1px solid #e5e7eb;
+  padding: 1.5rem 1.5rem 1rem; flex-shrink: 0; border-bottom: 1px solid #f3f4f6;
 }
 .timeline-title {
   font-size: 1.25rem; font-weight: 700; color: #1f2937;
@@ -334,8 +362,8 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid #e5e7eb;
   overflow: hidden;
-  /* --- 修改点：统一阴影效果 --- */
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  cursor: pointer;
 }
 .conference-card:hover {
   transform: translateY(-5px);
