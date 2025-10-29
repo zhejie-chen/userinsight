@@ -7,7 +7,10 @@
         <div
             v-if="isDesktop"
             class="timeline-card-container"
-            :class="{ 'is-blurred': isMainContentBlurred }"
+            :class="{
+              'is-blurred': isMainContentBlurred,
+              'is-ready': isTimelineReady
+            }"
             :style="{ left: timelineLeftPos }"
         >
           <div class="timeline-card">
@@ -15,43 +18,19 @@
               <h2 class="timeline-title">发布会日程</h2>
             </div>
             <div class="timeline-scroll-area">
-              <div
-                  v-for="(group, monthKey) in upcomingEventGroups"
-                  :key="monthKey"
-                  class="month-group-timeline"
-              >
-                <div class="month-header">{{ monthKey }}</div>
-                <div class="timeline">
-                  <div
-                      v-for="item in group"
-                      :key="item.id"
-                      class="timeline-item"
-                      :class="{
-                      'has-report': item.hasReport,
-                      'is-active': item.id === activeTimelineEventId
-                    }"
-                      @click="item.hasReport && scrollToConference(item.reportId, item.id)"
-                      :tabindex="item.hasReport ? 0 : -1"
-                  >
-                    <div class="date-marker">
-                      <span class="day">{{ item.day }}</span>
-                      <span class="weekday">{{ item.weekday }}</span>
-                    </div>
-                    <div class="event-details">
-                      <p class="event-title">{{ item.title }}</p>
-                      <div class="badges-container">
-                        <span class="report-badge report-badge-upcoming">预计</span>
-                        <span v-if="item.hasReport" class="report-badge hover-badge">查看报告</span>
-                      </div>
-                    </div>
+              <div v-if="isLoadingEvents">
+                <div v-for="n in 5" :key="`skel-tl-${n}`" class="timeline-skeleton">
+                  <div class="avatar skeleton-loader"></div>
+                  <div class="text-group">
+                    <div class="line-1 skeleton-loader"></div>
+                    <div class="line-2 skeleton-loader"></div>
                   </div>
                 </div>
               </div>
 
-              <div v-if="Object.keys(pastEventGroups).length > 0" class="past-events-section">
-                <h3 class="past-events-title">过往发布会</h3>
+              <div v-else>
                 <div
-                    v-for="(group, monthKey) in pastEventGroups"
+                    v-for="(group, monthKey) in upcomingEventGroups"
                     :key="monthKey"
                     class="month-group-timeline"
                 >
@@ -60,12 +39,12 @@
                     <div
                         v-for="item in group"
                         :key="item.id"
-                        class="timeline-item is-past"
+                        class="timeline-item"
                         :class="{
                         'has-report': item.hasReport,
                         'is-active': item.id === activeTimelineEventId
                       }"
-                        @click="item.hasReport && scrollToConference(item.reportId, item.id)"
+                        @click="handleTimelineClick(item)"
                         :tabindex="item.hasReport ? 0 : -1"
                     >
                       <div class="date-marker">
@@ -75,7 +54,43 @@
                       <div class="event-details">
                         <p class="event-title">{{ item.title }}</p>
                         <div class="badges-container">
-                          <span v-if="item.hasReport" class="report-badge report-badge-archived">报告</span>
+                          <span class="report-badge report-badge-upcoming">预计</span>
+                          <span v-if="item.hasReport" class="report-badge hover-badge">查看报告</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div v-if="Object.keys(pastEventGroups).length > 0" class="past-events-section">
+                  <h3 class="past-events-title">过往发布会</h3>
+                  <div
+                      v-for="(group, monthKey) in pastEventGroups"
+                      :key="monthKey"
+                      class="month-group-timeline"
+                  >
+                    <div class="month-header">{{ monthKey }}</div>
+                    <div class="timeline">
+                      <div
+                          v-for="item in group"
+                          :key="item.id"
+                          class="timeline-item is-past"
+                          :class="{
+                          'has-report': item.hasReport,
+                          'is-active': item.id === activeTimelineEventId
+                        }"
+                          @click="handleTimelineClick(item)"
+                          :tabindex="item.hasReport ? 0 : -1"
+                      >
+                        <div class="date-marker">
+                          <span class="day">{{ item.day }}</span>
+                          <span class="weekday">{{ item.weekday }}</span>
+                        </div>
+                        <div class="event-details">
+                          <p class="event-title">{{ item.title }}</p>
+                          <div class="badges-container">
+                            <span v-if="item.hasReport" class="report-badge report-badge-archived">报告</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -93,7 +108,31 @@
             <h1 class="text-4xl font-bold text-gray-800">新车发布会</h1>
           </div>
           <div class="space-y-16">
+            <div v-if="isLoadingReports">
+              <div
+                  v-for="month in skeletonMonths"
+                  :key="month"
+                  class="month-group-reports"
+              >
+                <div class="month-divider">
+                  <span class="month-text">{{ month }}</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+                  <div v-for="n in 4" :key="`skel-card-${month}-${n}`" class="report-card-skeleton">
+                    <div class="image-placeholder skeleton-loader"></div>
+                    <div class="content">
+                      <div class="line-1 skeleton-loader"></div>
+                      <div class="line-2 skeleton-loader"></div>
+                      <div class="line-3 skeleton-loader"></div>
+                      <div class="line-4 skeleton-loader"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div
+                v-else
                 v-for="(group, month) in groupedConferences"
                 :key="month"
                 class="month-group-reports"
@@ -118,7 +157,6 @@
                     <p class="text-gray-600 text-sm h-14 overflow-hidden mb-4">{{ conference.description }}</p>
                     <div class="card-meta flex justify-between items-center text-xs text-gray-500">
                       <span>{{ conference.date }}</span>
-
                       <div class="meta-action">
                         <span class="default-text">用户洞察</span>
                         <a
@@ -151,39 +189,89 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUpdate, reactive, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onBeforeUpdate, reactive, onMounted, onUnmounted, nextTick } from 'vue';
 import DetailModal from '@/components/common/DetailModal.vue';
-import { conferenceDetails } from '@/data/conferenceDetails.js';
+import { getTimelineEvents, getConferenceReports, getReportImages } from '@/services/api/conferences.js';
 
 
-// --- 弹窗状态管理 ---
+// --- Data & Loading State ---
+const timelineEvents = ref([]);
+const conferences = ref([]);
+const isLoadingEvents = ref(true);
+const isLoadingReports = ref(true);
+
+// --- Image Prefetching Cache ---
+const imageCache = new Map();
+
+// --- Modal State Management ---
 const isModalOpen = ref(false);
 const selectedConference = ref(null);
 
-function openConferenceModal(conference) {
+async function openConferenceModal(conference) {
   selectedConference.value = {
     ...conference,
-    details: conferenceDetails[conference.id] || { team: '未知团队', images: [] }
+    details: {
+      team: conference.team || '未知团队',
+      images: [] // Start with an empty images array
+    }
   };
   isModalOpen.value = true;
+
+  // Check cache first
+  if (imageCache.has(conference.id)) {
+    console.log(`Modal images for ${conference.id} found in cache.`);
+    selectedConference.value.details.images = imageCache.get(conference.id);
+    return;
+  }
+
+  // If not in cache, fetch them
+  try {
+    console.log(`Modal for ${conference.id} opened. Fetching images...`);
+    const images = await getReportImages(conference.id);
+    if (selectedConference.value && selectedConference.value.id === conference.id) {
+      selectedConference.value.details.images = images;
+      imageCache.set(conference.id, images); // Store in cache
+    }
+  } catch (error) {
+    console.error(`Failed to fetch images for conference ${conference.id}:`, error);
+  }
 }
 
 function closeConferenceModal() {
   isModalOpen.value = false;
+  selectedConference.value = null;
 }
 
-// --- 新增：统一的卡片点击处理器 ---
+// --- Unified Card Click Handler ---
 function handleCardClick(conference) {
-  // 如果是外部链接类型，则打开新窗口
   if (conference.action_type === 'EXTERNAL_LINK' && conference.external_url) {
     window.open(conference.external_url, '_blank');
-  }
-  // 否则，执行默认的打开弹窗操作
-  else {
+  } else {
     openConferenceModal(conference);
   }
 }
 
+// --- Timeline Click Handler for Scrolling & Prefetching ---
+function handleTimelineClick(item) {
+  if (!item.hasReport) return;
+
+  // 1. Scroll to the conference card
+  scrollToConference(item.reportId, item.id);
+
+  // 2. Prefetch images if it's a modal action and not already cached
+  const relatedConference = conferences.value.find(c => c.id === item.reportId);
+  if (relatedConference && relatedConference.action_type !== 'EXTERNAL_LINK' && !imageCache.has(item.reportId)) {
+    console.log(`Prefetching images for reportId: ${item.reportId}`);
+    getReportImages(item.reportId)
+        .then(images => {
+          imageCache.set(item.reportId, images);
+          console.log(`Successfully prefetched and cached ${images.length} images for ${item.reportId}.`);
+        })
+        .catch(err => {
+          console.error(`Prefetching failed for ${item.reportId}:`, err);
+        });
+  }
+}
 
 // --- Highlighting Logic ---
 const activeConferenceId = ref(null);
@@ -193,62 +281,82 @@ let highlightTimer = null;
 // --- Layout & Blur Sync Logic ---
 const isDesktop = ref(window.innerWidth > 1024);
 const mainLayoutRef = ref(null);
-const timelineLeftPos = ref('2rem');
+const timelineLeftPos = ref('0px'); // Start at 0, will be calculated
+const isTimelineReady = ref(false); // Flag to control timeline animation
 const isMainContentBlurred = ref(false);
 let observer = null;
 
-const updateTimelinePosition = () => {
+const updateTimelinePosition = async () => {
   if (mainLayoutRef.value && isDesktop.value) {
+    // Wait for the DOM to be fully updated before measuring
+    await nextTick();
     const rect = mainLayoutRef.value.getBoundingClientRect();
-    timelineLeftPos.value = `${rect.left + 32}px`;
+    // Use a fallback of 32px if left is 0, which can happen during initial render
+    const leftPosition = rect.left > 0 ? rect.left : 32;
+    timelineLeftPos.value = `${leftPosition}px`;
+    isTimelineReady.value = true; // Position is set, trigger the animation
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  isLoadingEvents.value = true;
+  isLoadingReports.value = true;
+
   const handleResize = () => {
+    const oldIsDesktop = isDesktop.value;
     isDesktop.value = window.innerWidth > 1024;
-    updateTimelinePosition();
+    if (oldIsDesktop !== isDesktop.value || !isTimelineReady.value) {
+      updateTimelinePosition();
+    }
   };
+
+  handleResize();
   window.addEventListener('resize', handleResize);
-  updateTimelinePosition();
+
+  try {
+    const eventsPromise = getTimelineEvents();
+    const reportsPromise = getConferenceReports();
+
+    const eventsData = await eventsPromise;
+    isLoadingEvents.value = false;
+
+    const reportsData = await reportsPromise;
+
+    const reportMap = new Map(reportsData.map(r => [r.event_id, r.id]));
+    timelineEvents.value = eventsData.map(event => {
+      const originalEventId = event.id.replace('evt-', '');
+      const reportId = reportMap.get(originalEventId);
+      return { ...event, reportId: reportId || null };
+    });
+
+    conferences.value = reportsData;
+    isLoadingReports.value = false;
+
+  } catch (error) {
+    console.error("Failed to load data:", error);
+    isLoadingEvents.value = false;
+    isLoadingReports.value = false;
+  }
 
   const mainContent = document.getElementById('main-content');
   if (mainContent) {
     isMainContentBlurred.value = mainContent.classList.contains('blurred');
-    observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+    observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if (mutation.attributeName === 'class') {
           isMainContentBlurred.value = mainContent.classList.contains('blurred');
         }
-      }
+      });
     });
     observer.observe(mainContent, { attributes: true });
   }
 });
 
 onUnmounted(() => {
-  const handleResize = () => {
-    isDesktop.value = window.innerWidth > 1024;
-    updateTimelinePosition();
-  };
-  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('resize', () => { isDesktop.value = window.innerWidth > 1024; updateTimelinePosition(); });
   if (observer) observer.disconnect();
   if (highlightTimer) clearTimeout(highlightTimer);
 });
-
-// --- DATA SOURCES ---
-const timelineEvents = ref([
-  { id: 'evt-009', date: '2025-12-10', title: '蔚来 ET9 行政版发布', reportId: null }, { id: 'evt-010', date: '2025-11-20', title: '极氪 007 性能版发布', reportId: null }, { id: 'evt-011', date: '2025-11-05', title: '理想 L8 Pro 升级款发布', reportId: null }, { id: 'evt-012', date: '2025-10-30', title: '小米 SU7 Pro 答谢会', reportId: null }, { id: 'evt-001', date: '2025-05-20', title: '全新小鹏P7上市发布会', reportId: 2 }, { id: 'evt-002', date: '2025-05-15', title: '乐道L90上市发布会', reportId: 1 }, { id: 'evt-003', date: '2025-04-22', title: '极氪9X技术发布会', reportId: 3 }, { id: 'evt-004', date: '2025-04-18', title: '深蓝L07P7亮相发布会', reportId: 4 }, { id: 'evt-005', date: '2025-04-10', title: '比亚迪汉新车型技术分享会', reportId: null }, { id: 'evt-006', date: '2025-03-25', title: '零跑B01上市发布会', reportId: 6 }, { id: 'evt-007', date: '2025-03-11', title: '理想i8上市发布会', reportId: 5 }, { id: 'evt-008', date: '2025-02-28', title: '蔚来资本日', reportId: null },
-]);
-// --- 更新数据结构以匹配数据库 ---
-const conferences = ref([
-  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15', replayUrl: 'https://www.nio.cn/', action_type: 'MODAL', external_url: null },
-  { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20', replayUrl: 'https://www.xiaopeng.com/', action_type: 'MODAL', external_url: null },
-  { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22', replayUrl: null, action_type: 'EXTERNAL_LINK', external_url: 'https://www.zeekrlife.com/' }, // 示例：跳转外链
-  { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18', replayUrl: 'https://www.deepal.com.cn/', action_type: 'MODAL', external_url: null },
-  { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11', replayUrl: null, action_type: 'MODAL', external_url: null },
-  { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25', replayUrl: 'https://www.leapmotor.com/', action_type: 'EXTERNAL_LINK', external_url: 'https://www.leapmotor.com/' }, // 示例：跳转外链
-]);
 
 // --- Scrolling & Highlighting Logic ---
 const conferenceCardRefs = reactive({});
@@ -269,16 +377,56 @@ const scrollToConference = (reportId, eventId) => {
 };
 
 // --- COMPUTED PROPERTIES ---
+
+// --- CHANGE HERE: Only show one month skeleton ---
+const skeletonMonths = computed(() => {
+  const today = new Date('2025-10-27T00:00:00');
+  return [`${today.getFullYear()}年 ${today.toLocaleString('zh-CN', { month: 'long' })}`];
+});
+
 const processAndGroupEvents = (events, isPastFilter) => {
   const today = new Date('2025-10-27T00:00:00');
   const conferenceIdsWithReports = new Set(conferences.value.map(c => c.id));
-  const filtered = events.filter(event => { const eventDate = new Date(event.date); return isPastFilter ? eventDate < today : eventDate >= today; });
-  const processed = [...filtered] .sort((a, b) => new Date(b.date) - new Date(a.date)) .map(event => { const eventDate = new Date(event.date); return { ...event, day: eventDate.getDate(), weekday: eventDate.toLocaleString('zh-CN', { weekday: 'short' }), hasReport: event.reportId !== null && conferenceIdsWithReports.has(event.reportId), }; });
-  return processed.reduce((acc, event) => { const date = new Date(event.date); const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`; if (!acc[key]) acc[key] = []; acc[key].push(event); return acc; }, {});
+
+  const filtered = events.filter(event => {
+    const eventDate = new Date(event.date);
+    return isPastFilter ? eventDate < today : eventDate >= today;
+  });
+
+  const processed = [...filtered]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .map(event => {
+        const eventDate = new Date(event.date);
+        return {
+          ...event,
+          day: eventDate.getDate(),
+          weekday: eventDate.toLocaleString('zh-CN', { weekday: 'short' }),
+          hasReport: event.reportId !== null && conferenceIdsWithReports.has(event.reportId),
+        };
+      });
+
+  return processed.reduce((acc, event) => {
+    const date = new Date(event.date);
+    const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(event);
+    return acc;
+  }, {});
 };
 const upcomingEventGroups = computed(() => processAndGroupEvents(timelineEvents.value, false));
 const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.value, true));
-const groupedConferences = computed(() => { return [...conferences.value] .sort((a, b) => new Date(b.date) - new Date(a.date)) .reduce((acc, conference) => { const date = new Date(conference.date); const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`; if (!acc[key]) acc[key] = []; acc[key].push(conference); return acc; }, {}); });
+const groupedConferences = computed(() => {
+  return [...conferences.value]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .reduce((acc, conference) => {
+        const date = new Date(conference.date);
+        const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(conference);
+        return acc;
+      }, {});
+});
+
 </script>
 
 <style scoped>
@@ -289,7 +437,12 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
 .left-panel-spacer { flex: 0 0 300px; }
 .timeline-card-container {
   position: fixed; top: 88px; width: 300px; height: calc(100vh - 112px); z-index: 10;
-  transition: filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  /* --- CHANGE HERE: Removed transform for a pure fade-in --- */
+  opacity: 0;
+  transition: opacity 0.4s ease-out, filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.timeline-card-container.is-ready {
+  opacity: 1;
 }
 .timeline-card-container.is-blurred { filter: blur(8px); }
 .timeline-card {
