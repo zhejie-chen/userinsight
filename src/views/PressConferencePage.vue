@@ -108,7 +108,7 @@
                     :ref="el => { if (el) conferenceCardRefs[conference.id] = el }"
                     class="conference-card group bg-white rounded-lg"
                     :class="{ 'is-active': conference.id === activeConferenceId }"
-                    @click="openConferenceModal(conference)"
+                    @click="handleCardClick(conference)"
                 >
                   <div class="relative" style="padding-bottom: 42.6%">
                     <img :src="conference.image" :alt="conference.title" class="absolute h-full w-full object-cover"/>
@@ -172,6 +172,18 @@ function closeConferenceModal() {
   isModalOpen.value = false;
 }
 
+// --- 新增：统一的卡片点击处理器 ---
+function handleCardClick(conference) {
+  // 如果是外部链接类型，则打开新窗口
+  if (conference.action_type === 'EXTERNAL_LINK' && conference.external_url) {
+    window.open(conference.external_url, '_blank');
+  }
+  // 否则，执行默认的打开弹窗操作
+  else {
+    openConferenceModal(conference);
+  }
+}
+
 
 // --- Highlighting Logic ---
 const activeConferenceId = ref(null);
@@ -228,13 +240,14 @@ onUnmounted(() => {
 const timelineEvents = ref([
   { id: 'evt-009', date: '2025-12-10', title: '蔚来 ET9 行政版发布', reportId: null }, { id: 'evt-010', date: '2025-11-20', title: '极氪 007 性能版发布', reportId: null }, { id: 'evt-011', date: '2025-11-05', title: '理想 L8 Pro 升级款发布', reportId: null }, { id: 'evt-012', date: '2025-10-30', title: '小米 SU7 Pro 答谢会', reportId: null }, { id: 'evt-001', date: '2025-05-20', title: '全新小鹏P7上市发布会', reportId: 2 }, { id: 'evt-002', date: '2025-05-15', title: '乐道L90上市发布会', reportId: 1 }, { id: 'evt-003', date: '2025-04-22', title: '极氪9X技术发布会', reportId: 3 }, { id: 'evt-004', date: '2025-04-18', title: '深蓝L07P7亮相发布会', reportId: 4 }, { id: 'evt-005', date: '2025-04-10', title: '比亚迪汉新车型技术分享会', reportId: null }, { id: 'evt-006', date: '2025-03-25', title: '零跑B01上市发布会', reportId: 6 }, { id: 'evt-007', date: '2025-03-11', title: '理想i8上市发布会', reportId: 5 }, { id: 'evt-008', date: '2025-02-28', title: '蔚来资本日', reportId: null },
 ]);
+// --- 更新数据结构以匹配数据库 ---
 const conferences = ref([
-  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15', replayUrl: 'https://www.nio.cn/' },
-  { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20', replayUrl: 'https://www.xiaopeng.com/' },
-  { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22', replayUrl: null },
-  { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18', replayUrl: 'https://www.deepal.com.cn/' },
-  { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11', replayUrl: null },
-  { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25', replayUrl: 'https://www.leapmotor.com/' },
+  { id: 1, title: '乐道L90上市发布会', description: '全新乐道L90，智能电动新标杆。', image: '/img/cover-press-conference/乐道L90上市发布会-头图.png', date: '2025-05-15', replayUrl: 'https://www.nio.cn/', action_type: 'MODAL', external_url: null },
+  { id: 2, title: '全新小鹏P7上市发布会', description: '见证全新小鹏P7的非凡魅力。', image: '/img/cover-press-conference/全新小鹏P7上市发布会-头图.png', date: '2025-05-20', replayUrl: 'https://www.xiaopeng.com/', action_type: 'MODAL', external_url: null },
+  { id: 3, title: '极氪9X技术发布会', description: '极氪9X，颠覆性技术震撼发布。', image: '/img/cover-press-conference/极氪9X技术发布会.png', date: '2025-04-22', replayUrl: null, action_type: 'EXTERNAL_LINK', external_url: 'https://www.zeekrlife.com/' }, // 示例：跳转外链
+  { id: 4, title: '深蓝L07P7亮相发布会', description: '深蓝L07P7，双子星闪耀登场。', image: '/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png', date: '2025-04-18', replayUrl: 'https://www.deepal.com.cn/', action_type: 'MODAL', external_url: null },
+  { id: 5, title: '理想i8上市发布会', description: '理想i8，为家庭打造的智能旗舰SUV。', image: '/img/cover-press-conference/理想i8上市发布会-头图.png', date: '2025-03-11', replayUrl: null, action_type: 'MODAL', external_url: null },
+  { id: 6, title: '零跑B01上市发布会', description: '零跑B01，开启智能纯电新纪元。', image: '/img/cover-press-conference/零跑B01上市发布会-头图.png', date: '2025-03-25', replayUrl: 'https://www.leapmotor.com/', action_type: 'EXTERNAL_LINK', external_url: 'https://www.leapmotor.com/' }, // 示例：跳转外链
 ]);
 
 // --- Scrolling & Highlighting Logic ---
@@ -380,9 +393,10 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
   border: 1px solid #e5e7eb;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  cursor: pointer;
 }
 .conference-card:has(.hover-link:hover) { cursor: default; }
-.conference-card:not(:has(.hover-link:hover)) { cursor: pointer; }
+
 .conference-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
@@ -396,7 +410,6 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
 .conference-card.is-active img { transform: scale(1.05); }
 .card-meta { border-top: 1px solid #f3f4f6; padding-top: 1rem; position: relative; }
 
-/* --- 卡片右下角交互样式更新 --- */
 .meta-action {
   position: relative;
   height: 16px;
@@ -415,15 +428,14 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
   right: 0;
   opacity: 0;
   transform: translateY(5px);
-  color: #6b7280; /* 改为灰色 */
+  color: #6b7280;
   text-decoration: none;
-  white-space: nowrap; /* 防止换行 */
+  white-space: nowrap;
 }
 .link-icon {
   width: 14px;
   height: 14px;
 }
-/* 修复：只有当卡片内存在.hover-link时，才应用消失效果 */
 .group:has(.hover-link):hover .default-text {
   opacity: 0;
   transform: translateY(-5px);
@@ -432,10 +444,9 @@ const groupedConferences = computed(() => { return [...conferences.value] .sort(
   opacity: 1;
   transform: translateY(0);
 }
-/* 更新：链接本身的 hover 效果改为放大 */
 .hover-link:hover {
-  transform: translateY(0) scale(1.1); /* 保持Y轴位置，只放大 */
-  color: #1d1d1f; /* hover时变深色 */
+  transform: translateY(0) scale(1.1);
+  color: #1d1d1f;
 }
 
 @media (max-width: 1024px) {
