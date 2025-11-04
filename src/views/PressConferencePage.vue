@@ -153,7 +153,7 @@
                     <img :src="conference.image" :alt="conference.title" class="absolute h-full w-full object-cover"/>
                   </div>
                   <div class="p-5">
-                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ conference.title }}</h3>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2 truncate">{{ conference.title }}</h3>
                     <p class="text-gray-600 text-sm h-14 overflow-hidden mb-4">{{ conference.description }}</p>
                     <div class="card-meta flex justify-between items-center text-xs text-gray-500">
                       <span>{{ conference.date }}</span>
@@ -281,20 +281,20 @@ let highlightTimer = null;
 // --- Layout & Blur Sync Logic ---
 const isDesktop = ref(window.innerWidth > 1024);
 const mainLayoutRef = ref(null);
-const timelineLeftPos = ref('0px'); // Start at 0, will be calculated
-const isTimelineReady = ref(false); // Flag to control timeline animation
+const timelineLeftPos = ref('0px');
+const isTimelineReady = ref(false);
 const isMainContentBlurred = ref(false);
 let observer = null;
 
 const updateTimelinePosition = async () => {
   if (mainLayoutRef.value && isDesktop.value) {
-    // Wait for the DOM to be fully updated before measuring
     await nextTick();
     const rect = mainLayoutRef.value.getBoundingClientRect();
-    // Use a fallback of 32px if left is 0, which can happen during initial render
     const leftPosition = rect.left > 0 ? rect.left : 32;
     timelineLeftPos.value = `${leftPosition}px`;
-    isTimelineReady.value = true; // Position is set, trigger the animation
+    isTimelineReady.value = true;
+  } else {
+    isTimelineReady.value = false; // Hide if not on desktop
   }
 };
 
@@ -303,14 +303,15 @@ onMounted(async () => {
   isLoadingReports.value = true;
 
   const handleResize = () => {
-    const oldIsDesktop = isDesktop.value;
     isDesktop.value = window.innerWidth > 1024;
-    if (oldIsDesktop !== isDesktop.value || !isTimelineReady.value) {
-      updateTimelinePosition();
+    if (isDesktop.value) {
+      updateTimelinePosition(); // Always update on desktop
+    } else {
+      isTimelineReady.value = false; // Ensure it's hidden on mobile
     }
   };
 
-  handleResize();
+  handleResize(); // Initial call
   window.addEventListener('resize', handleResize);
 
   try {
@@ -353,7 +354,15 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', () => { isDesktop.value = window.innerWidth > 1024; updateTimelinePosition(); });
+  const handleResize = () => {
+    isDesktop.value = window.innerWidth > 1024;
+    if (isDesktop.value) {
+      updateTimelinePosition();
+    } else {
+      isTimelineReady.value = false;
+    }
+  };
+  window.removeEventListener('resize', handleResize);
   if (observer) observer.disconnect();
   if (highlightTimer) clearTimeout(highlightTimer);
 });
@@ -378,14 +387,15 @@ const scrollToConference = (reportId, eventId) => {
 
 // --- COMPUTED PROPERTIES ---
 
-// --- CHANGE HERE: Only show one month skeleton ---
 const skeletonMonths = computed(() => {
-  const today = new Date('2025-10-27T00:00:00');
+  const today = new Date();
   return [`${today.getFullYear()}年 ${today.toLocaleString('zh-CN', { month: 'long' })}`];
 });
 
 const processAndGroupEvents = (events, isPastFilter) => {
-  const today = new Date('2025-10-27T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set to midnight this morning
+
   const conferenceIdsWithReports = new Set(conferences.value.map(c => c.id));
 
   const filtered = events.filter(event => {
@@ -437,7 +447,6 @@ const groupedConferences = computed(() => {
 .left-panel-spacer { flex: 0 0 300px; }
 .timeline-card-container {
   position: fixed; top: 88px; width: 300px; height: calc(100vh - 112px); z-index: 10;
-  /* --- CHANGE HERE: Removed transform for a pure fade-in --- */
   opacity: 0;
   transition: opacity 0.4s ease-out, filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -510,8 +519,20 @@ const groupedConferences = computed(() => {
 .timeline-item.has-report:not(.is-past):hover .report-badge-upcoming { opacity: 0; }
 
 /* Past Event Styling & Enhanced Hover Effect */
-.timeline-item.is-past { opacity: 0.6; }
+.timeline-item.is-past {
+  opacity: 0.8; /* Default opacity for past items (with reports) */
+}
+/* New rule: Make past items WITHOUT reports much more faded */
+.timeline-item.is-past:not(.has-report) {
+  opacity: 0.4;
+}
+.timeline-item.is-past:not(.has-report):hover {
+  background-color: transparent;
+}
+
 .timeline-item.is-past .date-marker { background-color: #e5e7eb; }
+
+/* Hover effect only for past items WITH reports */
 .timeline-item.is-past.has-report:hover {
   opacity: 1; background-color: #eff6ff;
 }
@@ -539,6 +560,12 @@ const groupedConferences = computed(() => {
 .month-divider { display: flex; align-items: center; margin-bottom: 2.5rem; }
 .month-divider::after { content: ''; flex: 1; border-bottom: 1px solid #e5e7eb; margin-left: 1.5em; }
 .month-text { font-size: 1.25rem; font-weight: 600; color: #4b5563; padding-right: 1.5rem; }
+
+.conference-card .p-5 p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
 
 /* Conference Card Effects */
 .conference-card {
@@ -596,10 +623,11 @@ const groupedConferences = computed(() => {
 .group:has(.hover-link):hover .hover-link {
   opacity: 1;
   transform: translateY(0);
+  color: #3b82f6; /* Apply blue color on card hover */
 }
+/* This just controls the scale animation when hovering the link itself */
 .hover-link:hover {
   transform: translateY(0) scale(1.1);
-  color: #1d1d1f;
 }
 
 @media (max-width: 1024px) {
