@@ -3,14 +3,15 @@
 import { supabase } from '../supabase';
 
 /**
- * 1. 获取所有发布会事件用于左侧时间轴
+ * 1. 获取所有发布会事件用于左侧时间轴 (和日历)
  * Fetches all events from the conference-events table.
  */
 export async function getTimelineEvents() {
     console.log('Fetching timeline events...');
+    // --- 必须的改动: 添加 'replay_url' ---
     const { data, error } = await supabase
         .from('conference-events')
-        .select('id, title, event_date')
+        .select('id, title, event_date, replay_url')
         .order('event_date', { ascending: false });
 
     if (error) {
@@ -18,13 +19,12 @@ export async function getTimelineEvents() {
         throw error;
     }
 
-    // Supabase returns event_date as 'YYYY-MM-DD'. We need to map it to the component's expected format.
-    // The component's processing logic will handle the rest.
     const formattedData = data.map(event => ({
-        id: `evt-${event.id}`, // Add a prefix to avoid potential DOM ID conflicts
+        id: `evt-${event.id}`,
         date: event.event_date,
         title: event.title,
-        reportId: null // This will be linked later by a separate query/logic
+        replayUrl: event.replay_url, // <-- 传递 replay_url
+        reportId: null
     }));
 
     console.log('Successfully fetched timeline events:', formattedData);
@@ -37,9 +37,10 @@ export async function getTimelineEvents() {
  */
 export async function getConferenceReports() {
     console.log('Fetching conference reports...');
+    // --- 必须的改动: 移除 'replay_url' ---
     const { data, error } = await supabase
         .from('conference-reports')
-        .select('id, event_id, title, description, cover_image_url, team_name, replay_url, action_type, external_url')
+        .select('id, event_id, title, description, cover_image_url, team_name, action_type, external_url')
         .eq('status', 'published')
         .order('created_at', { ascending: false });
 
@@ -48,34 +49,18 @@ export async function getConferenceReports() {
         throw error;
     }
 
-    // We need to get the event_date from the related event for sorting on the page
-    // Let's get all events first to create a mapping.
-    const { data: events, error: eventsError } = await supabase
-        .from('conference-events')
-        .select('id, event_date');
-
-    if (eventsError) {
-        console.error('Error fetching event dates for reports:', eventsError);
-        throw eventsError;
-    }
-
-    const eventDateMap = new Map(events.map(e => [e.id, e.event_date]));
-
     const formattedData = data.map(report => ({
         id: report.id,
         event_id: report.event_id,
         title: report.title,
         description: report.description,
         image: report.cover_image_url,
-        date: eventDateMap.get(report.event_id) || 'Unknown Date',
-        replayUrl: report.replay_url,
         action_type: report.action_type,
         external_url: report.external_url,
-        // Pass team_name for the modal
         team: report.team_name,
     }));
 
-    console.log('Successfully fetched conference reports:', formattedData);
+    console.log('Successfully fetched conference reports (raw):', formattedData);
     return formattedData;
 }
 

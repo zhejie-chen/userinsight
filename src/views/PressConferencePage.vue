@@ -15,8 +15,20 @@
         >
           <div class="timeline-card">
             <div class="timeline-header">
-              <h2 class="timeline-title">发布会日程</h2>
+              <h2 class="timeline-title">发布会预告</h2>
+              <button
+                  v-if="isDesktop && isSufficientHeight"
+                  @click="openCalendarModal"
+                  class="calendar-button"
+                  aria-label="打开日历视图"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5v-.008ZM7.5 18h.008v.008H7.5v-.008ZM9.75 18h.008v.008H9.75v-.008ZM12 18h.008v.008H12v-.008ZM14.25 15h.008v.008H14.25v-.008ZM14.25 18h.008v.008H14.25v-.008ZM16.5 15h.008v.008H16.5v-.008Z" />
+                </svg>
+                <span>日历视图</span>
+              </button>
             </div>
+
             <div class="timeline-scroll-area">
               <div v-if="isLoadingEvents">
                 <div v-for="n in 5" :key="`skel-tl-${n}`" class="timeline-skeleton">
@@ -56,6 +68,7 @@
                         <div class="badges-container">
                           <span class="report-badge report-badge-upcoming">预计</span>
                           <span v-if="item.hasReport" class="report-badge hover-badge">查看报告</span>
+                          <span v-if="item.replayUrl" class="report-badge report-badge-replay">回放</span>
                         </div>
                       </div>
                     </div>
@@ -63,7 +76,7 @@
                 </div>
 
                 <div v-if="Object.keys(pastEventGroups).length > 0" class="past-events-section">
-                  <h3 class="past-events-title">过往发布会</h3>
+                  <h3 class="past-events-title">过往报告</h3>
                   <div
                       v-for="(group, monthKey) in pastEventGroups"
                       :key="monthKey"
@@ -90,6 +103,7 @@
                           <p class="event-title">{{ item.title }}</p>
                           <div class="badges-container">
                             <span v-if="item.hasReport" class="report-badge report-badge-archived">报告</span>
+                            <span v-if="item.replayUrl" class="report-badge report-badge-replay">回放</span>
                           </div>
                         </div>
                       </div>
@@ -150,7 +164,13 @@
                     @click="handleCardClick(conference)"
                 >
                   <div class="relative" style="padding-bottom: 42.6%">
-                    <img :src="conference.image" :alt="conference.title" class="absolute h-full w-full object-cover"/>
+                    <img
+                        :src="conference.image"
+                        :alt="conference.title"
+                        class="absolute h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
                   </div>
                   <div class="p-5">
                     <h3 class="text-lg font-bold text-gray-800 mb-2 truncate">{{ conference.title }}</h3>
@@ -185,14 +205,33 @@
 
     <DetailModal :isOpen="isModalOpen" :conference="selectedConference" @close="closeConferenceModal" />
 
+    <ConferenceCalendarModal
+        :isOpen="isCalendarModalOpen"
+        :events="timelineEvents"
+        @close="closeCalendarModal"
+        @navigateToEvent="onCalendarNavigate"
+    />
+
   </main>
 </template>
 
 <script setup>
 import { ref, computed, onBeforeUpdate, reactive, onMounted, onUnmounted, nextTick } from 'vue';
 import DetailModal from '@/components/common/DetailModal.vue';
+import ConferenceCalendarModal from '@/components/common/ConferenceCalendarModal.vue';
 import { getTimelineEvents, getConferenceReports, getReportImages } from '@/services/api/conferences.js';
 
+function parseLocalDate(dateStr) {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return null;
+  }
+  const parts = dateStr.split('-');
+  const date = new Date(parts[0], parts[1] - 1, parts[2]);
+  if (isNaN(date.getTime())) {
+    return null;
+  }
+  return date;
+}
 
 // --- Data & Loading State ---
 const timelineEvents = ref([]);
@@ -207,30 +246,28 @@ const imageCache = new Map();
 const isModalOpen = ref(false);
 const selectedConference = ref(null);
 
+const isCalendarModalOpen = ref(false);
+
 async function openConferenceModal(conference) {
   selectedConference.value = {
     ...conference,
     details: {
       team: conference.team || '未知团队',
-      images: [] // Start with an empty images array
+      images: []
     }
   };
   isModalOpen.value = true;
 
-  // Check cache first
   if (imageCache.has(conference.id)) {
-    console.log(`Modal images for ${conference.id} found in cache.`);
     selectedConference.value.details.images = imageCache.get(conference.id);
     return;
   }
 
-  // If not in cache, fetch them
   try {
-    console.log(`Modal for ${conference.id} opened. Fetching images...`);
     const images = await getReportImages(conference.id);
     if (selectedConference.value && selectedConference.value.id === conference.id) {
       selectedConference.value.details.images = images;
-      imageCache.set(conference.id, images); // Store in cache
+      imageCache.set(conference.id, images);
     }
   } catch (error) {
     console.error(`Failed to fetch images for conference ${conference.id}:`, error);
@@ -240,6 +277,20 @@ async function openConferenceModal(conference) {
 function closeConferenceModal() {
   isModalOpen.value = false;
   selectedConference.value = null;
+}
+
+function openCalendarModal() {
+  isCalendarModalOpen.value = true;
+}
+function closeCalendarModal() {
+  isCalendarModalOpen.value = false;
+}
+
+function onCalendarNavigate(event) {
+  closeCalendarModal();
+  nextTick(() => {
+    scrollToConference(event.reportId, event.id);
+  });
 }
 
 // --- Unified Card Click Handler ---
@@ -255,17 +306,13 @@ function handleCardClick(conference) {
 function handleTimelineClick(item) {
   if (!item.hasReport) return;
 
-  // 1. Scroll to the conference card
   scrollToConference(item.reportId, item.id);
 
-  // 2. Prefetch images if it's a modal action and not already cached
   const relatedConference = conferences.value.find(c => c.id === item.reportId);
   if (relatedConference && relatedConference.action_type !== 'EXTERNAL_LINK' && !imageCache.has(item.reportId)) {
-    console.log(`Prefetching images for reportId: ${item.reportId}`);
     getReportImages(item.reportId)
         .then(images => {
           imageCache.set(item.reportId, images);
-          console.log(`Successfully prefetched and cached ${images.length} images for ${item.reportId}.`);
         })
         .catch(err => {
           console.error(`Prefetching failed for ${item.reportId}:`, err);
@@ -280,6 +327,8 @@ let highlightTimer = null;
 
 // --- Layout & Blur Sync Logic ---
 const isDesktop = ref(window.innerWidth > 1024);
+// --- CHANGE 2: Re-introduced isSufficientHeight ---
+const isSufficientHeight = ref(window.innerHeight > 750); // Min height for calendar
 const mainLayoutRef = ref(null);
 const timelineLeftPos = ref('0px');
 const isTimelineReady = ref(false);
@@ -294,7 +343,24 @@ const updateTimelinePosition = async () => {
     timelineLeftPos.value = `${leftPosition}px`;
     isTimelineReady.value = true;
   } else {
-    isTimelineReady.value = false; // Hide if not on desktop
+    isTimelineReady.value = false;
+  }
+};
+
+// --- CHANGE 3: Define handleResize outside onMounted ---
+const handleResize = () => {
+  isDesktop.value = window.innerWidth > 1024;
+  isSufficientHeight.value = window.innerHeight > 750; // Update height
+
+  if (isDesktop.value) {
+    updateTimelinePosition();
+  } else {
+    isTimelineReady.value = false;
+  }
+
+  // Auto-close modal if window is too small
+  if ((!isDesktop.value || !isSufficientHeight.value) && isCalendarModalOpen.value) {
+    closeCalendarModal();
   }
 };
 
@@ -302,35 +368,40 @@ onMounted(async () => {
   isLoadingEvents.value = true;
   isLoadingReports.value = true;
 
-  const handleResize = () => {
-    isDesktop.value = window.innerWidth > 1024;
-    if (isDesktop.value) {
-      updateTimelinePosition(); // Always update on desktop
-    } else {
-      isTimelineReady.value = false; // Ensure it's hidden on mobile
-    }
-  };
-
   handleResize(); // Initial call
-  window.addEventListener('resize', handleResize);
+  window.addEventListener('resize', handleResize); // Register shared handler
 
   try {
-    const eventsPromise = getTimelineEvents();
-    const reportsPromise = getConferenceReports();
+    const [eventsData, reportsData] = await Promise.all([
+      getTimelineEvents(),
+      getConferenceReports()
+    ]);
 
-    const eventsData = await eventsPromise;
-    isLoadingEvents.value = false;
+    const reportIdMap = new Map(reportsData.map(r => [r.event_id, r.id]));
 
-    const reportsData = await reportsPromise;
+    const eventInfoMap = new Map(eventsData.map(e => {
+      const originalEventId = e.id.replace('evt-', '');
+      return [originalEventId, { date: e.date, replayUrl: e.replayUrl }];
+    }));
 
-    const reportMap = new Map(reportsData.map(r => [r.event_id, r.id]));
     timelineEvents.value = eventsData.map(event => {
       const originalEventId = event.id.replace('evt-', '');
-      const reportId = reportMap.get(originalEventId);
-      return { ...event, reportId: reportId || null };
+      return {
+        ...event,
+        reportId: reportIdMap.get(originalEventId) || null,
+      };
     });
 
-    conferences.value = reportsData;
+    conferences.value = reportsData.map(report => {
+      const eventInfo = eventInfoMap.get(report.event_id);
+      return {
+        ...report,
+        date: eventInfo?.date || 'Unknown Date',
+        replayUrl: eventInfo?.replayUrl || null,
+      };
+    });
+
+    isLoadingEvents.value = false;
     isLoadingReports.value = false;
 
   } catch (error) {
@@ -354,15 +425,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  const handleResize = () => {
-    isDesktop.value = window.innerWidth > 1024;
-    if (isDesktop.value) {
-      updateTimelinePosition();
-    } else {
-      isTimelineReady.value = false;
-    }
-  };
-  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('resize', handleResize); // Remove shared handler
   if (observer) observer.disconnect();
   if (highlightTimer) clearTimeout(highlightTimer);
 });
@@ -394,19 +457,33 @@ const skeletonMonths = computed(() => {
 
 const processAndGroupEvents = (events, isPastFilter) => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set to midnight this morning
+  today.setHours(0, 0, 0, 0);
 
   const conferenceIdsWithReports = new Set(conferences.value.map(c => c.id));
 
   const filtered = events.filter(event => {
-    const eventDate = new Date(event.date);
+    const eventDate = parseLocalDate(event.date);
+    if (!eventDate) return false;
+
+    // --- CHANGE 1: Logic removed, now shows all ---
+    // if (isPastFilter && !event.reportId) {
+    //   return false;
+    // }
+
     return isPastFilter ? eventDate < today : eventDate >= today;
   });
 
   const processed = [...filtered]
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .sort((a, b) => {
+        const dateA = parseLocalDate(a.date);
+        const dateB = parseLocalDate(b.date);
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        return dateB - dateA; // Descending
+      })
       .map(event => {
-        const eventDate = new Date(event.date);
+        const eventDate = parseLocalDate(event.date);
         return {
           ...event,
           day: eventDate.getDate(),
@@ -416,20 +493,30 @@ const processAndGroupEvents = (events, isPastFilter) => {
       });
 
   return processed.reduce((acc, event) => {
-    const date = new Date(event.date);
+    const date = parseLocalDate(event.date);
+    if (!date) return acc;
     const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`;
     if (!acc[key]) acc[key] = [];
     acc[key].push(event);
     return acc;
   }, {});
 };
-const upcomingEventGroups = computed(() => processAndGroupEvents(timelineEvents.value, false));
-const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.value, true));
+
 const groupedConferences = computed(() => {
   return [...conferences.value]
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .sort((a, b) => {
+        const dateA = parseLocalDate(a.date);
+        const dateB = parseLocalDate(b.date);
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        return dateB - dateA;
+      })
       .reduce((acc, conference) => {
-        const date = new Date(conference.date);
+        const date = parseLocalDate(conference.date);
+        if (!date) {
+          return acc;
+        }
         const key = `${date.getFullYear()}年 ${date.toLocaleString('zh-CN', { month: 'long' })}`;
         if (!acc[key]) acc[key] = [];
         acc[key].push(conference);
@@ -437,9 +524,34 @@ const groupedConferences = computed(() => {
       }, {});
 });
 
+const upcomingEventGroups = computed(() => processAndGroupEvents(timelineEvents.value, false));
+const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.value, true));
+
 </script>
 
 <style scoped>
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem; flex-shrink: 0; border-bottom: 1px solid #f3f4f6;
+}
+.calendar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b5563;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.calendar-button:hover {
+  background-color: #f3f4f6;
+  color: #3b82f6;
+}
+
 /* Main Layout */
 .main-layout { display: flex; max-width: 1600px; margin: 0 auto; padding: 0 2rem; }
 
@@ -460,9 +572,6 @@ const groupedConferences = computed(() => {
   display: flex; flex-direction: column;
 }
 
-.timeline-header {
-  padding: 1.5rem 1.5rem 1rem; flex-shrink: 0; border-bottom: 1px solid #f3f4f6;
-}
 .timeline-title {
   font-size: 1.25rem; font-weight: 700; color: #1f2937;
 }
@@ -514,25 +623,24 @@ const groupedConferences = computed(() => {
 .report-badge { font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 999px; line-height: 1.2; }
 .report-badge-archived { background-color: #dcfce7; color: #166534; }
 .report-badge-upcoming { background-color: #fef3c7; color: #b45309; }
+/* --- CHANGE 1: Added Replay Badge Style --- */
+.report-badge-replay { background-color: #dbeafe; color: #4338ca; }
+
 .hover-badge { background-color: #eff6ff; color: #3b82f6; opacity: 0; transition: opacity 0.3s ease; position: absolute; }
 .timeline-item.has-report:not(.is-past):hover .hover-badge { opacity: 1; }
 .timeline-item.has-report:not(.is-past):hover .report-badge-upcoming { opacity: 0; }
 
-/* Past Event Styling & Enhanced Hover Effect */
+/* --- CHANGE 1: Restored Past Event Styling --- */
 .timeline-item.is-past {
-  opacity: 0.8; /* Default opacity for past items (with reports) */
+  opacity: 0.8;
 }
-/* New rule: Make past items WITHOUT reports much more faded */
 .timeline-item.is-past:not(.has-report) {
   opacity: 0.4;
 }
 .timeline-item.is-past:not(.has-report):hover {
   background-color: transparent;
 }
-
 .timeline-item.is-past .date-marker { background-color: #e5e7eb; }
-
-/* Hover effect only for past items WITH reports */
 .timeline-item.is-past.has-report:hover {
   opacity: 1; background-color: #eff6ff;
 }
@@ -623,9 +731,8 @@ const groupedConferences = computed(() => {
 .group:has(.hover-link):hover .hover-link {
   opacity: 1;
   transform: translateY(0);
-  color: #3b82f6; /* Apply blue color on card hover */
+  color: #3b82f6;
 }
-/* This just controls the scale animation when hovering the link itself */
 .hover-link:hover {
   transform: translateY(0) scale(1.1);
 }
