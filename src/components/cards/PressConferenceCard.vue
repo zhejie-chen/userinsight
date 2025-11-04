@@ -66,18 +66,18 @@ onMounted(() => {
       <div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center;">
         <div class="scrolling-gallery">
           <div class="gallery-row row-1">
-            <img src="/img/cover-press-conference/C11头图.png" alt="placeholder image 1">
-            <img src="/img/cover-press-conference/乐道L90上市发布会-头图.png" alt="placeholder image 2">
-            <img src="/img/cover-press-conference/小鹏全新P7亮相发布会-头图.png" alt="placeholder image 3">
-            <img src="/img/cover-press-conference/零跑C11上市发布会.png" alt="placeholder image 4">
-            <img src="/img/cover-press-conference/深蓝L07P7亮相发布会-头图.png" alt="placeholder image 5">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/08.25-LUXEED&AITO-cover.webp" alt="placeholder image 1">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/08.06-XpengP7-cover.webp" alt="placeholder image 2">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/09.08-Deepal-cover.webp" alt="placeholder image 3">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/09.26-LiAutoi6-cover.webp" alt="placeholder image 4">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/07.24-LeamportB01-cover.webp" alt="placeholder image 5">
           </div>
           <div class="gallery-row row-2">
-            <img src="/img/cover-press-conference/小鹏G7上市发布会.png" alt="placeholder image A">
-            <img src="/img/cover-press-conference/极氪9X技术发布会.png" alt="placeholder image B">
-            <img src="/img/cover-press-conference/理想i8上市发布会-头图.png" alt="placeholder image C">
-            <img src="/img/cover-press-conference/零跑B01上市发布会-头图.png" alt="placeholder image D">
-            <img src="/img/cover-press-conference/全新小鹏P7上市发布会-头图.png" alt="placeholder image E">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/09.17-DENZAN9-cover.webp" alt="placeholder image A">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/09.29-Zeekr9x-cover.webp" alt="placeholder image B">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/07.10-LeamportC11-cover.webp" alt="placeholder image C">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/09.09-FCBTi7-cover.webp" alt="placeholder image D">
+            <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/Press_conference/09.16-STELATOS9T-cover.webp" alt="placeholder image E">
           </div>
         </div>
       </div>
