@@ -186,7 +186,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import {
   TransitionRoot,
   TransitionChild,
@@ -220,8 +220,29 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'navigateToEvent']);
 
+// --- (Keeping this fix from last time) ---
+// Correct logic to apply padding to <header>
+watch(() => props.isOpen, (isOpen) => {
+  if (isOpen) {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const header = document.querySelector('header');
+    if (header) {
+      header.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    document.body.style.overflow = 'hidden';
+  } else {
+    const header = document.querySelector('header');
+    if (header) {
+      header.style.paddingRight = '0';
+    }
+    document.body.style.overflow = 'auto';
+  }
+});
+// --- END ---
+
+
 const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
-const maxVisibleEvents = 2; // --- CHANGE 4: 减少到2个以适应更小的高度 ---
+const maxVisibleEvents = 2;
 
 // --- 日期范围 ---
 const minDate = new Date(2025, 5, 1); // 2025年6月 (月份0-indexed)
@@ -331,7 +352,7 @@ function closeDayModal() {
 }
 
 function navigateToEvent(event) {
-  if (!event.reportId) return; // 如果没有报告ID (灰色)，则不执行任何操作
+  if (!event.reportId) return;
   if (isDayModalOpen.value) {
     closeDayModal();
   }
@@ -378,7 +399,6 @@ const calendarGrid = computed(() => {
 </script>
 
 <style scoped>
-/* --- CHANGE 4: 单元格高度减小 --- */
 .day-cell {
   height: 110px;
   position: relative;
@@ -428,10 +448,9 @@ const calendarGrid = computed(() => {
   flex-shrink: 1;
 }
 
-/* --- CHANGE 4: Base style is GRAY (no report) --- */
 .event-item {
-  background-color: #f3f4f6; /* gray-100 */
-  border-left: 3px solid #9ca3af; /* gray-400 */
+  background-color: #f3f4f6;
+  border-left: 3px solid #9ca3af;
   padding: 4px 6px;
   border-radius: 2px;
   display: flex;
@@ -440,16 +459,15 @@ const calendarGrid = computed(() => {
   gap: 4px;
   width: 100%;
   text-align: left;
-  cursor: default; /* 默认不可点击 */
+  cursor: default;
 }
-/* --- CHANGE 4: Override for GREEN (has report) --- */
 .event-item.has-report {
-  background-color: #f0fdf4; /* green-50 */
-  border-left-color: #22c55e; /* green-500 */
+  background-color: #f0fdf4;
+  border-left-color: #22c55e;
   cursor: pointer;
 }
 .event-item.has-report:hover {
-  background-color: #dcfce7; /* green-100 */
+  background-color: #dcfce7;
 }
 
 
@@ -457,7 +475,7 @@ const calendarGrid = computed(() => {
   font-size: 0.7rem;
   line-height: 0.9rem;
   font-weight: 500;
-  color: #4b5563; /* gray-600 */
+  color: #4b5563;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -465,7 +483,7 @@ const calendarGrid = computed(() => {
   min-width: 0;
 }
 .event-item.has-report .event-title {
-  color: #15803d; /* green-700 */
+  color: #15803d;
 }
 
 .replay-button {
@@ -485,11 +503,11 @@ const calendarGrid = computed(() => {
   background-color: #bfdbfe;
 }
 .event-item.has-report .replay-button {
-  color: #166534; /* green-800 */
-  background-color: #dcfce7; /* green-100 */
+  color: #166534;
+  background-color: #dcfce7;
 }
 .event-item.has-report .replay-button:hover {
-  background-color: #bbf7d0; /* green-200 */
+  background-color: #bbf7d0;
 }
 
 
@@ -500,7 +518,7 @@ const calendarGrid = computed(() => {
   background-color: #f3f4f6;
   border-radius: 4px;
   padding: 2px 4px;
-  margin-top: auto; /* 固定在底部 */
+  margin-top: auto;
   padding-top: 4px;
   flex-shrink: 0;
   text-align: center;
@@ -511,38 +529,35 @@ const calendarGrid = computed(() => {
   background-color: #e5e7eb;
 }
 
-/* --- "日视图" 弹窗样式 --- */
-/* --- CHANGE 4: Base style is GRAY --- */
 .day-event-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
   padding: 10px;
-  background-color: #f3f4f6; /* gray-100 */
+  background-color: #f3f4f6;
   border-radius: 6px;
   width: 100%;
   text-align: left;
   cursor: default;
 }
-/* --- CHANGE 4: Override for GREEN --- */
 .day-event-item.has-report {
   cursor: pointer;
-  background-color: #f0fdf4; /* green-50 */
+  background-color: #f0fdf4;
 }
 .day-event-item.has-report:hover {
-  background-color: #dcfce7; /* green-100 */
+  background-color: #dcfce7;
 }
 
 
 .day-event-title {
   font-size: 0.9rem;
   font-weight: 500;
-  color: #4b5563; /* gray-600 */
+  color: #4b5563;
   line-height: 1.4;
 }
 .day-event-item.has-report .day-event-title {
-  color: #15803d; /* green-700 */
+  color: #15803d;
 }
 
 

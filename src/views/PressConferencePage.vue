@@ -248,10 +248,6 @@ const selectedConference = ref(null);
 
 const isCalendarModalOpen = ref(false);
 
-// --- MODIFICATION (Request 2) ---
-// Computed ref to track if *any* modal is open.
-const isAnyModalOpen = computed(() => isModalOpen.value || isCalendarModalOpen.value);
-
 async function openConferenceModal(conference) {
   selectedConference.value = {
     ...conference,
@@ -331,7 +327,6 @@ let highlightTimer = null;
 
 // --- Layout & Blur Sync Logic ---
 const isDesktop = ref(window.innerWidth > 1024);
-// --- CHANGE 2: Re-introduced isSufficientHeight ---
 const isSufficientHeight = ref(window.innerHeight > 750); // Min height for calendar
 const mainLayoutRef = ref(null);
 const timelineLeftPos = ref('0px');
@@ -351,25 +346,20 @@ const updateTimelinePosition = async () => {
   }
 };
 
-// --- CHANGE 3: Define handleResize outside onMounted ---
+// --- (Keeping this fix from last time) ---
+// Removed isSufficientHeight check for closing modal
 const handleResize = () => {
   isDesktop.value = window.innerWidth > 1024;
   isSufficientHeight.value = window.innerHeight > 750; // Update height
 
-  // --- MODIFICATION (Request 2) ---
-  // If a modal is open, the scrollbar is hidden.
-  // This can trigger a 'resize' event.
-  // We DON'T want to recalculate the timeline position,
-  // as the main layout will have shifted, causing the jump.
-  if (isDesktop.value && !isAnyModalOpen.value) {
+  if (isDesktop.value) {
     updateTimelinePosition();
-  } else if (!isDesktop.value) {
+  } else {
     isTimelineReady.value = false;
   }
-  // --- END MODIFICATION ---
 
-  // Auto-close modal if window is too small (Original logic from file)
-  if ((!isDesktop.value || !isSufficientHeight.value) && isCalendarModalOpen.value) {
+  // Auto-close modal ONLY if not desktop
+  if (!isDesktop.value && isCalendarModalOpen.value) {
     closeCalendarModal();
   }
 };
@@ -465,6 +455,7 @@ const skeletonMonths = computed(() => {
   return [`${today.getFullYear()}年 ${today.toLocaleString('zh-CN', { month: 'long' })}`];
 });
 
+// --- (Keeping this logic as requested) ---
 const processAndGroupEvents = (events, isPastFilter) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -475,14 +466,12 @@ const processAndGroupEvents = (events, isPastFilter) => {
     const eventDate = parseLocalDate(event.date);
     if (!eventDate) return false;
 
-    // --- MODIFICATION (Request 1) ---
-    // 仅当是“过往”日程时，才筛选掉没有报告的
     // "未来"日程 (isPastFilter = false) 会全部显示
+    // "过往"日程 (isPastFilter = true) 仅显示有报告的
     const hasReportCheck = event.reportId !== null && conferenceIdsWithReports.has(event.reportId);
     if (isPastFilter && !hasReportCheck) {
       return false;
     }
-    // --- END MODIFICATION ---
 
     return isPastFilter ? eventDate < today : eventDate >= today;
   });
@@ -494,8 +483,6 @@ const processAndGroupEvents = (events, isPastFilter) => {
         if (!dateA && !dateB) return 0;
         if (!dateA) return 1;
         if (!dateB) return -1;
-        // 修正：即将发生的事件应该升序（最近的在前），过往事件降序（最近的在前）
-        // 原始代码是全部降序，我们保持这个逻辑
         return dateB - dateA; // Descending
       })
       .map(event => {
@@ -612,7 +599,7 @@ const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.valu
 .timeline-item:not(.has-report) { cursor: default; }
 .timeline-item.has-report:not(.is-past):hover { background-color: #f9fafb; }
 .timeline-item:not(.has-report):not(.is-past):hover {
-  background-color: #f9fafb; /* 让没有报告的未来日程也有悬停效果 */
+  background-color: #f9fafb;
 }
 .timeline-item.is-active { background-color: #eff6ff; }
 
@@ -632,7 +619,6 @@ const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.valu
 .timeline-item.is-active:not(.is-past) .date-marker .weekday {
   color: rgba(255,255,255,0.8);
 }
-/* 为没有报告的未来日程添加悬停效果 */
 .timeline-item:not(.has-report):not(.is-past):hover .date-marker {
   background-color: #e5e7eb;
 }
@@ -646,18 +632,17 @@ const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.valu
 .report-badge { font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 999px; line-height: 1.2; }
 .report-badge-archived { background-color: #dcfce7; color: #166534; }
 .report-badge-upcoming { background-color: #fef3c7; color: #b45309; }
-/* --- (上次的修改) Changed color to blue-600 --- */
+/* (Keeping this fix) */
 .report-badge-replay { background-color: #dbeafe; color: #2563eb; }
 
 .hover-badge { background-color: #eff6ff; color: #3b82f6; opacity: 0; transition: opacity 0.3s ease; position: absolute; }
 .timeline-item.has-report:not(.is-past):hover .hover-badge { opacity: 1; }
 .timeline-item.has-report:not(.is-past):hover .report-badge-upcoming { opacity: 0; }
 
-/* --- CHANGE 1: Restored Past Event Styling --- */
+/* Past Event Styling */
 .timeline-item.is-past {
   opacity: 0.8;
 }
-/* (恢复) 没有报告的过往日程现在被隐藏了，但保留样式以防万一 */
 .timeline-item.is-past:not(.has-report) {
   opacity: 0.4;
 }
