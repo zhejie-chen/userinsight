@@ -25,9 +25,9 @@
               leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-                class="w-full max-w-7xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                class="w-full max-w-7xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all flex flex-col max-h-[calc(100vh-80px)] calendar-dialog-panel"
             >
-              <div class="flex justify-between items-center mb-4">
+              <div class="flex justify-between items-center mb-4 flex-shrink-0 calendar-header">
                 <button
                     @click="changeMonth(-1)"
                     :disabled="!canGoBack"
@@ -51,61 +51,63 @@
                 </button>
               </div>
 
-              <div class="grid grid-cols-7 gap-px text-center text-sm font-semibold text-gray-500 mb-2">
-                <div v-for="day in weekdays" :key="day">{{ day }}</div>
-              </div>
+              <div class="overflow-y-auto">
+                <div class="grid grid-cols-7 gap-px text-center text-sm font-semibold text-gray-500 mb-2 sticky top-0 bg-white z-10 py-2 weekday-header">
+                  <div v-for="day in weekdays" :key="day">{{ day }}</div>
+                </div>
 
-              <div
-                  class="calendar-grid grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden"
-              >
                 <div
-                    v-for="(day, index) in calendarGrid"
-                    :key="index"
-                    class="day-cell bg-white p-2"
-                    :class="{
-                      'is-other-month': !day.isCurrentMonth,
-                      'is-today': isToday(day.date)
-                    }"
+                    class="calendar-grid grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden"
                 >
-                  <span class="day-number">{{ day.date.getDate() }}</span>
+                  <div
+                      v-for="(day, index) in calendarGrid"
+                      :key="index"
+                      class="day-cell bg-white p-2"
+                      :class="{
+                        'is-other-month': !day.isCurrentMonth,
+                        'is-today': isToday(day.date)
+                      }"
+                  >
+                    <span class="day-number">{{ day.date.getDate() }}</span>
 
-                  <div class="day-content-wrapper">
-                    <div class="event-list">
-                      <template v-if="day.isCurrentMonth">
-                        <template v-for="(event, eventIndex) in getEventsForDay(day)" :key="event.id">
-                          <button
-                              v-if="eventIndex < maxVisibleEvents"
-                              class="event-item"
-                              :class="{ 'has-report': event.reportId }"
-                              @click="navigateToEvent(event)"
-                          >
-                            <p class="event-title">{{ event.title }}</p>
-                            <a
-                                v-if="event.replayUrl"
-                                :href="event.replayUrl"
-                                target="_blank"
-                                @click.stop
-                                class="replay-button"
+                    <div class="day-content-wrapper">
+                      <div class="event-list">
+                        <template v-if="day.isCurrentMonth">
+                          <template v-for="(event, eventIndex) in getEventsForDay(day)" :key="event.id">
+                            <button
+                                v-if="eventIndex < maxVisibleEvents"
+                                class="event-item"
+                                :class="{ 'has-report': event.reportId }"
+                                @click="navigateToEvent(event)"
                             >
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
-                                <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16ZM6.75 5.25A.75.75 0 0 0 6 6v4a.75.75 0 0 0 1.5 0v-1.559l2.22 1.332a.75.75 0 0 0 1.11-.668V6.895a.75.75 0 0 0-1.11-.668L7.5 7.559V6a.75.75 0 0 0-.75-.75Z" clip-rule="evenodd" />
-                              </svg>
-                              回放
-                            </a>
-                          </button>
+                              <p class="event-title">{{ event.title }}</p>
+                              <a
+                                  v-if="event.replayUrl"
+                                  :href="event.replayUrl"
+                                  target="_blank"
+                                  @click.stop
+                                  class="replay-button"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3 h-3">
+                                  <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16ZM6.75 5.25A.75.75 0 0 0 6 6v4a.75.75 0 0 0 1.5 0v-1.559l2.22 1.332a.75.75 0 0 0 1.11-.668V6.895a.75.75 0 0 0-1.11-.668L7.5 7.559V6a.75.75 0 0 0-.75-.75Z" clip-rule="evenodd" />
+                                </svg>
+                                回放
+                              </a>
+                            </button>
+                          </template>
                         </template>
-                      </template>
+                      </div>
+
+                      <button
+                          v-if="day.isCurrentMonth && getEventsForDay(day).length > maxVisibleEvents"
+                          @click.stop="openDayModal(day)"
+                          class="more-button"
+                      >
+                        更多...
+                      </button>
                     </div>
 
-                    <button
-                        v-if="day.isCurrentMonth && getEventsForDay(day).length > maxVisibleEvents"
-                        @click.stop="openDayModal(day)"
-                        class="more-button"
-                    >
-                      + {{ getEventsForDay(day).length - maxVisibleEvents }} 更多...
-                    </button>
                   </div>
-
                 </div>
               </div>
 
@@ -220,8 +222,6 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'navigateToEvent']);
 
-// --- (Keeping this fix from last time) ---
-// Correct logic to apply padding to <header>
 watch(() => props.isOpen, (isOpen) => {
   if (isOpen) {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -238,15 +238,13 @@ watch(() => props.isOpen, (isOpen) => {
     document.body.style.overflow = 'auto';
   }
 });
-// --- END ---
 
 
 const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
 const maxVisibleEvents = 2;
 
-// --- 日期范围 ---
-const minDate = new Date(2025, 5, 1); // 2025年6月 (月份0-indexed)
-const maxDate = new Date(2025, 11, 1); // 2025年12月
+const minDate = new Date(2025, 5, 1);
+const maxDate = new Date(2025, 11, 1);
 
 const getInitialDate = () => {
   const today = new Date();
@@ -259,7 +257,6 @@ const getInitialDate = () => {
 
 const currentDate = ref(getInitialDate());
 
-// --- "日视图" 弹窗状态 ---
 const isDayModalOpen = ref(false);
 const selectedDayData = ref({ date: null, events: [] });
 
@@ -267,7 +264,6 @@ function closeModal() {
   emit('close');
 }
 
-// --- 事件查找表 (Events Map) ---
 const eventsByDate = computed(() => {
   const map = new Map();
   props.events.forEach(event => {
@@ -280,7 +276,6 @@ const eventsByDate = computed(() => {
   return map;
 });
 
-// --- 月份切换 ---
 function isSameMonth(d1, d2) {
   return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth();
 }
@@ -303,7 +298,6 @@ function changeMonth(direction) {
   );
 }
 
-// --- 日期格式化与工具 ---
 function isToday(date) {
   const today = new Date();
   return formatDateKey(date) === formatDateKey(today);
@@ -328,7 +322,6 @@ function getEventsForDay(day) {
   return eventsByDate.value.get(key) || [];
 }
 
-// --- 日视图弹窗逻辑 ---
 const selectedDayTitle = computed(() => {
   if (!selectedDayData.value.date) return '';
   return selectedDayData.value.date.toLocaleString('zh-CN', {
@@ -360,7 +353,6 @@ function navigateToEvent(event) {
 }
 
 
-// --- 日历网格生成 ---
 const calendarGrid = computed(() => {
   const year = currentDate.value.getFullYear();
   const month = currentDate.value.getMonth();
@@ -438,6 +430,7 @@ const calendarGrid = computed(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  gap: 4px;
 }
 
 .event-list {
@@ -460,6 +453,7 @@ const calendarGrid = computed(() => {
   width: 100%;
   text-align: left;
   cursor: default;
+  min-height: 28px;
 }
 .event-item.has-report {
   background-color: #f0fdf4;
@@ -518,7 +512,6 @@ const calendarGrid = computed(() => {
   background-color: #f3f4f6;
   border-radius: 4px;
   padding: 2px 4px;
-  margin-top: auto;
   padding-top: 4px;
   flex-shrink: 0;
   text-align: center;
@@ -540,6 +533,8 @@ const calendarGrid = computed(() => {
   width: 100%;
   text-align: left;
   cursor: default;
+  /* --- MODIFICATION (Alignment): Added min-height --- */
+  min-height: 48px;
 }
 .day-event-item.has-report {
   cursor: pointer;
@@ -584,5 +579,34 @@ const calendarGrid = computed(() => {
 }
 .day-event-item.has-part .replay-button-detailed:hover {
   background-color: #bbf7d0;
+}
+
+@media (max-height: 750px) {
+  .calendar-dialog-panel {
+    padding: 0.75rem; /* p-3 */
+  }
+
+  .calendar-header {
+    margin-bottom: 0.5rem; /* mb-2 */
+  }
+
+  .calendar-header .text-xl { /* DialogTitle */
+    font-size: 1.125rem; /* text-lg */
+  }
+
+  .calendar-header .p-2 { /* Arrow buttons */
+    padding: 0.25rem; /* p-1 */
+  }
+
+  .weekday-header {
+    padding-top: 0.25rem;    /* py-1 */
+    padding-bottom: 0.25rem; /* py-1 */
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem; /* mb-1 */
+  }
+
+  .day-cell {
+    height: 95px; /* 110px -> 95px */
+  }
 }
 </style>
