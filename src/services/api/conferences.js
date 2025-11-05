@@ -8,10 +8,10 @@ import { supabase } from '../supabase';
  */
 export async function getTimelineEvents() {
     console.log('Fetching timeline events...');
-    // --- 必须的改动: 添加 'replay_url' ---
+    // --- 必须的改动: 添加 'replay_url' 和 'Pressconference_type' ---
     const { data, error } = await supabase
         .from('conference-events')
-        .select('id, title, event_date, replay_url')
+        .select('id, title, event_date, replay_url, Pressconference_type') // <-- 1. 在这里添加字段
         .order('event_date', { ascending: false });
 
     if (error) {
@@ -24,6 +24,7 @@ export async function getTimelineEvents() {
         date: event.event_date,
         title: event.title,
         replayUrl: event.replay_url, // <-- 传递 replay_url
+        Pressconference_type: event.Pressconference_type, // <-- 2. 传递新字段
         reportId: null
     }));
 
