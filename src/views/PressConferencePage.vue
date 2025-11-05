@@ -66,7 +66,7 @@
                       <div class="event-details">
                         <p class="event-title">{{ item.title }}</p>
                         <div class="badges-container">
-                          <span class="report-badge report-badge-upcoming">预计</span>
+                          <span class="report-badge report-badge-upcoming">预告</span>
                           <span v-if="item.hasReport" class="report-badge hover-badge">查看报告</span>
                           <span v-if="item.replayUrl" class="report-badge report-badge-replay">回放</span>
                         </div>
@@ -346,8 +346,6 @@ const updateTimelinePosition = async () => {
   }
 };
 
-// --- (Keeping this fix from last time) ---
-// Removed isSufficientHeight check for closing modal
 const handleResize = () => {
   isDesktop.value = window.innerWidth > 1024;
   isSufficientHeight.value = window.innerHeight > 750; // Update height
@@ -455,7 +453,6 @@ const skeletonMonths = computed(() => {
   return [`${today.getFullYear()}年 ${today.toLocaleString('zh-CN', { month: 'long' })}`];
 });
 
-// --- (Keeping this logic as requested) ---
 const processAndGroupEvents = (events, isPastFilter) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -466,8 +463,6 @@ const processAndGroupEvents = (events, isPastFilter) => {
     const eventDate = parseLocalDate(event.date);
     if (!eventDate) return false;
 
-    // "未来"日程 (isPastFilter = false) 会全部显示
-    // "过往"日程 (isPastFilter = true) 仅显示有报告的
     const hasReportCheck = event.reportId !== null && conferenceIdsWithReports.has(event.reportId);
     if (isPastFilter && !hasReportCheck) {
       return false;
@@ -483,7 +478,7 @@ const processAndGroupEvents = (events, isPastFilter) => {
         if (!dateA && !dateB) return 0;
         if (!dateA) return 1;
         if (!dateB) return -1;
-        return dateB - dateA; // Descending
+        return dateB - dateA;
       })
       .map(event => {
         const eventDate = parseLocalDate(event.date);
@@ -632,7 +627,6 @@ const pastEventGroups = computed(() => processAndGroupEvents(timelineEvents.valu
 .report-badge { font-size: 0.75rem; font-weight: 500; padding: 2px 8px; border-radius: 999px; line-height: 1.2; }
 .report-badge-archived { background-color: #dcfce7; color: #166534; }
 .report-badge-upcoming { background-color: #fef3c7; color: #b45309; }
-/* (Keeping this fix) */
 .report-badge-replay { background-color: #dbeafe; color: #2563eb; }
 
 .hover-badge { background-color: #eff6ff; color: #3b82f6; opacity: 0; transition: opacity 0.3s ease; position: absolute; }
