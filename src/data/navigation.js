@@ -25,13 +25,6 @@ export const navigationData = [
                     { id: 'ota-map', label: 'OTA 地图', link: '#', type: 'external', status: 'coming-soon' },
                 ],
             },
-            {
-                id: 'tech-tracking',
-                label: '技术追踪',
-                children: [
-                    { id: 'ota-map', label: 'OTA 地图', link: '#', type: 'external', status: 'coming-soon' },
-                ],
-            },
         ],
     },
     {
@@ -42,7 +35,7 @@ export const navigationData = [
                 id: 'global-market',
                 label: '全球市场',
                 children: [
-                    { id: 'os-sales', label: '海外销量', link: '#', type: 'external', status: 'active' },
+                    { id: 'os-sales', label: '海外销量', link: '/sales-guide', type: 'internal', status: 'active' },
                     { id: 'os-map', label: '出海地图', link: '/osmap', type: 'internal', status: 'active' },
                     { id: 'os-new', label: '海外上新', link: '/new-release', type: 'internal', status: 'active' },
                     { id: 'os-insight', label: '海外洞察', link: '#', type: 'external', status: 'coming-soon' },
@@ -62,11 +55,18 @@ export const navigationData = [
         label: '工具',
         children: [
             {
+                id: 'image-tools',
+                label: '图文工具',
+                children: [
+                    { id: 'long-image', label: '长图文', link: '#', type: 'external', status: 'coming-soon' },
+                    { id: 'poster', label: '发布会海报', link: '#', type: 'external', status: 'coming-soon' },
+                ],
+            },
+            {
                 id: 'data-tools',
                 label: '数据工具',
                 children: [
-                    { id: 'long-image', label: '长图工具', link: '#', type: 'external', status: 'coming-soon' },
-                    { id: 'poster', label: '发布会海报', link: '#', type: 'external', status: 'coming-soon' },
+                    { id: 'long-image', label: 'CAnswer', link: '#', type: 'external', status: 'coming-soon' },
                 ],
             },
         ],

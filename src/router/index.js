@@ -4,6 +4,7 @@ import OverseasMapPage from '../views/OverseasMapPage.vue';
 import NewReleasePage from '../views/NewReleasePage.vue';
 import RegulationPage from '../views/RegulationPage.vue';
 import PressConferencePage from '../views/PressConferencePage.vue';
+import SalesGuidePage from '@/views/SalesGuidePage.vue'
 
 const routes = [
     {
@@ -31,7 +32,12 @@ const routes = [
         path: '/press-conference',
         name: 'press-conference',
         component: PressConferencePage
-    }
+    },
+    {
+        path: '/sales-guide',
+        name: 'SalesGuide',
+        component: SalesGuidePage
+    },
 ];
 
 const router = createRouter({
