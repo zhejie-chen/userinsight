@@ -73,7 +73,7 @@
                 </span>
               </p>
               <div class="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                <img src="/img/cover-img/手机版图-1.png" alt="步骤2" class="w-full h-full object-contain p-1">
+                <img src="/img/cover-img/Canswer_oversea_sales_QRcode.png" alt="步骤2" class="w-full h-full object-contain p-1">
               </div>
             </div>
 
