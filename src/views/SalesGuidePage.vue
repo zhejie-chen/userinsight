@@ -1,5 +1,6 @@
 <script setup>
-// 无需任何 JavaScript
+// 1. 导入您（用户）的全新 Three.js 地球组件
+import ThreeJsEarth from '@/components/common/ThreeJsEarth.vue';
 </script>
 
 <template>
@@ -25,12 +26,8 @@
             立即访问
           </a>
 
-          <div class="rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto">
-            <img
-                src="/img/cover-img/World.png"
-                alt="世界地图"
-                class="w-full h-full object-cover"
-            >
+          <div class="rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-black cursor-grab active:cursor-grabbing">
+            <ThreeJsEarth />
           </div>
 
         </section>
@@ -46,7 +43,8 @@
             <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center text-center">
               <span class="text-5xl font-bold text-blue-500 mb-2">1</span>
               <p class="text-gray-800 font-semibold mb-3 min-h-[2.5rem] flex justify-center items-center text-sm leading-tight">
-                <span> 确保登录过
+                <span>
+                  确保登录过
                   <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-baseline text-blue-600 font-bold hover:opacity-80 transition-all ml-1">
                     <span class="hover:underline">CAnswer</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-0.5">
@@ -63,7 +61,8 @@
             <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center text-center">
               <span class="text-5xl font-bold text-blue-500 mb-2">2</span>
               <p class="text-gray-800 font-semibold mb-3 min-h-[2.5rem] flex justify-center items-center text-sm leading-tight">
-                <span> <span>扫码或点击</span>
+                <span>
+                  <span>扫码或点击</span>
                   <a href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-baseline text-blue-600 font-bold hover:opacity-80 transition-all ml-1">
                     <span class="hover:underline">填写问卷</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-0.5">
@@ -73,14 +72,15 @@
                 </span>
               </p>
               <div class="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                <img src="/img/cover-img/Canswer_oversea_sales_QRcode.png" alt="步骤2" class="w-full h-full object-contain p-1">
+                <img src="/img/cover-img/手机版图-1.png" alt="步骤2" class="w-full h-full object-contain p-1">
               </div>
             </div>
 
             <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center text-center">
               <span class="text-5xl font-bold text-blue-500 mb-2">3</span>
               <p class="text-gray-800 font-semibold mb-3 min-h-[2.5rem] flex justify-center items-center text-sm leading-tight">
-                <span>切换分区</span> </p>
+                <span>切换分区</span>
+              </p>
               <div class="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
                 <img src="/img/cover-img/手机版图-2.png" alt="步骤3" class="w-full h-full object-contain p-1">
               </div>
@@ -89,7 +89,8 @@
             <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center text-center">
               <span class="text-5xl font-bold text-blue-500 mb-2">4</span>
               <p class="text-gray-800 font-semibold mb-3 min-h-[2.5rem] flex justify-center items-center text-sm leading-tight">
-                <span>选择报告</span> </p>
+                <span>选择报告</span>
+              </p>
               <div class="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
                 <img src="/img/cover-img/手机版图.png" alt="步骤4" class="w-full h-full object-contain p-1">
               </div>
@@ -104,18 +105,13 @@
 </template>
 
 <style scoped>
-/* 确保文本换行时，链接内的图标也能对齐 */
+/* 智能换行样式 (保持不变) */
 .inline-flex.items-baseline {
-  white-space: normal; /* 允许文本换行 */
+  white-space: normal;
   display: inline-flex;
   align-items: baseline;
 }
-
-/* 智能换行样式 (保持不变) */
 p.min-h-\[2\.5rem\] {
   min-height: 40px;
 }
-
-/* (已删除所有动画 CSS) */
-
 </style>
