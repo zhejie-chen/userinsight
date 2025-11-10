@@ -13,7 +13,8 @@ export const navigationData = [
                 id: 'market-analysis',
                 label: '市场分析',
                 children: [ // 这是三级菜单
-                    { id: 'report', label: '调研报告', link: '#', type: 'external', status: 'coming-soon' },
+                    // --- 修改点 1 ---
+                    { id: 'report', label: '调研报告', link: '/report/domestic', type: 'internal', status: 'active' },
                     { id: 'competitor', label: '友商发布会', link: 'press-conference', type: 'internal', status: 'active' },
                     { id: 'insight', label: '洞察报告', link: '#', type: 'external', status: 'coming-soon' },
                 ],
@@ -38,7 +39,8 @@ export const navigationData = [
                     { id: 'os-sales', label: '海外销量', link: '/sales-guide', type: 'internal', status: 'active' },
                     { id: 'os-map', label: '出海地图', link: '/osmap', type: 'internal', status: 'active' },
                     { id: 'os-new', label: '海外上新', link: '/new-release', type: 'internal', status: 'active' },
-                    { id: 'os-insight', label: '海外洞察', link: '#', type: 'external', status: 'coming-soon' },
+                    // --- 修改点 2 ---
+                    { id: 'os-insight', label: '海外洞察', link: '/report/overseas', type: 'internal', status: 'active' },
                 ],
             },
             {

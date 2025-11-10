@@ -129,7 +129,7 @@ const findNavItem = (id) => {
 
         <div class="md:hidden z-50 h-8 w-8 flex items-center justify-center">
           <button v-if="isMobileMenuOpen && mobileNavView !== 'main'" @click="mobileNavView = 'main'" class="text-black">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
 
           <router-link v-else to="/" id="nav-logo-mobile"
@@ -155,8 +155,8 @@ const findNavItem = (id) => {
         </div>
 
         <button id="mobile-menu-btn" class="md:hidden text-black z-50 h-8 w-8 flex items-center justify-center" @click="toggleMobileMenu">
-          <svg v-if="!isMobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-          <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <svg v-if="!isMobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
       </div>
@@ -178,7 +178,7 @@ const findNavItem = (id) => {
                @click.prevent="mobileNavView = item.id"
                class="text-xl font-semibold text-gray-800 hover:text-blue-600 flex justify-between items-center">
               <span>{{ item.label }}</span>
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
           </nav>
         </div>
@@ -214,7 +214,7 @@ const findNavItem = (id) => {
              :id="`dropdown-${item.id}`"
              class="dropdown-content py-8">
           <div class="container mx-auto px-4">
-            <div class="grid grid-cols-4 gap-8">
+            <div class="grid grid-cols-3 gap-8">
 
               <div v-for="group in item.children" :key="group.id">
                 <h3 class="text-xs text-gray-500 font-semibold uppercase mb-4">{{ group.label }}</h3>
