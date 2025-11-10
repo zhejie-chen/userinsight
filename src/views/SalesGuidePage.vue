@@ -1,6 +1,5 @@
 <script setup>
-// 1. 导入您（用户）的全新 Three.js 地球组件
-import ThreeJsEarth from '@/components/common/ThreeJsEarth.vue';
+import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
 </script>
 
 <template>
@@ -26,8 +25,8 @@ import ThreeJsEarth from '@/components/common/ThreeJsEarth.vue';
             立即访问
           </a>
 
-          <div class="rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-black cursor-grab active:cursor-grabbing">
-            <ThreeJsEarth />
+          <div class="globe-container rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-gray-900">
+            <InteractiveGlobe />
           </div>
 
         </section>
@@ -113,5 +112,12 @@ import ThreeJsEarth from '@/components/common/ThreeJsEarth.vue';
 }
 p.min-h-\[2\.5rem\] {
   min-height: 40px;
+}
+
+/* --- 修复 1 (卡死): 
+  让地球仪容器对鼠标事件“透明”
+--- */
+.globe-container {
+  pointer-events: none;
 }
 </style>
