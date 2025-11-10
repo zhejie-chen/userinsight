@@ -114,10 +114,10 @@ p.min-h-\[2\.5rem\] {
   min-height: 40px;
 }
 
-/* --- 修复 1 (卡死):
-  让地球仪容器对鼠标事件“透明”
+/* --- 步骤 2 (交互):
+  移除 pointer-events: none; 以允许悬停
 --- */
 .globe-container {
-  pointer-events: none;
+  /* pointer-events: none;  <-- 已移除此行 */
 }
 </style>
