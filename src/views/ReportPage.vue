@@ -3,8 +3,12 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 // 1. 导入我们正确的、可复用的卡片组件
 import ConferenceReportCard from '@/components/common/ConferenceReportCard.vue';
+// 2. 导入可复用的弹窗组件
+import DetailModal from '@/components/common/DetailModal.vue';
+// (新增) 3. 导入新的 API
+import { getInsightReports, getInsightReportImages } from '@/services/api/reports.js';
 
-// 2. 定义从路由接收的 prop
+// 4. 定义从路由接收的 prop
 const props = defineProps({
   category: {
     type: String,
@@ -13,58 +17,17 @@ const props = defineProps({
   },
 });
 
-// 3. 静态数据
-const allArticles = ref([
-  // --- 国内洞察文章 ---
-  {
-    id: 'd-001',
-    title: '2025年国内新能源市场趋势分析',
-    date: '2025-11-10',
-    image: '/img/cover-img/file cover - 1.png',
-    description: '深度解析国内市场竞争格局、消费者偏好以及未来技术发展方向。',
-    category: 'domestic',
-    replayUrl: null,
-  },
-  {
-    id: 'd-002',
-    title: '智能座舱技术国内应用报告',
-    date: '2025-10-28',
-    image: '/img/cover-press-conference/sepSales.png',
-    description: '探讨国内主流车厂在智能座舱领域的最新进展与用户反馈。',
-    category: 'domestic',
-    replayUrl: null,
-  },
-  // --- 海外洞察文章 ---
-  {
-    id: 'o-001',
-    title: '欧洲电动车市场准入壁垒研究',
-    date: '2025-11-05',
-    image: '/img/cover-img/World.png',
-    description: '分析欧盟最新的法规政策、关税及对中国车企出海的影响。',
-    category: 'overseas',
-    replayUrl: null,
-  },
-  {
-    id: 'o-002',
-    title: '东南亚新能源汽车市场概览',
-    date: '2025-10-22',
-    image: '/img/cover-img/海外销量封面.png',
-    description: '泰国、印尼、马来西亚三国市场潜力、本土品牌与竞争对手分析。',
-    category: 'overseas',
-    replayUrl: null,
-  },
-  {
-    id: 'o-003',
-    title: '巴西市场消费者调研报告',
-    date: '2025-10-15',
-    image: '/img/cover-img/卡片三-巴西.png',
-    description: '针对巴西消费者的购车动机、品牌认知度及价格敏感度进行的专项调研。',
-    category: 'overseas',
-    replayUrl: null,
-  },
-]);
+// (新增) 5. 数据和加载状态
+const allReports = ref([]); // 替换 allArticles
+const isLoadingReports = ref(true);
 
-// 4. 响应式状态
+// (新增) 6. 弹窗状态 和 图片缓存
+const isModalOpen = ref(false);
+const selectedConference = ref(null);
+const imageCache = new Map(); // 用于缓存弹窗图片
+
+
+// 7. 响应式状态 (Tabs)
 const activeTab = ref(props.category);
 
 // --- 滑块动画逻辑 ---
@@ -90,10 +53,19 @@ function updateSlider() {
   }
 }
 
-onMounted(() => {
-  nextTick(() => {
-    updateSlider();
-  });
+// (修改) 8. onMounted - 加载数据
+onMounted(async () => {
+  isLoadingReports.value = true;
+  try {
+    allReports.value = await getInsightReports();
+  } catch (error) {
+    console.error("Failed to load reports:", error);
+  } finally {
+    isLoadingReports.value = false;
+    nextTick(() => {
+      updateSlider();
+    });
+  }
 });
 
 watch(activeTab, () => {
@@ -102,60 +74,93 @@ watch(activeTab, () => {
 // --- 滑块逻辑结束 ---
 
 
-// 5. 监听路由 prop 的变化
+// 9. 监听路由 prop 的变化
 watch(() => props.category, (newCategory) => {
   activeTab.value = newCategory;
 });
 
-// 6. 计算属性
-// 动态过滤文章列表
+// (修改) 10. 计算属性 - 过滤动态数据
 const filteredArticles = computed(() => {
-  return allArticles.value.filter(article => article.category === activeTab.value);
+  return allReports.value.filter(article => article.category === activeTab.value);
 });
 
-// 7. 定义卡片点击事件处理器
+// (新增) 骨架屏计算属性
+const skeletonMonths = computed(() => {
+  const today = new Date();
+  return [`${today.getFullYear()}年 ${today.toLocaleString('zh-CN', { month: 'long' })}`];
+});
+
+
+// (修改) 11. 弹窗控制函数 (异步加载图片)
+async function openConferenceModal(article) {
+  // 适配数据：将 'article' 包装成 'DetailModal' 期望的 'conference' 对象
+  selectedConference.value = {
+    ...article, // 包含 id, title, description, date, image 等
+    details: {
+      team: article.team || 'CAnswer 洞察团队', // 使用动态团队名称
+      images: [] // 初始为空
+    }
+  };
+  isModalOpen.value = true;
+
+  // 检查缓存
+  if (imageCache.has(article.id)) {
+    selectedConference.value.details.images = imageCache.get(article.id);
+    return;
+  }
+
+  // 异步获取图片
+  try {
+    const images = await getInsightReportImages(article.id);
+    // 确保弹窗仍然是同一个
+    if (selectedConference.value && selectedConference.value.id === article.id) {
+      selectedConference.value.details.images = images;
+      imageCache.set(article.id, images); // 存入缓存
+    }
+  } catch (error) {
+    console.error(`Failed to fetch images for report ${article.id}:`, error);
+  }
+}
+
+function closeConferenceModal() {
+  isModalOpen.value = false;
+  selectedConference.value = null;
+}
+
+// 12. 更新卡片点击处理器 (逻辑不变)
 function handleCardClick(article) {
-  console.log('Clicked article:', article.title);
-  // router.push(`/reports/${article.id}`);
+  if (article.action_type === 'EXTERNAL_LINK' && article.external_url) {
+    window.open(article.external_url, '_blank');
+  } else {
+    openConferenceModal(article);
+  }
 }
 
 // --- JS 动画钩子 (高性能) ---
 const STAGGER_DELAY = 60; // 每个卡片交错 60ms
 
-// 动画：进入之前
 function onBeforeEnter(el) {
-  // 设置初始状态：透明、轻微下移
   el.style.opacity = 0;
   el.style.transform = 'translateY(20px)';
-  el.style.transition = 'none'; // 确保初始状态不应用动画
+  el.style.transition = 'none';
 }
 
-// 动画：进入时
 function onEnter(el, done) {
-  // 读取 data-index 来计算延迟
   const index = parseInt(el.dataset.index) || 0;
   const delay = index * STAGGER_DELAY;
 
-  // 使用 requestAnimationFrame 确保在下一帧应用动画
   requestAnimationFrame(() => {
-    // 设置最终状态和带延迟的过渡
     el.style.opacity = 1;
     el.style.transform = 'translateY(0)';
     el.style.transition = `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`;
-
-    // 动画结束后，调用 done() 来清理
     el.addEventListener('transitionend', done, { once: true });
   });
 }
 
-// 动画：离开时
 function onLeave(el, done) {
-  // 离开动画：快速、统一淡出
   el.style.opacity = 0;
-  el.style.transform = 'translateY(-10px) scale(0.95)'; // 轻微上移并缩小
+  el.style.transform = 'translateY(-10px) scale(0.95)';
   el.style.transition = 'all 0.2s cubic-bezier(0.55, 0, 0.1, 1)';
-
-  // 动画结束后，调用 done()
   el.addEventListener('transitionend', done, { once: true });
 }
 // --- JS 动画钩子结束 ---
@@ -200,7 +205,28 @@ function onLeave(el, done) {
         洞察报告
       </h1>
 
+      <div v-if="isLoadingReports">
+        <div
+            v-for="month in skeletonMonths"
+            :key="month"
+            class="month-group-reports"
+        >
+          <div class="grid gap-6 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
+            <div v-for="n in 4" :key="`skel-card-${month}-${n}`" class="report-card-skeleton">
+              <div class="image-placeholder skeleton-loader"></div>
+              <div class="content">
+                <div class="line-1 skeleton-loader"></div>
+                <div class="line-2 skeleton-loader"></div>
+                <div class="line-3 skeleton-loader"></div>
+                <div class="line-4 skeleton-loader"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <TransitionGroup
+          v-else
           tag="div"
           class="grid gap-6 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]"
           :css="false"
@@ -218,11 +244,19 @@ function onLeave(el, done) {
       </TransitionGroup>
 
     </div>
+
+    <DetailModal
+        :isOpen="isModalOpen"
+        :conference="selectedConference"
+        @close="closeConferenceModal"
+    />
+
   </div>
 </template>
 
 <style scoped>
-/* 所有 .article-fade-* 样式已被移除,
-  因为动画现在由 <script setup> 中的 JS 钩子驱动。
+/* 动画样式已由 JS 钩子处理。
+  骨架屏样式 (.report-card-skeleton)
+  假定已在全局 (如 loading-animations.css) 中定义。
 */
 </style>
