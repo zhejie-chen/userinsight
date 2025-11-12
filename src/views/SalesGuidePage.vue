@@ -3,7 +3,7 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
 </script>
 
 <template>
-  <main id="main-content" class="pt-16 pb-12 min-h-screen flex items-center">
+  <main id="main-content" class="pt-16 pb-12 min-h-dvh flex items-center">
     <div class="container mx-auto px-4 max-w-7xl">
 
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
@@ -25,7 +25,7 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
             立即访问
           </a>
 
-          <div class="globe-container rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-gray-900">
+          <div class="globe-container rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-gray-900 hidden sm:block">
             <InteractiveGlobe />
           </div>
 
