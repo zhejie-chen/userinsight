@@ -25,7 +25,9 @@ const router = createRouter({
         {
             path: '/new-release',
             name: 'NewRelease',
-            component: () => import('../views/NewReleasePage.vue')
+            component: () => import('../views/NewReleasePage.vue'),
+            // --- 核心修改：添加下面这行 meta ---
+            meta: { hideHeader: true }
         },
         {
             path: '/regulation',

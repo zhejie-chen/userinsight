@@ -129,7 +129,7 @@ const findNavItem = (id) => {
 
         <div class="md:hidden z-50 h-8 w-8 flex items-center justify-center">
           <button v-if="isMobileMenuOpen && mobileNavView !== 'main'" @click="mobileNavView = 'main'" class="text-black">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
 
           <router-link v-else to="/" id="nav-logo-mobile"
@@ -155,8 +155,8 @@ const findNavItem = (id) => {
         </div>
 
         <button id="mobile-menu-btn" class="md:hidden text-black z-50 h-8 w-8 flex items-center justify-center" @click="toggleMobileMenu">
-          <svg v-if="!isMobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-          <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <svg v-if="!isMobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+          <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
 
       </div>
@@ -178,7 +178,7 @@ const findNavItem = (id) => {
                @click.prevent="mobileNavView = item.id"
                class="text-xl font-semibold text-gray-800 hover:text-blue-600 flex justify-between items-center">
               <span>{{ item.label }}</span>
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
           </nav>
         </div>
@@ -196,8 +196,8 @@ const findNavItem = (id) => {
                          :is="getLinkComponent(link.type)"
                          v-bind="getLinkProps(link)"
                          class="text-xl font-semibold flex items-center"
-                         :class="link.status === 'active' ? 'text-gray-800 hover:text-blue-600' : 'coming-soon-link'">
-                <span>{{ link.label }}</span>
+                         :class="link.status === 'active' ? 'text-gray-800 hover:text-blue-600' : 'coming-soon-link'"
+                         @click="toggleMobileMenu"> <span>{{ link.label }}</span>
                 <span v-if="link.status === 'coming-soon'" class="coming-soon-tag">即将上线</span>
               </component>
             </template>
@@ -224,8 +224,8 @@ const findNavItem = (id) => {
                            :is="getLinkComponent(link.type)"
                            v-bind="getLinkProps(link)"
                            class="text-2xl font-semibold mb-2 block flex items-center"
-                           :class="link.status === 'active' ? 'text-gray-800 hover:text-blue-600' : 'coming-soon-link'">
-                  <span>{{ link.label }}</span>
+                           :class="link.status === 'active' ? 'text-gray-800 hover:text-blue-600' : 'coming-soon-link'"
+                           @click="hideDropdowns"> <span>{{ link.label }}</span>
                   <span v-if="link.status === 'coming-soon'" class="coming-soon-tag">即将上线</span>
                 </component>
               </div>

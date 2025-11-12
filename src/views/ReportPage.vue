@@ -145,6 +145,7 @@ function onBeforeEnter(el) {
   el.style.transition = 'none';
 }
 
+// 【修改二】修复 onEnter 函数，使其在动画结束后清理 transition 样式
 function onEnter(el, done) {
   const index = parseInt(el.dataset.index) || 0;
   const delay = index * STAGGER_DELAY;
@@ -153,7 +154,14 @@ function onEnter(el, done) {
     el.style.opacity = 1;
     el.style.transform = 'translateY(0)';
     el.style.transition = `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`;
-    el.addEventListener('transitionend', done, { once: true });
+
+    // 定义一个包含清理工作的结束函数
+    const onTransitionEnd = () => {
+      el.style.transition = ''; // 移除内联 transition，恢复 CSS hover 效果
+      done();
+    };
+    // 使用 { once: true } 确保监听器自动移除
+    el.addEventListener('transitionend', onTransitionEnd, { once: true });
   });
 }
 
@@ -168,7 +176,7 @@ function onLeave(el, done) {
 </script>
 
 <template>
-  <div class="pt-11 bg-gray-50 min-h-screen">
+  <div id="main-content" class="pt-11 bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-8">
 
       <div class="flex mb-8">
