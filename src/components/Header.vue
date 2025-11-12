@@ -140,10 +140,9 @@ const findNavItem = (id) => {
         </div>
 
         <div class="hidden md:flex justify-center items-center space-x-6 w-full text-gray-800">
-          <router-link to="/" id="nav-logo" class="hover:text-black transition-colors">
+          <router-link to="/" id="nav-logo" class="hover:text-black transition-colors" @click="hideDropdowns">
             <img src="/logo.png" alt="Logo" class="h-8 w-8">
           </router-link>
-
           <a v-for="item in navItems"
              :key="item.id"
              href="#"

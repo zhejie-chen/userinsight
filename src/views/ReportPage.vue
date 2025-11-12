@@ -139,37 +139,57 @@ function handleCardClick(article) {
 // --- JS 动画钩子 (高性能) ---
 const STAGGER_DELAY = 60; // 每个卡片交错 60ms
 
+// --- onBeforeEnter 保持不变 ---
 function onBeforeEnter(el) {
   el.style.opacity = 0;
   el.style.transform = 'translateY(20px)';
   el.style.transition = 'none';
 }
 
-// 【修改二】修复 onEnter 函数，使其在动画结束后清理 transition 样式
+// --- 【 核心修复：onEnter 】 ---
 function onEnter(el, done) {
   const index = parseInt(el.dataset.index) || 0;
   const delay = index * STAGGER_DELAY;
 
+  // 1. 定义一个在动画结束时运行的“清理”函数
+  const onAnimationEnd = () => {
+    // 【关键】移除所有内联样式，将控制权还给 CSS 文件
+    el.style.opacity = '';
+    el.style.transform = '';
+    el.style.transition = '';
+    done(); // 通知 Vue 动画已完成
+  };
+
+  // 2. 使用 rAF 启动动画
   requestAnimationFrame(() => {
     el.style.opacity = 1;
     el.style.transform = 'translateY(0)';
-    el.style.transition = `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`;
 
-    // 定义一个包含清理工作的结束函数
-    const onTransitionEnd = () => {
-      el.style.transition = ''; // 移除内联 transition，恢复 CSS hover 效果
-      done();
-    };
-    // 使用 { once: true } 确保监听器自动移除
-    el.addEventListener('transitionend', onTransitionEnd, { once: true });
+    // 3. 【更精确】只对我们正在改变的属性应用过渡
+    el.style.transition = `opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`;
+
+    // 4. 监听 'transitionend' 事件，一旦动画结束就调用“清理”函数
+    el.addEventListener('transitionend', onAnimationEnd, { once: true });
   });
 }
 
+// --- 【 核心修复：onLeave 】 ---
 function onLeave(el, done) {
+  // 1. 定义一个简单的 'done' 回调
+  const onAnimationEnd = () => {
+    // 元素即将被移除，我们只需要告诉 Vue 它已经完成了
+    done();
+  };
+
+  // 2. 设置离开状态
   el.style.opacity = 0;
   el.style.transform = 'translateY(-10px) scale(0.95)';
-  el.style.transition = 'all 0.2s cubic-bezier(0.55, 0, 0.1, 1)';
-  el.addEventListener('transitionend', done, { once: true });
+
+  // 3. 【更精确】只对我们正在改变的属性应用过渡
+  el.style.transition = 'opacity 0.2s cubic-bezier(0.55, 0, 0.1, 1), transform 0.2s cubic-bezier(0.55, 0, 0.1, 1)';
+
+  // 4. 监听 'transitionend' 事件，确保 'done' 被调用
+  el.addEventListener('transitionend', onAnimationEnd, { once: true });
 }
 // --- JS 动画钩子结束 ---
 
