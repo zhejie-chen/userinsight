@@ -67,7 +67,8 @@ export const navigationData = [
                 id: 'data-tools',
                 label: '数据工具',
                 children: [
-                    { id: 'long-image', label: 'CAnswer', link: '#', type: 'external', status: 'coming-soon' },
+                    // --- 核心修改：更新此链接 ---
+                    { id: 'ai-analysis', label: 'AI数据分析', link: '/ai-analysis', type: 'internal', status: 'active' },
                 ],
             },
         ],

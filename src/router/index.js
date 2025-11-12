@@ -45,6 +45,13 @@ const router = createRouter({
             name: 'Report',
             component: ReportPage,
             props: true // 自动将 URL 参数 (如 'domestic') 作为 prop 传递给组件
+        },
+        // --- 3. 添加比亚迪天神之眼页面的路由 ---
+        {
+            path: '/ai-analysis',
+            name: 'AiAnalysis',
+            component: () => import('../views/AiAnalysisPage.vue'),
+            // meta: { hideHeader: true } // 这个页面有自己的头部，隐藏全局头部
         }
     ],
     // 滚动行为：切换路由时滚动到顶部
