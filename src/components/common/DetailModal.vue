@@ -210,7 +210,7 @@ onUnmounted(() => {
 }
 .team-name { font-weight: 500; }
 
-/* --- 修改 1: 移除垂直 gap，实现无缝 --- */
+/* --- 移除垂直 gap，实现无缝 --- */
 .modal-body {
   font-size: 0;
   display: flex;
@@ -261,8 +261,8 @@ onUnmounted(() => {
   /* 增加一个属性，让滚动在 iOS 上更平滑 */
   -webkit-overflow-scrolling: touch;
 
-  /* 捕捉滚动，使其按页（图片）停止 */
-  scroll-snap-type: x mandatory;
+  /* --- 修改: 移除滚动捕捉 --- */
+  /* scroll-snap-type: x mandatory; */ /* <-- 已移除 */
 
   /* 美化滚动条 (可选) */
   &::-webkit-scrollbar {
@@ -284,22 +284,22 @@ onUnmounted(() => {
 .scroll-content {
   display: flex;
   flex-wrap: nowrap; /* 确保图片在同一行 */
-  /* --- 修改 2: 移除横向 gap，实现无缝 --- */
+  /* --- 移除横向 gap，实现无缝 --- */
   /* gap: 4px; */ /* <-- 已移除 */
 }
 
 .content-image-horizontal {
-  /* --- 修改 3: 设置宽度为 100%，使其与垂直图片同宽 --- */
+  /* --- 设置宽度为 100%，使其与垂直图片同宽 --- */
   width: 100%;
   height: auto;
   flex-shrink: 0; /* 防止图片被压缩 */
   display: block;
 
-  /* --- 修改 2: 移除圆角 --- */
+  /* --- 移除圆角 --- */
   /* border-radius: 8px; */ /* <-- 已移除 */
 
-  /* 增加滚动对齐 */
-  scroll-snap-align: start;
+  /* --- 修改: 移除滚动对齐 --- */
+  /* scroll-snap-align: start; */ /* <-- 已移除 */
 }
 
 
