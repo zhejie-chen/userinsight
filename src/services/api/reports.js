@@ -17,7 +17,8 @@ export async function getInsightReports() {
       team,
       action_type,
       external_url,
-      type
+      type,
+      extra_url 
     `
         )
         // (已修改) 只选择 status 为 'published' 的报告

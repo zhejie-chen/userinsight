@@ -147,6 +147,21 @@ onUnmounted(() => {
                     </svg>
                     直播回放
                   </a>
+
+                  <a
+                      v-if="conference?.extra_url"
+                      :href="conference.extra_url"
+                      target="_blank"
+                      class="replay-link"
+                      @click.stop
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="link-icon">
+                      <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.665l3-3z" />
+                      <path d="M8.603 14.397a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 005.656 5.656l3-3a4 4 0 00-.225-5.865.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.665l-3 3z" />
+                    </svg>
+                    看板直达
+                  </a>
+
                 </div>
               </header>
 
@@ -235,7 +250,7 @@ onUnmounted(() => {
 .close-button .icon { width: 16px; height: 16px; }
 .close-button:hover { transform: scale(1.1); }
 
-/* --- 直播回放链接样式 --- */
+/* (无修改) .replay-link 样式将自动应用于 "额外链接" */
 .replay-link {
   display: inline-flex;
   align-items: center;
