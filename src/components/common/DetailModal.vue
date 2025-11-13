@@ -1,5 +1,6 @@
 <script setup>
-import { defineProps, defineEmits, onMounted, onUnmounted, watch } from 'vue';
+// --- 引入 computed ---
+import { defineProps, defineEmits, onMounted, onUnmounted, watch, computed } from 'vue';
 
 const props = defineProps({
   isOpen: Boolean,
@@ -12,7 +13,51 @@ const closeModal = () => {
   emit('close');
 };
 
-// 最可靠的背景滚动锁定逻辑，增加了对导航条的防抖动处理
+// --- 计算属性，用于处理图片分组 ---
+const processedImages = computed(() => {
+  // 传入的 images 应该是 [{ image_url: '...', scroll_group: '...' }, ...]
+  const images = props.conference?.details?.images;
+
+  if (!images || !Array.isArray(images)) {
+    return [];
+  }
+
+  const grouped = [];
+  let currentGroup = null;
+
+  for (const image of images) {
+    // 确保我们处理的是 API 返回的对象
+    const imageUrl = image.image_url;
+    const scrollGroup = image.scroll_group;
+
+    if (scrollGroup) {
+      // 这是一个可横向滚动的图片
+      if (currentGroup && currentGroup.groupId === scrollGroup) {
+        // 连续的图片，添加到当前组
+        currentGroup.images.push(imageUrl);
+      } else {
+        // 一个新组的开始
+        currentGroup = {
+          isGroup: true,
+          groupId: scrollGroup,
+          images: [imageUrl]
+        };
+        grouped.push(currentGroup);
+      }
+    } else {
+      // 这是一个普通的垂直图片
+      currentGroup = null; // 中断当前组
+      grouped.push({
+        isGroup: false,
+        image: imageUrl
+      });
+    }
+  }
+  return grouped;
+});
+
+
+// 最可靠的背景滚动锁定逻辑
 watch(() => props.isOpen, (newVal) => {
   const htmlEl = document.documentElement;
   const headerEl = document.querySelector('header.apple-nav');
@@ -104,15 +149,32 @@ onUnmounted(() => {
                   </a>
                 </div>
               </header>
+
               <div class="modal-body">
-                <img
-                    v-for="(image, index) in conference?.details?.images"
-                    :key="index"
-                    :src="image"
-                    alt="Conference detail image"
-                    class="content-image"
-                />
+                <template v-for="(item, index) in processedImages" :key="index">
+
+                  <div v-if="item.isGroup" class="scroll-container">
+                    <div class="scroll-content">
+                      <img
+                          v-for="(image, imgIndex) in item.images"
+                          :key="imgIndex"
+                          :src="image"
+                          alt="Conference detail image"
+                          class="content-image-horizontal"
+                      />
+                    </div>
+                  </div>
+
+                  <img
+                      v-else
+                      :src="item.image"
+                      alt="Conference detail image"
+                      class="content-image"
+                  />
+
+                </template>
               </div>
+
             </div>
           </div>
         </transition>
@@ -147,8 +209,19 @@ onUnmounted(() => {
   gap: 1.5rem; font-size: 0.875rem; color: #6b7280;
 }
 .team-name { font-weight: 500; }
-.modal-body { font-size: 0; }
-.content-image { width: 100%; height: auto; display: block; }
+
+/* --- 修改 1: 移除垂直 gap，实现无缝 --- */
+.modal-body {
+  font-size: 0;
+  display: flex;
+  flex-direction: column;
+  /* gap: 4px; */ /* <-- 已移除 */
+}
+.content-image { /* 垂直图片的样式 */
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 .close-button {
   position: absolute; top: 32px; right: 32px;
@@ -162,7 +235,7 @@ onUnmounted(() => {
 .close-button .icon { width: 16px; height: 16px; }
 .close-button:hover { transform: scale(1.1); }
 
-/* --- 新增：直播回放链接样式 --- */
+/* --- 直播回放链接样式 --- */
 .replay-link {
   display: inline-flex;
   align-items: center;
@@ -181,9 +254,65 @@ onUnmounted(() => {
   height: 1rem;
 }
 
+/* --- 横向滚动样式 --- */
+.scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  /* 增加一个属性，让滚动在 iOS 上更平滑 */
+  -webkit-overflow-scrolling: touch;
+
+  /* 捕捉滚动，使其按页（图片）停止 */
+  scroll-snap-type: x mandatory;
+
+  /* 美化滚动条 (可选) */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+}
+
+.scroll-content {
+  display: flex;
+  flex-wrap: nowrap; /* 确保图片在同一行 */
+  /* --- 修改 2: 移除横向 gap，实现无缝 --- */
+  /* gap: 4px; */ /* <-- 已移除 */
+}
+
+.content-image-horizontal {
+  /* --- 修改 3: 设置宽度为 100%，使其与垂直图片同宽 --- */
+  width: 100%;
+  height: auto;
+  flex-shrink: 0; /* 防止图片被压缩 */
+  display: block;
+
+  /* --- 修改 2: 移除圆角 --- */
+  /* border-radius: 8px; */ /* <-- 已移除 */
+
+  /* 增加滚动对齐 */
+  scroll-snap-align: start;
+}
+
+
 @media (max-width: 768px) {
   .modal-content { padding: 32px; }
   .modal-title { font-size: 1.875rem; }
   .close-button { top: 20px; right: 20px; }
+
+  /* 在移动端，内边距更小，滚动容器可能需要调整 */
+  .scroll-container {
+    /* 确保滚动容器不会超出 modal-content 的内边距 */
+    width: 100%;
+    margin-left: 0;
+  }
 }
 </style>

@@ -518,7 +518,7 @@
     <footer class="bg-gray-900 text-white py-8 mt-16">
       <div class="container mx-auto px-6 text-center">
         <p class="text-gray-400">
-          数据来源：比亚迪官方发布、OTA更新日志及公开信息整理 | 制作时间：2025年10月
+          数据来源：比亚迪官方发布、OTA更新日志及公开信息整理 | 制作时间：2025年10月 | 网页部分内容由AI生成
         </p>
       </div>
     </footer>

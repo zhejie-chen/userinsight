@@ -43,7 +43,8 @@ export async function getInsightReportImages(reportId) {
 
     const { data, error } = await supabase
         .from('insight_report_images')
-        .select('id, image_url')
+        // --- 修改: 增加 'scroll_group' 字段 ---
+        .select('id, image_url, scroll_group')
         .eq('report_id', reportId)
         .order('order', { ascending: true });
 
@@ -52,6 +53,9 @@ export async function getInsightReportImages(reportId) {
         throw error;
     }
 
-    // 返回 image_url 数组，DetailModal 期望的格式
-    return data.map(img => img.image_url);
+    // --- 修改: 返回包含 scroll_group 的对象数组 ---
+    return data.map(img => ({
+        image_url: img.image_url,
+        scroll_group: img.scroll_group
+    }));
 }

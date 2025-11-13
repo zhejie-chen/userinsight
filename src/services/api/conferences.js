@@ -79,7 +79,8 @@ export async function getReportImages(reportId) {
     }
     const { data, error } = await supabase
         .from('conference-report_images')
-        .select('image_url')
+        // --- 修改: 增加 'scroll_group' 字段 ---
+        .select('image_url, scroll_group')
         .eq('report_id', reportId)
         .order('display_order', { ascending: true });
 
@@ -88,7 +89,12 @@ export async function getReportImages(reportId) {
         throw error;
     }
 
-    const imageUrls = data.map(img => img.image_url);
+    // --- 修改: 直接返回 data (对象数组)，而不是
+    const imageUrls = data.map(img => ({
+        image_url: img.image_url,
+        scroll_group: img.scroll_group
+    }));
+
     console.log(`Successfully fetched ${imageUrls.length} images:`, imageUrls);
     return imageUrls;
 }
