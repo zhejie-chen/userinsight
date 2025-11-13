@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import ConferenceReportCard from '@/components/common/ConferenceReportCard.vue';
 // 2. 导入可复用的弹窗组件
 import DetailModal from '@/components/common/DetailModal.vue';
-// (新增) 3. 导入新的 API
+// 3. 导入新的 API
 import { getInsightReports, getInsightReportImages } from '@/services/api/reports.js';
 
 // 4. 定义从路由接收的 prop
@@ -17,18 +17,29 @@ const props = defineProps({
   },
 });
 
-// (新增) 5. 数据和加载状态
-const allReports = ref([]); // 替换 allArticles
+// 5. 数据和加载状态
+const allReports = ref([]);
 const isLoadingReports = ref(true);
 
-// (新增) 6. 弹窗状态 和 图片缓存
+// 6. 弹窗状态 和 图片缓存
 const isModalOpen = ref(false);
 const selectedConference = ref(null);
-const imageCache = new Map(); // 用于缓存弹窗图片
+const imageCache = new Map();
 
 
 // 7. 响应式状态 (Tabs)
 const activeTab = ref(props.category);
+
+// (新增) 8. 二级筛选 (报告类型)
+const ALL_TYPES = 'all'; // 用于"全部"筛选的常量
+const activeTypeTab = ref(ALL_TYPES); // 当前选中的报告类型
+
+// (新增) 9. 报告类型与显示文字的映射表
+const typeDisplayMap = {
+  '市场洞察': '市场',
+  '销量洞察': '销量',
+  '技术追踪': '技术',
+};
 
 // --- 滑块动画逻辑 ---
 const domesticTabRef = ref(null);
@@ -53,7 +64,7 @@ function updateSlider() {
   }
 }
 
-// (修改) 8. onMounted - 加载数据
+// (修改) 10. onMounted - 加载数据
 onMounted(async () => {
   isLoadingReports.value = true;
   try {
@@ -68,21 +79,56 @@ onMounted(async () => {
   }
 });
 
+// (修改) 11. 监听一级Tab (品类) 变化
 watch(activeTab, () => {
   updateSlider();
+  activeTypeTab.value = ALL_TYPES; // (新增) 切换主Tab时，重置二级筛选
 });
 // --- 滑块逻辑结束 ---
 
 
-// 9. 监听路由 prop 的变化
+// 12. 监听路由 prop 的变化
 watch(() => props.category, (newCategory) => {
   activeTab.value = newCategory;
+  // (新增) 路由变化时也重置二级筛选
+  activeTypeTab.value = ALL_TYPES;
 });
 
-// (修改) 10. 计算属性 - 过滤动态数据
-const filteredArticles = computed(() => {
+// (修改) 13. 计算属性 - 第一层过滤 (按国内/海外)
+const articlesByCategory = computed(() => {
   return allReports.value.filter(article => article.category === activeTab.value);
 });
+
+// (新增) 14. 计算属性 - 动态生成二级筛选的选项
+const availableTypes = computed(() => {
+  // 从已按 "国内/海外" 过滤的报告中提取所有 "type"
+  const types = articlesByCategory.value.map(report => report.type);
+
+  // 1. 使用 Set 去重
+  // 2. filter(Boolean) 过滤掉 null 或 undefined 的 type
+  const uniqueTypes = [...new Set(types.filter(Boolean))];
+
+  // 3. (推荐) 按你期望的顺序排序 ("市场" -> "销量" -> "技术")
+  const sortOrder = ['市场洞察', '销量洞察', '技术追踪'];
+  return uniqueTypes.sort((a, b) => {
+    const indexA = sortOrder.indexOf(a);
+    const indexB = sortOrder.indexOf(b);
+    if (indexA === -1) return 1; // a 不在排序列表, 放后面
+    if (indexB === -1) return -1; // b 不在排序列表, 放前面
+    return indexA - indexB; // 都在列表, 按顺序排
+  });
+});
+
+// (修改) 15. 计算属性 - 最终渲染列表 (第二层过滤, 按报告类型)
+const filteredArticles = computed(() => {
+  // 如果 "全部" 被选中，则返回第一层过滤的结果
+  if (activeTypeTab.value === ALL_TYPES) {
+    return articlesByCategory.value;
+  }
+  // 否则，在第一层的基础上，再按 "type" 过滤
+  return articlesByCategory.value.filter(article => article.type === activeTypeTab.value);
+});
+
 
 // (新增) 骨架屏计算属性
 const skeletonMonths = computed(() => {
@@ -91,31 +137,27 @@ const skeletonMonths = computed(() => {
 });
 
 
-// (修改) 11. 弹窗控制函数 (异步加载图片)
+// 16. 弹窗控制函数 (异步加载图片) - (逻辑不变)
 async function openConferenceModal(article) {
-  // 适配数据：将 'article' 包装成 'DetailModal' 期望的 'conference' 对象
   selectedConference.value = {
-    ...article, // 包含 id, title, description, date, image 等
+    ...article,
     details: {
-      team: article.team || 'CAnswer 洞察团队', // 使用动态团队名称
-      images: [] // 初始为空
+      team: article.team || 'CAnswer 洞察团队',
+      images: []
     }
   };
   isModalOpen.value = true;
 
-  // 检查缓存
   if (imageCache.has(article.id)) {
     selectedConference.value.details.images = imageCache.get(article.id);
     return;
   }
 
-  // 异步获取图片
   try {
     const images = await getInsightReportImages(article.id);
-    // 确保弹窗仍然是同一个
     if (selectedConference.value && selectedConference.value.id === article.id) {
       selectedConference.value.details.images = images;
-      imageCache.set(article.id, images); // 存入缓存
+      imageCache.set(article.id, images);
     }
   } catch (error) {
     console.error(`Failed to fetch images for report ${article.id}:`, error);
@@ -127,7 +169,7 @@ function closeConferenceModal() {
   selectedConference.value = null;
 }
 
-// 12. 更新卡片点击处理器 (逻辑不变)
+// 17. 更新卡片点击处理器 (逻辑不变)
 function handleCardClick(article) {
   if (article.action_type === 'EXTERNAL_LINK' && article.external_url) {
     window.open(article.external_url, '_blank');
@@ -137,58 +179,42 @@ function handleCardClick(article) {
 }
 
 // --- JS 动画钩子 (高性能) ---
-const STAGGER_DELAY = 60; // 每个卡片交错 60ms
+// (全部保持不变)
+const STAGGER_DELAY = 60;
 
-// --- onBeforeEnter 保持不变 ---
 function onBeforeEnter(el) {
   el.style.opacity = 0;
   el.style.transform = 'translateY(20px)';
   el.style.transition = 'none';
 }
 
-// --- 【 核心修复：onEnter 】 ---
 function onEnter(el, done) {
   const index = parseInt(el.dataset.index) || 0;
   const delay = index * STAGGER_DELAY;
 
-  // 1. 定义一个在动画结束时运行的“清理”函数
   const onAnimationEnd = () => {
-    // 【关键】移除所有内联样式，将控制权还给 CSS 文件
     el.style.opacity = '';
     el.style.transform = '';
     el.style.transition = '';
-    done(); // 通知 Vue 动画已完成
+    done();
   };
 
-  // 2. 使用 rAF 启动动画
   requestAnimationFrame(() => {
     el.style.opacity = 1;
     el.style.transform = 'translateY(0)';
-
-    // 3. 【更精确】只对我们正在改变的属性应用过渡
     el.style.transition = `opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`;
-
-    // 4. 监听 'transitionend' 事件，一旦动画结束就调用“清理”函数
     el.addEventListener('transitionend', onAnimationEnd, { once: true });
   });
 }
 
-// --- 【 核心修复：onLeave 】 ---
 function onLeave(el, done) {
-  // 1. 定义一个简单的 'done' 回调
   const onAnimationEnd = () => {
-    // 元素即将被移除，我们只需要告诉 Vue 它已经完成了
     done();
   };
 
-  // 2. 设置离开状态
   el.style.opacity = 0;
   el.style.transform = 'translateY(-10px) scale(0.95)';
-
-  // 3. 【更精确】只对我们正在改变的属性应用过渡
   el.style.transition = 'opacity 0.2s cubic-bezier(0.55, 0, 0.1, 1), transform 0.2s cubic-bezier(0.55, 0, 0.1, 1)';
-
-  // 4. 监听 'transitionend' 事件，确保 'done' 被调用
   el.addEventListener('transitionend', onAnimationEnd, { once: true });
 }
 // --- JS 动画钩子结束 ---
@@ -232,6 +258,37 @@ function onLeave(el, done) {
       <h1 class="text-4xl font-bold text-gray-900 mb-8">
         洞察报告
       </h1>
+
+      <div
+          v-if="!isLoadingReports && availableTypes.length > 0"
+          class="flex items-center gap-2 mb-8"
+      >
+        <button
+            @click="activeTypeTab = ALL_TYPES"
+            :class="[
+            'px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200',
+            activeTypeTab === ALL_TYPES
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          ]"
+        >
+          全部
+        </button>
+
+        <button
+            v-for="type in availableTypes"
+            :key="type"
+            @click="activeTypeTab = type"
+            :class="[
+            'px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200',
+            activeTypeTab === type
+              ? 'bg-gray-900 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          ]"
+        >
+          {{ typeDisplayMap[type] || type }}
+        </button>
+      </div>
 
       <div v-if="isLoadingReports">
         <div
