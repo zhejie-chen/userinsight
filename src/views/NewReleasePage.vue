@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
-import { fetchCarDataForTimeline } from '../services/supabaseClient.js';
+import { getAllCarsForTimeline } from '@/services/api/cars.js';
 import html2canvas from 'html2canvas';
 import BackToHomeLogo from '../components/BackToHomeLogo.vue';
 
@@ -83,7 +83,7 @@ async function loadCarData() {
   const loadingOverlay = document.getElementById('loadingOverlay');
   try {
     if(loadingOverlay) loadingOverlay.style.display = 'flex';
-    const data = await fetchCarDataForTimeline();
+    const data = await getAllCarsForTimeline();
     return processCarData(data);
   } catch (error) {
     console.error('加载汽车数据失败:', error);

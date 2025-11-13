@@ -11,8 +11,11 @@ import NewReleaseCard from '../components/cards/NewReleaseCard.vue';
   <main id="main-content" class="pt-11">
     <div class="px-4 pb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <PressConferenceCard />
-      <OtaMapCard />
       <SalesCard />
-      <RegulationsCard /> <OverseasMapCard /> <NewReleaseCard />  </div>
+      <NewReleaseCard />
+      <RegulationsCard />
+      <OverseasMapCard />
+      <OtaMapCard />
+    </div>
   </main>
 </template>

@@ -32,8 +32,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <a href="#" class="block">
-    <div class="grid-item relative flex flex-col items-center pt-12 text-center" style="background-color:#f5f5f7; overflow: hidden;">
+  <router-link to="/sales-guide" class="block">
+    <div class="grid-item relative flex flex-col items-center pt-12 text-center" style="background-color:#ffffff; overflow: hidden;">
       <div class="relative z-10">
         <h2 class="text-4xl font-bold">海外销量</h2>
         <p class="text-xl mt-2">借助强大的CAnswer，主要市场销量一屏洞察</p>
@@ -52,7 +52,7 @@ onMounted(() => {
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <style scoped>

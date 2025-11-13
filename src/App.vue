@@ -1,23 +1,23 @@
 <script setup>
-import Header from './components/Header.vue';
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
+import { RouterView } from 'vue-router'
+import Header from './components/Header.vue'
 </script>
 
 <template>
   <Header />
-
-  <router-view :key="route.fullPath" />
-
+  <RouterView />
 </template>
 
 <style>
-/* 全局过渡效果（可选，但能提升体验） */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
+/* 全局样式，定义Header脚本所需要的模糊效果。
+  这样一来，任何页面的 #main-content 元素都能响应模糊指令。
+*/
+#main-content.blurred {
+  filter: blur(4px);
 }
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
+
+/* 添加过渡效果，让模糊动画更平滑 */
+#main-content {
+  transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
