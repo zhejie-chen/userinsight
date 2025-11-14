@@ -54,7 +54,7 @@ const columns = [
 </script>
 
 <template>
-  <router-link to="/insight-report" class="block">
+  <router-link to="/report/overseas" class="block">
     <div class="grid-item relative flex flex-col items-center pt-12 text-center" style="background-color:#ffffff; overflow: hidden;">
 
       <div class="background-container">
