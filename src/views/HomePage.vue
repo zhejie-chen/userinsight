@@ -1,10 +1,11 @@
 <script setup>
 import PressConferenceCard from '../components/cards/PressConferenceCard.vue';
-import OtaMapCard from '../components/cards/OtaMapCard.vue';
+import OtaMapCard from '../components/cards/OtaMapCard.vue'; // 保留导入，但下面模板中会注释掉
 import SalesCard from '../components/cards/SalesCard.vue';
 import RegulationsCard from '../components/cards/RegulationsCard.vue';
 import OverseasMapCard from '../components/cards/OverseasMapCard.vue';
 import NewReleaseCard from '../components/cards/NewReleaseCard.vue';
+import InsightReportCard from '../components/cards/InsightReportCard.vue'; // 1. 导入新卡片
 </script>
 
 <template>
@@ -15,7 +16,6 @@ import NewReleaseCard from '../components/cards/NewReleaseCard.vue';
       <NewReleaseCard />
       <RegulationsCard />
       <OverseasMapCard />
-      <OtaMapCard />
-    </div>
+      <InsightReportCard /> </div>
   </main>
 </template>
