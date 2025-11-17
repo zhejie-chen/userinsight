@@ -8,22 +8,21 @@ onMounted(() => {
   const imageItems = layeredCardContainer.value.querySelectorAll('.layered-item');
   imageItems.forEach(item => {
     const imageUrl = item.getAttribute('data-src');
+
     if (imageUrl) {
-      item.style.backgroundImage = `url('/${imageUrl}')`;
+      item.style.backgroundImage = `url('${imageUrl}')`;
     }
   });
 
-  // 为每个卡片独立添加悬停交互
+  // 为每个卡片独立添加悬停交互 (这部分保持不变)
   if (layeredCardContainer.value) {
     const layeredItems = layeredCardContainer.value.querySelectorAll('.layered-item');
 
     layeredItems.forEach(item => {
       item.addEventListener('mouseenter', () => {
-        // 当鼠标进入这个卡片时，只给这个卡片添加 is-hovered 类
         item.classList.add('is-hovered');
       });
       item.addEventListener('mouseleave', () => {
-        // 当鼠标离开这个卡片时，只移除这个卡片的 is-hovered 类
         item.classList.remove('is-hovered');
       });
     });
@@ -41,10 +40,10 @@ onMounted(() => {
 
       <div class="layered-column-perspective">
         <div ref="layeredCardContainer" class="layered-column-container">
-          <div class="layered-item" data-src="img/cover-img/卡片三-德国.png"></div>
-          <div class="layered-item" data-src="img/cover-img/卡片三-泰国.png"></div>
-          <div class="layered-item" data-src="img/cover-img/卡片三-巴西.png"></div>
-          <div class="layered-item" data-src="img/cover-img/卡片三-封面.png"></div>
+          <div class="layered-item" data-src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/cover/3thcard-germany.webp"></div>
+          <div class="layered-item" data-src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/cover/3thcard-thailand.webp"></div>
+          <div class="layered-item" data-src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/cover/3thcard-brazil.webp"></div>
+          <div class="layered-item" data-src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/cover/3thcard-cover.webp"></div>
         </div>
       </div>
 
@@ -56,7 +55,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* 单列层叠透视效果 */
+/* <style> 部分保持不变
+*/
 .layered-column-perspective {
   position: absolute;
   top: 0;
@@ -96,7 +96,7 @@ onMounted(() => {
   background-position: center;
 }
 
-/* 初始状态 - 完全参照 TC-3.html */
+/* 初始状态 */
 .layered-item:nth-child(1) {
   z-index: 4;
   top: 0;
@@ -116,8 +116,7 @@ onMounted(() => {
   transform: rotateX(-5deg) rotateY(-10deg) skewY(5deg) translateX(105px) translateY(-105px) translateZ(-60px);
 }
 
-/* ---- 【已修复】悬停状态 - 完全参照 TC-3.html ---- */
-/* 这里的关键是保留原有的所有 transform 属性，只修改 translateY 的值 */
+/* 悬停状态 */
 .layered-item:nth-child(1).is-hovered {
   transform: rotateX(-5deg) rotateY(-10deg) skewY(5deg) translateZ(0) translateY(-20px);
 }

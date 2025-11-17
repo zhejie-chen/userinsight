@@ -19,7 +19,7 @@
         <div class="card-stack">
           <div
               v-for="(car, index) in carData"
-              :key="car.name"
+              :key="car.id"
               class="info-card"
               :style="getCardStyle(index)"
           >
@@ -41,18 +41,31 @@
 </template>
 
 <script>
-import { newReleaseCarData } from '../../../public/newReleaseCardData.js';
+// 【修改】修复了路径：从 ../../../ 改为 ../../
+import { getNewReleases } from '../../services/api/homepage.js';
+// 【修改】移除静态数据导入
+// import { newReleaseCarData } from '../../../public/newReleaseCardData.js';
 
 export default {
   data() {
     return {
-      carData: newReleaseCarData,
+      carData: [],
       currentIndex: 0,
       intervalId: null,
       isPaused: false,
     };
   },
   methods: {
+    async fetchData() {
+      try {
+        const data = await getNewReleases();
+        this.carData = data;
+      } catch (error) {
+        console.error('Failed to load new release data:', error);
+        this.carData = [];
+      }
+    },
+
     getCardStyle(index) {
       const total = this.carData.length;
       const offset = (this.currentIndex - index + total) % total;
@@ -84,27 +97,34 @@ export default {
         zIndex: 0,
       };
     },
+
     startCarousel() {
       clearInterval(this.intervalId);
       this.intervalId = setInterval(() => {
         this.currentIndex = (this.currentIndex - 1 + this.carData.length) % this.carData.length;
       }, 3000);
     },
+
     pauseCarousel() {
       this.isPaused = true;
       clearInterval(this.intervalId);
     },
+
     resumeCarousel() {
       this.isPaused = false;
       this.startCarousel();
     }
   },
-  mounted() {
+
+  async mounted() {
+    await this.fetchData();
+
     if (this.carData.length > 0) {
       this.currentIndex = this.carData.length - 1;
       this.startCarousel();
     }
   },
+
   beforeDestroy() {
     clearInterval(this.intervalId);
   }
@@ -112,7 +132,7 @@ export default {
 </script>
 
 <style scoped>
-/* Main container is now a flex column that fills height */
+/* <style> 部分完全不需要修改 */
 .grid-item {
   height: 100%;
 }
@@ -176,11 +196,10 @@ export default {
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
 
-/* FIX: Positioned the icon at the bottom right and restored its color */
 .card-hover-icon {
   position: absolute;
-  bottom: 16px; /* Changed from top to bottom */
+  bottom: 16px;
   right: 16px;
-  color: #374151; /* Restored to a solid, dark gray color */
+  color: #374151;
 }
 </style>

@@ -15,7 +15,12 @@ export const navigationData = [
                 children: [ // 这是三级菜单
                     // --- 修改点 1 ---
                     { id: 'report', label: '洞察报告', link: '/report/domestic', type: 'internal', status: 'active' },
-                    { id: 'competitor', label: '友商发布会', link: 'press-conference', type: 'internal', status: 'active' },
+
+                    // 【修复】
+                    // 之前是 'press-conference' (相对路径)
+                    // 现在是 '/press-conference' (绝对路径)
+                    { id: 'competitor', label: '友商发布会', link: '/press-conference', type: 'internal', status: 'active' },
+
                     { id: 'insight', label: '调研报告', link: '#', type: 'external', status: 'coming-soon' },
                 ],
             },

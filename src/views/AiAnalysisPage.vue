@@ -2,8 +2,8 @@
   <div id="main-content" class="font-inter bg-gray-50 pt-11">
     <header class="bg-gradient-to-r from-primary to-secondary text-white py-12">
       <div class="container mx-auto px-6 text-center">
-        <h1 class="text-4xl font-bold mb-4">比亚迪天神之眼C功能演进树状图</h1>
-        <p class="text-xl opacity-90">从初始版本到未来规划的完整功能演进历程</p>
+        <h1 class="text-4xl font-bold mb-4">比亚迪天神之眼C功能OTA解析</h1>
+        <p class="text-xl opacity-90">比亚迪自研纯视觉平台从初始版本到未来规划的升级历程</p>
       </div>
     </header>
 
