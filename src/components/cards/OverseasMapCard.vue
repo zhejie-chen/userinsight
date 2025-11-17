@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const dotMapCardEl = ref(null); // 这个 ref 现在指向 router-link 组件实例
+const dotMapCardEl = ref(null);
 const container = ref(null);
 const svgContainer = ref(null);
 
@@ -15,13 +15,16 @@ const handleMouseMove = (e) => {
 
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
+  // 【修改】根据容器宽度动态计算最大影响距离
   const maxEffectDistance = rect.width * 0.35;
 
   dotsWithPositions.forEach(dotInfo => {
     if (dotInfo.element.classList.contains('is-land')) {
       const distance = Math.sqrt(Math.pow(mouseX - dotInfo.x, 2) + Math.pow(mouseY - dotInfo.y, 2));
+      // 【修改】减小最大缩放值从2.5到1.5
+      const maxScale = 1 + (rect.width > 600 ? 2.0 : 1.5); // 更小的缩放范围
       const scale = Math.max(0, 1 - distance / maxEffectDistance);
-      dotInfo.element.style.transform = `scale(${1 + scale * 2.5})`;
+      dotInfo.element.style.transform = `scale(${1 + scale * maxScale})`;
       if (dotInfo.element.classList.contains('is-poi')) {
         const r = 245 + Math.round(scale * 10), g = 158 + Math.round(scale * 33), b = 11 + Math.round(scale * 25);
         dotInfo.element.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
@@ -41,7 +44,6 @@ const handleMouseLeave = () => {
     }
   });
 };
-
 
 onMounted(() => {
   if (dotMapCardEl.value.$el && container.value && svgContainer.value) { // 使用 .$el
