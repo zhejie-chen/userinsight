@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'; // <-- 1. 导入 useRouter
 // 1. 导入我们正确的、可复用的卡片组件
 import ConferenceReportCard from '@/components/common/ConferenceReportCard.vue';
 // 2. 导入可复用的弹窗组件
@@ -49,6 +49,8 @@ const sliderStyle = ref({
   height: '0px',
   transform: 'translateX(0px) translateY(0px)',
 });
+
+const router = useRouter(); // <-- 2. 初始化 router
 
 function updateSlider() {
   let activeEl = activeTab.value === 'domestic'
@@ -169,11 +171,19 @@ function closeConferenceModal() {
   selectedConference.value = null;
 }
 
-// 17. 更新卡片点击处理器 (逻辑不变)
+// 17. 更新卡片点击处理器
+// <-- 3. 修改 handleCardClick
 function handleCardClick(article) {
-  if (article.action_type === 'EXTERNAL_LINK' && article.external_url) {
+  // 新增：内部链接跳转
+  if (article.action_type === 'INTERNAL_LINK' && article.external_url) {
+    router.push(article.external_url);
+  }
+  // 现有：外部链接
+  else if (article.action_type === 'EXTERNAL_LINK' && article.external_url) {
     window.open(article.external_url, '_blank');
-  } else {
+  }
+  // 默认：打开弹窗
+  else {
     openConferenceModal(article);
   }
 }
