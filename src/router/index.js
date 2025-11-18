@@ -52,6 +52,13 @@ const router = createRouter({
             name: 'AiAnalysis',
             component: () => import('../views/AiAnalysisPage.vue'),
             // meta: { hideHeader: true } // 这个页面有自己的头部，隐藏全局头部
+        },
+        // --- 3. 添加比亚迪天神之眼页面的路由 ---
+        {
+            path: '/geely-ota',
+            name: 'Geely_OTA',
+            component: () => import('../views/Geely_OTA.vue'),
+            // meta: { hideHeader: true } // 这个页面有自己的头部，隐藏全局头部
         }
     ],
     // 滚动行为：切换路由时滚动到顶部

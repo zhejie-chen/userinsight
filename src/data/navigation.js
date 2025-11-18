@@ -73,7 +73,7 @@ export const navigationData = [
                 label: '数据工具',
                 children: [
                     // --- 核心修改：更新此链接 ---
-                    { id: 'ai-analysis', label: 'AI数据分析', link: '/ai-analysis', type: 'internal', status: 'active' },
+                    { id: 'ai-analysis', label: 'AI数据分析', link: '/geely-ota', type: 'internal', status: 'active' },
                 ],
             },
         ],
