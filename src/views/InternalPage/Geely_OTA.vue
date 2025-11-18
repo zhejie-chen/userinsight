@@ -555,7 +555,7 @@ const barOption = computed(() => {
 </script>
 
 <template>
-  <div id="main-content" class="pt-11">
+  <div id="main-content" class="pt-11 light">
 
     <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
       <div class="container mx-auto px-4 py-8 md:py-12">
@@ -1191,7 +1191,7 @@ const barOption = computed(() => {
           <div class="bg-orange-50 dark:bg-orange-100/20 rounded-xl shadow-lg p-8 mb-12">
             <h3 class="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">可能的挑战</h3>
             <p class="text-lg mb-6 text-gray-800 dark:text-gray-200">
-              基于"多传感器融合（视觉+雷达+激光雷达）+VLA 大模型"的路线架构虽能在短期内建立技术、品牌领先，但如果纯视觉方案突破、WA世界模型成为主流，前期投入的芯片采购、传感器布局、算法开发将部分失效，形成高额沉没成本；技术路线调整导致部分预埋硬件无法通过OTA激活高阶功能，早期购买用户会产生"背刺"的负面舆G-AES论，损害品牌信任。
+              基于"多传感器融合（视觉+雷达+激光雷达）+VLA 大模型"的路线架构虽能在短期内建立技术、品牌领先，但如果纯视觉方案突破、WA世界模型成为主流，前期投入的芯片采购、传感器布局、算法开发将部分失效，形成高额沉没成本；技术路线调整导致部分预埋硬件无法通过OTA激活高阶功能，早期购买用户会产生"背刺"的负面舆论，损害品牌信任。
             </p>
           </div>
 

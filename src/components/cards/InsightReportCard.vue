@@ -79,7 +79,7 @@ const columns = [
 
       <div class="relative z-10">
         <h2 class="text-4xl font-bold">洞察报告</h2>
-        <p class="text-xl mt-2">用户洞察团队倾力打造</p>
+        <p class="text-xl mt-2">国内外专题洞察研究</p>
       </div>
 
       <div class="card-hover-icon">
