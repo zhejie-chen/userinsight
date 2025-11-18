@@ -584,7 +584,7 @@ const barOption = computed(() => {
             <div
                 v-for="(arch, index) in architectureData"
                 :key="arch.id"
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow"
+                class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow"
             >
               <div :class="[arch.color, 'p-6 text-white']">
                 <div class="flex items-center justify-between mb-1">
@@ -597,69 +597,69 @@ const barOption = computed(() => {
               </div>
               <div class="p-6">
                 <div class="mb-4">
-                  <h4 class="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">硬件配置</h4>
+                  <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">硬件配置</h4>
                   <p class="font-medium">{{ arch.hardware }}</p>
                 </div>
                 <div class="mb-4">
-                  <h4 class="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">核心特点</h4>
+                  <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">核心特点</h4>
                   <p class="font-medium">{{ arch.features }}</p>
                 </div>
                 <div>
-                  <h4 class="text-sm uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">代表车型</h4>
+                  <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">代表车型</h4>
                   <p class="font-medium">{{ arch.models }}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-12">
+          <div class="bg-white rounded-xl shadow-lg p-6 mb-12">
             <h3 class="text-2xl font-bold mb-6">智驾搭载逻辑</h3>
-            <p class="text-gray-700 dark:text-gray-300 mb-8">
+            <p class="text-gray-700 mb-8">
               吉利旗下品牌矩阵（银河、极氪、领克等）定位差异显著，浩瀚智驾架构的搭载遵循<span
                 class="font-bold text-blue-600"
             >"品牌高端化程度→架构技术等级"</span
             >的逻辑，并通过规模化降本逐步实现高阶智驾功能的下放：
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700/50 dark:to-gray-800 p-5 rounded-lg border-l-4 border-indigo-600">
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-lg border-l-4 border-indigo-600">
                 <h4 class="text-xl font-bold mb-2 flex items-center">
                   <i class="fa-solid fa-car-side text-indigo-600 mr-2"></i>极氪<span class="text-base font-normal">（高端智能电动品牌）</span>
                 </h4>
                 <div class="ml-6 space-y-2">
                   <p class="font-medium">主要搭载：H7、H9架构</p>
-                  <p class="text-gray-600 dark:text-gray-400">
+                  <p class="text-gray-600">
                     作为吉利高端电动化先锋，承担"技术旗舰"角色，优先搭载最高阶架构，通过最领先的硬件配置，强化"智能天花板"的品牌认知。
                   </p>
                 </div>
               </div>
-              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700/50 dark:to-gray-800 p-5 rounded-lg border-l-4 border-blue-600">
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-lg border-l-4 border-blue-600">
                 <h4 class="text-xl font-bold mb-2 flex items-center">
                   <i class="fa-solid fa-car text-blue-600 mr-2"></i>领克<span class="text-base font-normal">（中高端运动品牌）</span></h4>
                 <div class="ml-6 space-y-2">
                   <p class="font-medium">主要搭载：H5、H7架构</p>
-                  <p class="text-gray-600 dark:text-gray-400">主打"运动前卫"，聚焦年轻高端用户，搭载"VLM视觉语言模型+全场景NOA"满足对智能化的高阶需求，平衡成本与体验。</p>
+                  <p class="text-gray-600">主打"运动前卫"，聚焦年轻高端用户，搭载"VLM视觉语言模型+全场景NOA"满足对智能化的高阶需求，平衡成本与体验。</p>
                 </div>
               </div>
-              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700/50 dark:to-gray-800 p-5 rounded-lg border-l-4 border-blue-500">
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-lg border-l-4 border-blue-500">
                 <h4 class="text-xl font-bold mb-2 flex items-center">
                   <i class="fa-solid fa-rocket text-blue-500 mr-2"></i>银河<span class="text-base font-normal">（主流新能源品牌）</span></h4>
                 <div class="ml-6 space-y-2">
                   <p class="font-medium">主要搭载：H1、H3、H5架构</p>
-                  <p class="text-gray-600 dark:text-gray-400">作为走量品牌，H1覆盖入门级安全需求，H3满足城市通勤进阶需求，H5提供无图NOA核心功能，以"够用且先进"的配置覆盖最大多数用户。</p>
+                  <p class="text-gray-600">作为走量品牌，H1覆盖入门级安全需求，H3满足城市通勤进阶需求，H5提供无图NOA核心功能，以"够用且先进"的配置覆盖最大多数用户。</p>
                 </div>
               </div>
-              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700/50 dark:to-gray-800 p-5 rounded-lg border-l-4 border-blue-400">
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-lg border-l-4 border-blue-400">
                 <h4 class="text-xl font-bold mb-2 flex items-center">
                   <i class="fa-solid fa-gas-pump text-blue-400 mr-2"></i>吉利<span class="text-base font-normal">（燃油车主品牌）</span></h4>
                 <div class="ml-6 space-y-2">
                   <p class="font-medium">主要搭载：H1、H3架构</p>
-                  <p class="text-gray-600 dark:text-gray-400">燃油车聚焦"安全辅助"刚需，以H1的"高速NOA+AEB"满足用户对基础智驾的需求， 避免过度配置导致成本上升。</p>
+                  <p class="text-gray-600">燃油车聚焦"安全辅助"刚需，以H1的"高速NOA+AEB"满足用户对基础智驾的需求， 避免过度配置导致成本上升。</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-12">
+          <div class="bg-white rounded-xl shadow-lg p-6 mb-12">
             <h3 class="text-2xl font-bold mb-6">功能对比分析</h3>
             <div class="overflow-x-auto">
               <table class="w-full border-collapse">
@@ -673,8 +673,8 @@ const barOption = computed(() => {
                   <th class="px-6 py-4 text-center text-sm font-semibold uppercase tracking-wider">H9</th>
                 </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tbody class="divide-y divide-gray-200">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">高速NOA</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
@@ -682,7 +682,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">城市通勤NOA</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
@@ -690,7 +690,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">无图城市NOA</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
@@ -698,7 +698,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">记忆泊车HPA</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
@@ -706,7 +706,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">全场景D2D</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
@@ -714,7 +714,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">泊车代驾VPD</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
@@ -722,7 +722,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">L3级自动驾驶</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
@@ -730,7 +730,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">G-AES障碍物避让</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-times text-red-500"></i></td>
@@ -738,7 +738,7 @@ const barOption = computed(() => {
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                 </tr>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium">AEB主动刹车</td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
                   <td class="px-6 py-4 text-center"><i class="fa-solid fa-check text-green-500"></i></td>
@@ -751,7 +751,7 @@ const barOption = computed(() => {
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-12">
+          <div class="bg-white rounded-xl shadow-lg p-6 mb-12">
             <h3 class="text-2xl font-bold mb-6">各架构能力对比</h3>
             <div class="flex flex-wrap gap-2 mb-6">
               <button
@@ -760,7 +760,7 @@ const barOption = computed(() => {
                   'px-4 py-2 rounded-full text-sm transition-all',
                   selectedArchitecture.length === 0
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
                 ]"
               >
                 全部显示
@@ -773,7 +773,7 @@ const barOption = computed(() => {
                   'px-4 py-2 rounded-full text-sm transition-all',
                   selectedArchitecture.includes(arch.id)
                     ? `${arch.color} text-white shadow-md`
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
                 ]"
               >
                 {{ arch.id }}
@@ -788,26 +788,26 @@ const barOption = computed(() => {
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+          <div class="bg-white rounded-xl shadow-lg p-6">
             <h3 class="text-2xl font-bold mb-6">AEB刹停速度对比(km/h)</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               <div
                   v-for="(entry, index) in aebSpeedData"
                   :key="entry.name"
-                  class="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 shadow-md group"
+                  class="relative overflow-hidden rounded-xl border border-gray-200 shadow-md group"
                   :style="{ backgroundColor: entry.color + '15' }"
               >
                 <div class="relative z-10 p-6 flex flex-col items-center justify-center text-center h-[180px]">
                   <h4 class="text-3xl font-bold mb-2" :style="{ color: entry.color }">{{ entry.name }}</h4>
                   <div class="flex items-end gap-1">
                     <span class="text-4xl font-bold" :style="{ color: entry.color }">{{ entry.speed }}</span>
-                    <span class="text-lg text-gray-600 dark:text-gray-400">km/h</span>
+                    <span class="text-lg text-gray-600">km/h</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-              <p class="text-gray-600 dark:text-gray-400 text-sm">
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+              <p class="text-gray-600 text-sm">
                 根据吉利发布的信息，从H1到H9架构，AEB刹停速度呈现持续提升趋势，从110km/h逐步提升至140km/h。
               </p>
             </div>
@@ -827,7 +827,7 @@ const barOption = computed(() => {
                 'py-3 px-4 rounded-lg text-center font-medium text-sm transition-all',
                 expandedArchitecture === arch.id
                   ? `${arch.color} text-white shadow-md`
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700',
+                  : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-300',
               ]"
                 @click="toggleArchitecture(arch.id)"
             >
@@ -838,7 +838,7 @@ const barOption = computed(() => {
           <div class="space-y-12">
             <template v-for="arch in architectureData" :key="arch.id">
               <div v-show="expandedArchitecture === arch.id" class="overflow-hidden">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
                   <h3 class="text-2xl font-bold mb-6 flex items-center">
                     <span
                         :class="[
@@ -852,7 +852,7 @@ const barOption = computed(() => {
                   </h3>
                   <div class="relative">
                     <div
-                        class="absolute left-0 md:left-1/2 h-full w-0.5 bg-blue-700 dark:bg-blue-900 transform md:translate-x-[-0.5px]"
+                        class="absolute left-0 md:left-1/2 h-full w-0.5 bg-blue-700 transform md:translate-x-[-0.5px]"
                     ></div>
 
                     <div
@@ -870,14 +870,14 @@ const barOption = computed(() => {
                         <div
                             :class="[
                             'p-5 rounded-xl',
-                            index % 2 === 0 ? 'bg-blue-50 dark:bg-blue-900/30' : 'bg-indigo-50 dark:bg-indigo-900/30',
+                            index % 2 === 0 ? 'bg-blue-50' : 'bg-indigo-50',
                           ]"
                         >
                           <span class="inline-block px-3 py-1 bg-blue-600 text-white text-xs rounded-full mb-3">{{
                               event.date
                             }}</span>
                           <h4 class="text-xl font-bold mb-2">{{ event.title }}</h4>
-                          <p class="text-gray-600 dark:text-gray-400 mb-4">{{ event.description }}</p>
+                          <p class="text-gray-600 mb-4">{{ event.description }}</p>
                           <div class="space-y-2">
                             <div v-for="(feature, fidx) in event.features" :key="fidx" class="flex items-start">
                               <CheckCircle :size="18" class="text-green-500 mr-2 mt-1 flex-shrink-0" />
@@ -899,7 +899,7 @@ const barOption = computed(() => {
               </div>
             </template>
 
-            <div v-if="!expandedArchitecture" class="text-center py-12 text-gray-500 dark:text-gray-400">
+            <div v-if="!expandedArchitecture" class="text-center py-12 text-gray-500">
               <p class="text-lg">请选择上方的架构查看详细OTA升级历史</p>
             </div>
           </div>
@@ -912,146 +912,146 @@ const barOption = computed(() => {
           </h2>
 
           <div class="mb-12">
-            <h3 class="text-xl font-bold mb-8 text-gray-800 dark:text-gray-100">重要OTA事件</h3>
+            <h3 class="text-xl font-bold mb-8 text-gray-800">重要OTA事件</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-red-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-red-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">重大更新</span>
                   <span class="text-gray-500 text-sm">2025-03-03</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">千里浩瀚方案发布</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">吉利正式发布千里浩瀚智驾解决方案，H1-H9五级架构首次亮相</p>
+                <p class="text-gray-600 text-sm mb-4">吉利正式发布千里浩瀚智驾解决方案，H1-H9五级架构首次亮相</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs">全架构</span>
                   <span class="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs">新方案</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-orange-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-orange-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">功能更新</span>
                   <span class="text-gray-500 text-sm">2025-03-15</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">D2D功能大规模推送</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">车位到车位领航功能开始向H5/H7/H9车型推送</p>
+                <p class="text-gray-600 text-sm mb-4">车位到车位领航功能开始向H5/H7/H9车型推送</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-blue-200 text-blue-800 rounded-md text-xs">H5</span>
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-red-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-red-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">重大更新</span>
                   <span class="text-gray-500 text-sm">2025-03-18</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">极氪发布三大核心功能</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">G-AES、满血D2D、L3级技术架构三大核心功能发布</p>
+                <p class="text-gray-600 text-sm mb-4">G-AES、满血D2D、L3级技术架构三大核心功能发布</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-orange-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-orange-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">功能更新</span>
                   <span class="text-gray-500 text-sm">2025-04-10</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">H7车型D2D功能OTA</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">H7车型D2D功能升级，实现全场景覆盖</p>
+                <p class="text-gray-600 text-sm mb-4">H7车型D2D功能升级，实现全场景覆盖</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-orange-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-orange-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">功能更新</span>
                   <span class="text-gray-500 text-sm">2025-06-01</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">极氪G-AES功能推送开始</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">G-AES通用障碍物连续避让功能开始分批推送</p>
+                <p class="text-gray-600 text-sm mb-4">G-AES通用障碍物连续避让功能开始分批推送</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-orange-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-orange-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">功能更新</span>
                   <span class="text-gray-500 text-sm">2025-07-15</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">G-AES功能分批推送完成</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">G-AES功能向H7/H9车型推送完成</p>
+                <p class="text-gray-600 text-sm mb-4">G-AES功能向H7/H9车型推送完成</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-red-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-red-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">重大更新</span>
                   <span class="text-gray-500 text-sm">2025-08-24</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">极氪OS 6.5发布</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">40+项功能更新，包括D2D车位领航、安全升级等</p>
+                <p class="text-gray-600 text-sm mb-4">40+项功能更新，包括D2D车位领航、安全升级等</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-orange-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-orange-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">功能更新</span>
                   <span class="text-gray-500 text-sm">2025-10-20</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">星耀8首次大版本OTA</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Flyme Auto S1.9.0版本，APA泊车优化，新增RPA/HPA</p>
+                <p class="text-gray-600 text-sm mb-4">Flyme Auto S1.9.0版本，APA泊车优化，新增RPA/HPA</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-blue-500 text-white rounded-md text-xs">H3</span>
                   <span class="px-2 py-1 bg-blue-200 text-blue-800 rounded-md text-xs">H5</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-orange-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-orange-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">功能更新</span>
                   <span class="text-gray-500 text-sm">2025-11-11</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">银河A7首次OTA</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">Flyme Auto 1.10.0版本，13项更新，新增AES和MAI</p>
+                <p class="text-gray-600 text-sm mb-4">Flyme Auto 1.10.0版本，13项更新，新增AES和MAI</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-blue-500 text-white rounded-md text-xs">H3</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-green-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-green-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">规划中</span>
                   <span class="text-gray-500 text-sm">2026-01-20</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">H5/H7无图NOA增强版</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">新增窄路通行、施工路段自适应能力</p>
+                <p class="text-gray-600 text-sm mb-4">新增窄路通行、施工路段自适应能力</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-blue-200 text-blue-800 rounded-md text-xs">H5</span>
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-green-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-green-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">规划中</span>
                   <span class="text-gray-500 text-sm">2026-03-30</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">全场景代客泊车功能</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">车辆自主寻找车位并充电的完整解决方案</p>
+                <p class="text-gray-600 text-sm mb-4">车辆自主寻找车位并充电的完整解决方案</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-indigo-200 text-indigo-800 rounded-md text-xs">H7</span>
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
               </div>
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border-l-4 border-green-500">
+              <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-green-500">
                 <div class="flex justify-between items-center mb-3">
                   <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">规划中</span>
                   <span class="text-gray-500 text-sm">2026-10-01</span>
                 </div>
                 <h4 class="text-lg font-bold mb-2">H9架构L3级自动驾驶</h4>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">行业首个量产L3方案，支持高速脱手驾驶</p>
+                <p class="text-gray-600 text-sm mb-4">行业首个量产L3方案，支持高速脱手驾驶</p>
                 <div class="flex gap-2">
                   <span class="px-2 py-1 bg-purple-200 text-purple-800 rounded-md text-xs">H9</span>
                 </div>
@@ -1059,10 +1059,10 @@ const barOption = computed(() => {
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-12">
-            <div class="px-6 md:px-8 py-4 border-b border-gray-100 dark:border-gray-700">
-              <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100">各架构OTA更新频率对比</h3>
-              <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">展示不同架构的年度更新次数分布</p>
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
+            <div class="px-6 md:px-8 py-4 border-b border-gray-100">
+              <h3 class="text-xl font-bold text-gray-800">各架构OTA更新频率对比</h3>
+              <p class="text-gray-500 text-sm mt-1">展示不同架构的年度更新次数分布</p>
             </div>
             <div class="p-6 md:p-8">
               <div class="h-[400px] relative">
@@ -1071,7 +1071,7 @@ const barOption = computed(() => {
                     :option="barOption"
                     autoresize
                 />
-                <div class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic">
+                <div class="mt-4 text-xs text-gray-500 italic">
                   数据来源：吉利官方公布的OTA更新计划及历史数据整理
                 </div>
               </div>
@@ -1079,16 +1079,16 @@ const barOption = computed(() => {
           </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+            <table class="w-full bg-white rounded-xl shadow-lg">
               <thead>
-              <tr class="bg-gray-50 dark:bg-gray-700">
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">架构</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">OTA频率</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">代表车型</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">典型升级内容</th>
+              <tr class="bg-gray-50">
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">架构</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">OTA频率</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">代表车型</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">典型升级内容</th>
               </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody class="divide-y divide-gray-200">
               <tr v-for="item in otaFrequencyData" :key="item.name">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ item.name }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -1118,12 +1118,12 @@ const barOption = computed(() => {
             未来功能规划(2025-2026)
           </h2>
 
-          <div class="mb-8 bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+          <div class="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-6">
             <div class="flex items-start">
               <i class="fa-solid fa-circle-info text-blue-500 mr-3 mt-1 flex-shrink-0"></i>
               <div>
                 <h4 class="font-semibold text-lg mb-2">内容注意</h4>
-                <p class="text-gray-600 dark:text-gray-400">
+                <p class="text-gray-600">
                   本页面展示的未来规划内容总结自吉利品牌规划宣传资料。部分功能受限于技术验证、法规审批等条件，实际上线时间和功能表现可能与规划存在差异。具体功能以官方最终推送的实际开发进度为准。
                 </p>
               </div>
@@ -1134,7 +1134,7 @@ const barOption = computed(() => {
             <div
                 v-for="(periodData, index) in futurePlans"
                 :key="index"
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+                class="bg-white rounded-xl shadow-lg overflow-hidden"
             >
               <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4">
                 <h3 class="text-xl font-bold text-white">{{ periodData.period }}</h3>
@@ -1144,10 +1144,10 @@ const barOption = computed(() => {
                   <div
                       v-for="(plan, planIndex) in periodData.plans"
                       :key="planIndex"
-                      class="bg-gray-50 dark:bg-gray-700/50 p-5 rounded-lg"
+                      class="bg-gray-50 p-5 rounded-lg"
                   >
                     <h4 class="text-lg font-semibold mb-2">{{ plan.title }}</h4>
-                    <p class="text-gray-600 dark:text-gray-400">{{ plan.desc }}</p>
+                    <p class="text-gray-600">{{ plan.desc }}</p>
                   </div>
                 </div>
               </div>
@@ -1162,9 +1162,9 @@ const barOption = computed(() => {
           </h2>
 
           <div class="space-y-8 mb-12">
-            <div class="bg-blue-50 dark:bg-blue-100/20 rounded-xl shadow-lg p-8">
-              <h3 class="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">特点和优势</h3>
-              <p class="text-lg mb-6 text-gray-800 dark:text-gray-200">
+            <div class="bg-blue-50 rounded-xl shadow-lg p-8">
+              <h3 class="text-2xl font-bold mb-4 text-blue-700">特点和优势</h3>
+              <p class="text-lg mb-6 text-gray-800">
                 吉利千里浩瀚智驾解决方案通过H1-H9五级架构体系向用户传达了明确的技术品牌发展路径；通过"品牌-车型-技术"的匹配，在各价位段实现了有竞争力的全面覆盖；以"硬件预埋+OTA解锁"的模式缩短开发周期，加深了用户对智驾可用功能的心智。
               </p>
             </div>
@@ -1174,23 +1174,23 @@ const barOption = computed(() => {
             <div
                 v-for="(trend, index) in evolutionTrends"
                 :key="index"
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-blue-600"
+                class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-600"
             >
               <div class="flex items-center mb-4">
                 <div
-                    class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 mr-4"
+                    class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-4"
                 >
                   <component :is="trend.icon" :size="24" />
                 </div>
                 <h3 class="text-xl font-bold">{{ trend.title }}</h3>
               </div>
-              <p class="text-gray-600 dark:text-gray-400">{{ trend.description }}</p>
+              <p class="text-gray-600">{{ trend.description }}</p>
             </div>
           </div>
 
-          <div class="bg-orange-50 dark:bg-orange-100/20 rounded-xl shadow-lg p-8 mb-12">
-            <h3 class="text-2xl font-bold mb-4 text-blue-700 dark:text-blue-400">可能的挑战</h3>
-            <p class="text-lg mb-6 text-gray-800 dark:text-gray-200">
+          <div class="bg-orange-50 rounded-xl shadow-lg p-8 mb-12">
+            <h3 class="text-2xl font-bold mb-4 text-blue-700">可能的挑战</h3>
+            <p class="text-lg mb-6 text-gray-800">
               基于"多传感器融合（视觉+雷达+激光雷达）+VLA 大模型"的路线架构虽能在短期内建立技术、品牌领先，但如果纯视觉方案突破、WA世界模型成为主流，前期投入的芯片采购、传感器布局、算法开发将部分失效，形成高额沉没成本；技术路线调整导致部分预埋硬件无法通过OTA激活高阶功能，早期购买用户会产生"背刺"的负面舆论，损害品牌信任。
             </p>
           </div>
@@ -1271,26 +1271,24 @@ const barOption = computed(() => {
 /* =========== (改动) 悬浮筛选器容器 ===========
 */
 .floating-filter-container {
-  @apply relative overflow-hidden flex flex-col sm:flex-row sm:items-center bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-md rounded-lg sm:rounded-full shadow-lg p-1.5 transition-all duration-300;
-  /* (改动) 移除了 space-y-1 sm:space-y-0，因为滑块使用 translate 定位 */
+  @apply relative overflow-hidden flex flex-col sm:flex-row sm:items-center bg-gray-100/80 backdrop-blur-md rounded-lg sm:rounded-full shadow-lg p-1.5 transition-all duration-300;
 }
 
 /* =========== (新增) 动画滑块样式 ===========
 */
 .active-tab-indicator {
-  @apply absolute top-0 left-0 bg-white dark:bg-gray-900 rounded-lg sm:rounded-full shadow-md transition-transform duration-300 ease-in-out;
-  /* (改动) width, height, 和 transform 由 JS 动态设置 */
+  @apply absolute top-0 left-0 bg-white rounded-lg sm:rounded-full shadow-md transition-transform duration-300 ease-in-out;
 }
 
 /* =========== (改动) 筛选器按钮样式 ===========
 */
 .tab-link {
   /* (改动) 添加 relative, z-10, bg-transparent */
-  @apply relative z-10 flex items-center justify-center sm:justify-start px-5 py-2 rounded-lg sm:rounded-full text-base font-semibold text-gray-700 dark:text-gray-200 transition-colors duration-300 whitespace-nowrap bg-transparent;
+  @apply relative z-10 flex items-center justify-center sm:justify-start px-5 py-2 rounded-lg sm:rounded-full text-base font-semibold text-gray-700 transition-colors duration-300 whitespace-nowrap bg-transparent;
 }
 
 .tab-link.active {
   /* (改动) 只改变字体颜色，背景由滑块提供 */
-  @apply text-blue-600 dark:text-blue-400;
+  @apply text-blue-600;
 }
 </style>
