@@ -371,23 +371,58 @@ watch(activeTab, async () => {
   updateIndicator();
 });
 
+// --- 7. (改动) 筛选器与页脚交互逻辑 ---
+const footerRef = ref(null);
+const filterBottom = ref(24); // 对应 bottom-6 (1.5rem = 24px)
+const filterRight = ref(24); // 对应 right-6 (1.5rem = 24px)
+
+// (改动) 动态计算筛选器样式
+const filterStyle = computed(() => ({
+  bottom: `${filterBottom.value}px`,
+  right: `${filterRight.value}px`,
+  // (改动) 移除 CSS transition，使其瞬时响应
+}));
+
+// (改动) 滚动处理函数
+const handleScroll = () => {
+  if (!footerRef.value) return;
+
+  const margin = 24; // 24px (1.5rem)
+  const footerTop = footerRef.value.offsetTop;
+  const viewportBottom = window.scrollY + window.innerHeight;
+
+  // 计算视口底部 超出 页脚顶部的距离
+  const overlap = viewportBottom - footerTop;
+
+  if (overlap > 0) {
+    // 如果重叠，将筛选器向上推
+    filterBottom.value = overlap + margin;
+  } else {
+    // 否则，保持默认边距
+    filterBottom.value = margin;
+  }
+};
+
 // 在挂载和窗口大小改变时更新滑块
 onMounted(() => {
   window.addEventListener('resize', updateIndicator);
+  window.addEventListener('scroll', handleScroll, { passive: true }); // (新增) 添加滚动监听
   // 初始加载时设置滑块
   setTimeout(() => {
     updateIndicator();
+    handleScroll(); // (新增) 初始检查一次位置
   }, 100); // 确保 DOM 已经渲染
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateIndicator);
+  window.removeEventListener('scroll', handleScroll); // (新增) 移除滚动监听
 });
 
 
-// --- 7. (改动) ECharts 图表选项 ---
+// --- 8. (改动) ECharts 图表选项 ---
 
-// 7a. 雷达图选项
+// 8a. 雷达图选项
 const radarOption = computed(() => {
   const indicators = architectureRadarData.map((item) => ({
     name: item.subject,
@@ -397,11 +432,13 @@ const radarOption = computed(() => {
   const seriesData = architectureData.map((arch) => ({
     value: architectureRadarData.map((item) => item[arch.id]),
     name: arch.id,
+    // (改动) 默认不显示点
+    showSymbol: false,
     symbol: 'circle',
     symbolSize: 8,
+    // (改动) itemStyle 不再设置 opacity: 0
     itemStyle: {
       color: arch.colorHex,
-      opacity: 0, // (改动) 默认隐藏点
     },
     lineStyle: {
       width: getRadarStrokeWidth(arch.id),
@@ -411,9 +448,11 @@ const radarOption = computed(() => {
       opacity: getRadarOpacity(arch.id),
       color: arch.colorHex,
     },
-    emphasis: { // (改动) 悬浮时
+    emphasis: {
+      // (改动) 悬浮时显示点
+      showSymbol: true,
       itemStyle: {
-        opacity: 1 // (改动) 显示点
+        opacity: 1
       },
       lineStyle: {
         width: 3
@@ -449,7 +488,7 @@ const radarOption = computed(() => {
   };
 });
 
-// 7b. 柱状图选项
+// 8b. 柱状图选项
 const barOption = computed(() => {
   const legendData = [
     "季度小更新", "半年大更新", "月度小更新", "季度大更新",
@@ -1161,7 +1200,10 @@ const barOption = computed(() => {
       </Transition>
     </main>
 
-    <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-30">
+    <div
+        class="fixed z-30"
+        :style="filterStyle"
+    >
       <div
           ref="tabsContainer"
           class="floating-filter-container"
@@ -1181,7 +1223,7 @@ const barOption = computed(() => {
       </div>
     </div>
 
-    <footer class="bg-gray-900 text-white py-12 mt-16">
+    <footer ref="footerRef" class="bg-gray-900 text-white py-12 mt-16">
       <div class="container mx-auto px-4">
         <div class="text-center">
           <h2 class="text-2xl font-bold mb-4">吉利千里浩瀚智驾解决方案</h2>
