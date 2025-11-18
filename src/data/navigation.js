@@ -73,7 +73,7 @@ export const navigationData = [
                 label: '数据工具',
                 children: [
                     // --- 核心修改：更新此链接 ---
-                    { id: 'ai-analysis', label: 'AI数据分析', link: '/ai-analysis', type: 'internal', status: 'active' },
+                    { id: 'canswer', label: 'CAnswer', link: 'https://gaia.changan.com.cn/ai/canswer/#/home', type: 'external', status: 'active' },
                 ],
             },
         ],

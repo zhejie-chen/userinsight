@@ -184,11 +184,14 @@
 
 <script setup>
 import { ref, computed, onBeforeUpdate, reactive, onMounted, onUnmounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router'; // <-- 1. 导入 useRouter
 import DetailModal from '@/components/common/DetailModal.vue';
 import ConferenceCalendarModal from '@/components/common/ConferenceCalendarModal.vue';
 // *** 重构点: 导入新组件 ***
 import ConferenceReportCard from '@/components/common/ConferenceReportCard.vue';
 import { getTimelineEvents, getConferenceReports, getReportImages } from '@/services/api/conferences.js';
+
+const router = useRouter(); // <-- 2. 初始化 router
 
 function parseLocalDate(dateStr) {
   if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
@@ -263,10 +266,18 @@ function onCalendarNavigate(event) {
 }
 
 // --- Unified Card Click Handler ---
+// <-- 3. 修改 handleCardClick
 function handleCardClick(conference) {
-  if (conference.action_type === 'EXTERNAL_LINK' && conference.external_url) {
+  // 新增：内部链接跳转
+  if (conference.action_type === 'INTERNAL_LINK' && conference.external_url) {
+    router.push(conference.external_url);
+  }
+  // 现有：外部链接
+  else if (conference.action_type === 'EXTERNAL_LINK' && conference.external_url) {
     window.open(conference.external_url, '_blank');
-  } else {
+  }
+  // 默认：打开弹窗
+  else {
     openConferenceModal(conference);
   }
 }
