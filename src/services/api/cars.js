@@ -9,7 +9,7 @@ import { supabase } from '../supabase'; // 导入 supabase 客户端实例
 export async function getAllCarsForTimeline() {
     const { data, error } = await supabase
         .from('cars')
-        .select('"国家/地区", "公司", "品牌", "车型", "能源形式", "厢型", "上市情况", "上市时间", "售价", "售价-人民币", "汇率", "售价直达", "结束时间", "24年销量", "改款"')
+        .select('"国家", "公司", "品牌", "车型", "能源形式", "厢型", "上市情况", "上市时间", "售价", "售价-人民币", "汇率", "售价直达", "结束时间", "24年销量", "改款"')
         .not('上市时间', 'is', null);
 
     if (error) {
@@ -45,7 +45,7 @@ export async function getAllCarsForMap() {
 
     for (const car of cars) {
         const brand = car['公司'];
-        const countryZH = car['国家/地区'];
+        const countryZH = car['国家'];
         const countryEN = countryNameMap[countryZH] || countryZH;
 
         // 构建 brandData
