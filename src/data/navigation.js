@@ -68,14 +68,14 @@ export const navigationData = [
                     { id: 'poster', label: '发布会海报', link: '#', type: 'external', status: 'coming-soon' },
                 ],
             },
-            {
-                id: 'data-tools',
-                label: '数据工具',
-                children: [
-                    // --- 核心修改：更新此链接 ---
-                    { id: 'canswer', label: 'CAnswer', link: 'https://gaia.changan.com.cn/ai/canswer/#/home', type: 'external', status: 'active' },
-                ],
-            },
+            // {
+            //     id: 'data-tools',
+            //     label: '数据工具',
+            //     children: [
+            //         // --- 核心修改：更新此链接 ---
+            //         { id: 'canswer', label: 'CAnswer', link: 'https://gaia.changan.com.cn/ai/canswer/#/home', type: 'external', status: 'active' },
+            //     ],
+            // },
         ],
     },
 ];

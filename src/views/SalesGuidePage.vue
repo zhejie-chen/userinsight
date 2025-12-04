@@ -11,18 +11,18 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
         <section class="lg:col-span-3 text-center">
 
           <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            CAnswer海外销量
+            海外销量看板
           </h2>
 
           <p class="text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
             已更新52国，每月20日更新上月数据，数据源于Marklines
           </p>
 
-          <a href="https://gaia.changan.com.cn/ai/canswer/#/home"
+          <a href=" "
              target="_blank"
              rel="noopener noreferrer"
              class="inline-block bg-blue-600 text-white font-bold py-3 px-12 rounded-full text-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg mb-8">
-            立即访问
+            请前往“行业与竞品情报”公众号访问
           </a>
 
           <div class="globe-container rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-gray-900 hidden sm:block">
@@ -43,13 +43,13 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
               <span class="text-5xl font-bold text-blue-500 mb-2">1</span>
               <p class="text-gray-800 font-semibold mb-3 min-h-[2.5rem] flex justify-center items-center text-sm leading-tight">
                 <span>
-                  确保登录过
-                  <a href="https://gaia.changan.com.cn/ai/canswer/#/home" target="_blank" rel="noopener noreferrer" class="inline-flex items-baseline text-blue-600 font-bold hover:opacity-80 transition-all ml-1">
-                    <span class="hover:underline">CAnswer</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-0.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-                    </svg>
-                  </a>
+                  确保登录过系统
+<!--                  <a href="" target="_blank" rel="noopener noreferrer" class="inline-flex items-baseline text-blue-600 font-bold hover:opacity-80 transition-all ml-1">-->
+<!--                    <span class="hover:underline">CAnswer</span>-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-0.5">-->
+<!--                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />-->
+<!--                    </svg>-->
+<!--                  </a>-->
                 </span>
               </p>
               <div class="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
