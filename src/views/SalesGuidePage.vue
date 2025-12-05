@@ -1,32 +1,41 @@
 <script setup>
 import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
+import { Search } from 'lucide-vue-next';
 </script>
 
 <template>
-  <main id="main-content" class="pt-16 pb-12 min-h-dvh flex items-center">
+  <main id="main-content" class="pt-16 pb-12 min-h-dvh flex items-center bg-white">
     <div class="container mx-auto px-4 max-w-7xl">
 
       <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
 
-        <section class="lg:col-span-3 text-center">
+        <section class="lg:col-span-3 text-center relative z-10">
 
           <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             海外销量看板
           </h2>
 
-          <p class="text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
+          <p class="text-lg text-gray-700 mb-10 max-w-3xl mx-auto">
             已更新52国，每月20日更新上月数据，数据源于Marklines
           </p>
 
-          <a href=" "
-             target="_blank"
-             rel="noopener noreferrer"
-             class="inline-block bg-blue-600 text-white font-bold py-3 px-12 rounded-full text-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg mb-8">
-            请前往“行业与竞品情报”公众号访问
-          </a>
+          <div class="flex justify-center mb-12">
+            <div class="inline-flex items-center gap-3 bg-slate-50 border border-slate-200 px-6 py-3.5 rounded-full shadow-sm hover:border-blue-300 transition-colors duration-300 group">
+              <div class="flex-shrink-0 text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                <Search class="w-5 h-5" />
+              </div>
 
-          <div class="globe-container rounded-2xl overflow-hidden shadow-lg aspect-video max-h-[400px] mx-auto bg-gray-900 hidden sm:block">
+              <div class="text-sm md:text-base text-slate-700 font-medium">
+                请在 <span class="text-blue-700 font-bold mx-0.5">企业微信</span> 搜索
+                <span class="text-gray-900 font-bold mx-0.5">“行业与竞品情报”</span>，点击
+                <span class="text-blue-600 font-bold mx-0.5 border-b-2 border-blue-100">底部菜单</span> 访问
+              </div>
+            </div>
+          </div>
+
+          <div class="globe-container rounded-2xl overflow-hidden shadow-2xl aspect-video max-h-[400px] mx-auto bg-[#111827] hidden sm:block relative">
             <InteractiveGlobe />
+            <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#111827] to-transparent pointer-events-none"></div>
           </div>
 
         </section>
@@ -42,15 +51,7 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
             <div class="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center text-center">
               <span class="text-5xl font-bold text-blue-500 mb-2">1</span>
               <p class="text-gray-800 font-semibold mb-3 min-h-[2.5rem] flex justify-center items-center text-sm leading-tight">
-                <span>
-                  确保登录过系统
-<!--                  <a href="" target="_blank" rel="noopener noreferrer" class="inline-flex items-baseline text-blue-600 font-bold hover:opacity-80 transition-all ml-1">-->
-<!--                    <span class="hover:underline">CAnswer</span>-->
-<!--                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-0.5">-->
-<!--                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />-->
-<!--                    </svg>-->
-<!--                  </a>-->
-                </span>
+                <span>确保登录过系统</span>
               </p>
               <div class="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden">
                 <img src="https://advawhgwgzkydiubzzjb.supabase.co/storage/v1/object/public/cover/sales_guide.webp" alt="步骤1" class="w-full h-full object-contain p-1">
@@ -104,7 +105,6 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
 </template>
 
 <style scoped>
-/* 智能换行样式 (保持不变) */
 .inline-flex.items-baseline {
   white-space: normal;
   display: inline-flex;
@@ -112,12 +112,5 @@ import InteractiveGlobe from '@/components/common/InteractiveGlobe.vue';
 }
 p.min-h-\[2\.5rem\] {
   min-height: 40px;
-}
-
-/* --- 步骤 2 (交互):
-  移除 pointer-events: none; 以允许悬停
---- */
-.globe-container {
-  /* pointer-events: none;  <-- 已移除此行 */
 }
 </style>

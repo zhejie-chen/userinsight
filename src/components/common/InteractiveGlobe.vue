@@ -4,11 +4,6 @@ import createGlobe from 'cobe';
 
 const canvasRef = ref(null);
 let globe = null;
-let animationFrameId = null;
-
-// --- 步骤 1 (修复):
-// 只保留悬停状态，移除拖拽(isDragging)和光标(cursorStyle)
-const isPaused = ref(false); // 鼠标是否悬停
 
 // 54 个国家/地区坐标 (保持不变)
 const locations = [
@@ -25,80 +20,70 @@ const locations = [
   [50.45, 30.52], [59.42, 24.75], [31.78, 35.22], [24.47, 54.37]
 ];
 
+const isHovering = ref(false);
+
 onMounted(() => {
   const canvas = canvasRef.value;
   if (!canvas) return;
 
-  // 旋转和视觉的当前值与目标值
+  // 动画状态
   let currentPhi = 0;
-  let currentTheta = 0.1; // 保持固定的Y轴角度
-
+  let currentTheta = 0.15;
   let currentSpeed = 0.003;
-  let targetSpeed = 0.003;
-
   let currentBrightness = 2;
-  let targetBrightness = 2;
 
-  let currentDiffuse = 1.2;
-  let targetDiffuse = 1.2;
-
-  const autoRotateSpeed = 0.003; // 基础自动旋转速度
-  const easingFactor = 0.05; // 缓动因子
+  // 悬停交互配置
+  const autoRotateSpeed = 0.003;
+  const hoverBrightness = 5;
 
   globe = createGlobe(canvas, {
-    // 基础设置 (保持不变)
+    devicePixelRatio: 2,
+    width: 1000,
+    height: 1000,
     phi: 0,
-    theta: 0.1,
+    theta: 0.15,
     dark: 1,
     diffuse: 1.2,
-    mapSamples: 20000,
+    mapSamples: 16000,
     mapBrightness: 2,
     baseColor: [0.1, 0.3, 0.6],
     markerColor: [0.5, 0.8, 1],
     glowColor: [0.2, 0.5, 1],
-    scale: 2.5,
+    scale: 2.2,
     markers: locations.map(loc => ({ location: loc, size: 0.05 })),
 
     onRender: (state) => {
-      // 动态尺寸调整 (保持不变, 确保地球仪始终可见)
+      // 1. 响应式尺寸
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
-      const width = Math.round(rect.width * dpr);
-      const height = Math.round(rect.height * dpr);
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width; canvas.height = height;
-      }
-      state.width = width; state.height = height; state.devicePixelRatio = dpr;
+      const width = rect.width * dpr;
+      const height = rect.height * dpr;
 
-      // "醒目交互" (保持不变)
-      // A. 设置缓动目标
-      if (isPaused.value) { // 鼠标悬停时
-        targetSpeed = 0;
-        targetBrightness = 10; // 变亮
-        targetDiffuse = 2.0;   // 增加光泽
-      } else { // 鼠标离开时
-        targetSpeed = autoRotateSpeed;
-        targetBrightness = 2; // 恢复
-        targetDiffuse = 1.2;  // 恢复
+      if (Math.abs(state.width - width) > 1 || Math.abs(state.height - height) > 1) {
+        state.width = width;
+        state.height = height;
       }
 
-      // B. 平滑地应用缓动 (保持不变)
-      currentSpeed += (targetSpeed - currentSpeed) * (easingFactor * 2);
-      currentBrightness += (targetBrightness - currentBrightness) * easingFactor;
-      currentDiffuse += (targetDiffuse - currentDiffuse) * easingFactor;
+      // 2. 定位算法微调
+      // Offset X: 保持靠左 (0.35)
+      // Offset Y: 显著下移 (0.4)。数值越大，地球仪中心越靠下，露出的部分越少。
+      // 0.2 -> 0.4 的变化会让它看起来明显"沉"下去。
+      state.offset = [(height * 0.35) - (width / 2), height * 0.4];
 
-      // C. 将缓动值应用到地球仪 (保持不变)
+      // 3. 缓动交互
+      const targetSpeed = isHovering.value ? 0 : autoRotateSpeed;
+      const targetBrightnessVal = isHovering.value ? hoverBrightness : 2;
+      const easing = 0.05;
+
+      currentSpeed += (targetSpeed - currentSpeed) * easing;
+      currentBrightness += (targetBrightnessVal - currentBrightness) * easing;
+
       state.mapBrightness = currentBrightness;
-      state.diffuse = currentDiffuse;
 
-      // --- 步骤 1 (修复):
-      // 移除 isDragging 逻辑，始终应用自动旋转
+      // 4. 旋转
       currentPhi += currentSpeed;
       state.phi = currentPhi;
       state.theta = currentTheta;
-
-      // 定位到左下角 (保持不变)
-      state.offset = [-width * 0.25, height * 0.25];
     }
   });
 });
@@ -110,25 +95,27 @@ onUnmounted(() => {
   }
 });
 
-// --- 步骤 1 (修复):
-// 简化事件处理函数
 const handleMouseEnter = () => {
-  isPaused.value = true;
+  isHovering.value = true;
 };
 
 const handleMouseLeave = () => {
-  isPaused.value = false;
+  isHovering.value = false;
 };
-
-// (移除了 handleMouseDown 和 handleMouseUp)
 </script>
 
 <template>
   <canvas
       ref="canvasRef"
-      class="w-full h-full"
-      style="display: block;"
+      class="w-full h-full cursor-pointer transition-opacity duration-700 ease-in"
+      style="display: block; opacity: 0; animation: fadeIn 1s forwards;"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
   ></canvas>
 </template>
+
+<style>
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+</style>

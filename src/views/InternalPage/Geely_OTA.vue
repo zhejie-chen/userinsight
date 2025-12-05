@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed, provide, watch, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, computed, provide } from "vue";
+// 引入新组件
+import FloatingTabSelector from "@/components/common/FloatingTabSelector.vue";
 
 // --- 1. 依赖库 ---
-// 1a. ECharts (图表)
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { BarChart, RadarChart } from "echarts/charts";
@@ -36,10 +37,9 @@ use([
   PolarComponent,
 ]);
 
-// 为 ECharts 提供主题 (light/dark)，这里默认为 'light'
 provide(THEME_KEY, "light");
 
-// --- 3. 数据迁移 (与之前相同) ---
+// --- 3. 数据定义 ---
 const architectureData = [
   {
     id: "H1",
@@ -50,7 +50,6 @@ const architectureData = [
     models: "银河E8、星耀8(非EM-i版)",
     color: "bg-blue-500",
     colorHex: "#3b82f6",
-    textColor: "text-white",
   },
   {
     id: "H3",
@@ -61,7 +60,6 @@ const architectureData = [
     models: "银河A7、M7",
     color: "bg-blue-600",
     colorHex: "#2563eb",
-    textColor: "text-white",
   },
   {
     id: "H5",
@@ -72,7 +70,6 @@ const architectureData = [
     models: "银河M9、星耀8 EM版",
     color: "bg-blue-700",
     colorHex: "#1d4ed8",
-    textColor: "text-white",
   },
   {
     id: "H7",
@@ -83,7 +80,6 @@ const architectureData = [
     models: "极氪001/007/7X、领克900",
     color: "bg-indigo-700",
     colorHex: "#4338ca",
-    textColor: "text-white",
   },
   {
     id: "H9",
@@ -94,7 +90,6 @@ const architectureData = [
     models: "极氪9X光辉(规划中)",
     color: "bg-purple-800",
     colorHex: "#5b21b6",
-    textColor: "text-white",
   },
 ];
 
@@ -291,7 +286,6 @@ const activeTab = ref("overview");
 const expandedArchitecture = ref("H1");
 const selectedArchitecture = ref([]);
 
-// --- 标签页数据 ---
 const analysisTabs = [
   { id: 'overview', label: '架构全景' },
   { id: 'ota-history', label: 'OTA升级历史' },
@@ -300,13 +294,9 @@ const analysisTabs = [
   { id: 'trends', label: '升级趋势' }
 ];
 
-// --- 5. 方法 (与之前相同) ---
+// --- 5. 方法 ---
 function toggleArchitecture(id) {
-  if (expandedArchitecture.value === id) {
-    expandedArchitecture.value = null;
-  } else {
-    expandedArchitecture.value = id;
-  }
+  expandedArchitecture.value = expandedArchitecture.value === id ? null : id;
 }
 
 function toggleSelectedArchitecture(id) {
@@ -322,7 +312,6 @@ function clearSelectedArchitecture() {
   selectedArchitecture.value = [];
 }
 
-// 辅助函数
 function getRadarOpacity(id) {
   if (selectedArchitecture.value.length === 0) return 0.1;
   return selectedArchitecture.value.includes(id) ? 0.5 : 0.1;
@@ -333,222 +322,62 @@ function getRadarStrokeWidth(id) {
   return selectedArchitecture.value.includes(id) ? 2 : 1;
 }
 
-// --- 6. (改动) 动画滑块逻辑 ---
-const tabsContainer = ref(null);
-const tabRefs = ref({});
-const indicatorStyle = ref({});
-const setTabRef = (el, id) => {
-  if (el) {
-    tabRefs.value[id] = el;
-  }
-};
-
-// (改动) 更新滑块函数，使其尺寸与按钮一致
-const updateIndicator = () => {
-  if (!tabsContainer.value) return;
-  const activeTabEl = tabRefs.value[activeTab.value];
-  if (!activeTabEl) return;
-
-  const containerRect = tabsContainer.value.getBoundingClientRect();
-  const tabRect = activeTabEl.getBoundingClientRect();
-
-  // (Fix) 计算相对于容器的偏移
-  const offsetTop = tabRect.top - containerRect.top;
-  const offsetLeft = tabRect.left - containerRect.left;
-
-  indicatorStyle.value = {
-    // (Fix) 设置显式的 宽/高
-    height: `${tabRect.height}px`,
-    width: `${tabRect.width}px`,
-    // (Fix) 使用 2D translate
-    transform: `translate(${offsetLeft}px, ${offsetTop}px)`,
-  };
-};
-
-// 侦听 activeTab 变化来移动滑块
-watch(activeTab, async () => {
-  await nextTick(); // 等待 DOM 更新
-  updateIndicator();
-});
-
-// --- 7. (改动) 筛选器与页脚交互逻辑 ---
-const footerRef = ref(null);
-const filterBottom = ref(24); // 对应 bottom-6 (1.5rem = 24px)
-const filterRight = ref(24); // 对应 right-6 (1.5rem = 24px)
-
-// (改动) 动态计算筛选器样式
-const filterStyle = computed(() => ({
-  bottom: `${filterBottom.value}px`,
-  right: `${filterRight.value}px`,
-  // (改动) 移除 CSS transition，使其瞬时响应
-}));
-
-// (改动) 滚动处理函数
-const handleScroll = () => {
-  if (!footerRef.value) return;
-
-  const margin = 24; // 24px (1.5rem)
-  const footerTop = footerRef.value.offsetTop;
-  const viewportBottom = window.scrollY + window.innerHeight;
-
-  // 计算视口底部 超出 页脚顶部的距离
-  const overlap = viewportBottom - footerTop;
-
-  if (overlap > 0) {
-    // 如果重叠，将筛选器向上推
-    filterBottom.value = overlap + margin;
-  } else {
-    // 否则，保持默认边距
-    filterBottom.value = margin;
-  }
-};
-
-// 在挂载和窗口大小改变时更新滑块
-onMounted(() => {
-  window.addEventListener('resize', updateIndicator);
-  window.addEventListener('scroll', handleScroll, { passive: true }); // (新增) 添加滚动监听
-  // 初始加载时设置滑块
-  setTimeout(() => {
-    updateIndicator();
-    handleScroll(); // (新增) 初始检查一次位置
-  }, 100); // 确保 DOM 已经渲染
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateIndicator);
-  window.removeEventListener('scroll', handleScroll); // (新增) 移除滚动监听
-});
-
-
-// --- 8. (改动) ECharts 图表选项 ---
-
-// 8a. 雷达图选项
+// --- 6. ECharts 图表选项 ---
 const radarOption = computed(() => {
   const indicators = architectureRadarData.map((item) => ({
     name: item.subject,
     max: 100,
   }));
-
   const seriesData = architectureData.map((arch) => ({
     value: architectureRadarData.map((item) => item[arch.id]),
     name: arch.id,
-    // (改动) 默认不显示点
     showSymbol: false,
     symbol: 'circle',
     symbolSize: 8,
-    // (改动) itemStyle 不再设置 opacity: 0
-    itemStyle: {
-      color: arch.colorHex,
-    },
-    lineStyle: {
-      width: getRadarStrokeWidth(arch.id),
-      color: arch.colorHex,
-    },
-    areaStyle: {
-      opacity: getRadarOpacity(arch.id),
-      color: arch.colorHex,
-    },
-    emphasis: {
-      // (改动) 悬浮时显示点
-      showSymbol: true,
-      itemStyle: {
-        opacity: 1
-      },
-      lineStyle: {
-        width: 3
-      }
-    }
+    itemStyle: { color: arch.colorHex },
+    lineStyle: { width: getRadarStrokeWidth(arch.id), color: arch.colorHex },
+    areaStyle: { opacity: getRadarOpacity(arch.id), color: arch.colorHex },
+    emphasis: { showSymbol: true, itemStyle: { opacity: 1 }, lineStyle: { width: 3 } }
   }));
 
   return {
-    tooltip: {
-      trigger: 'item'
-    },
+    tooltip: { trigger: 'item' },
     legend: {
-      // (改动) 显式设置图例颜色
       data: architectureData.map(arch => ({
         name: arch.id,
-        icon: 'rect', // (改动) 确保显示为色块
-        itemStyle: {
-          color: arch.colorHex
-        }
+        icon: 'rect',
+        itemStyle: { color: arch.colorHex }
       })),
       bottom: 0,
     },
-    radar: {
-      indicator: indicators,
-    },
-    series: [
-      {
-        type: 'radar',
-        // (改动) 反转数组，让 H1 (面积最小) 在最上层被渲染，解决 H9 遮挡问题
-        data: [...seriesData].reverse(),
-      },
-    ],
+    radar: { indicator: indicators },
+    series: [{ type: 'radar', data: [...seriesData].reverse() }],
   };
 });
 
-// 8b. 柱状图选项
 const barOption = computed(() => {
   const legendData = [
     "季度小更新", "半年大更新", "月度小更新", "季度大更新",
     "双月大更新", "月更新", "季更新", "L3特更",
   ];
-
   const colors = {
-    "季度小更新": "#3b82f6",
-    "半年大更新": "#1d4ed8",
-    "月度小更新": "#60a5fa",
-    "季度大更新": "#2563eb",
-    "双月大更新": "#4f46e5",
-    "月更新": "#818cf8",
-    "季更新": "#6366f1",
-    "L3特更": "#7c3aed",
+    "季度小更新": "#3b82f6", "半年大更新": "#1d4ed8", "月度小更新": "#60a5fa",
+    "季度大更新": "#2563eb", "双月大更新": "#4f46e5", "月更新": "#818cf8",
+    "季更新": "#6366f1", "L3特更": "#7c3aed",
   };
-
   const series = legendData.map(key => ({
-    name: key,
-    type: 'bar',
-    stack: 'total',
-    emphasis: {
-      focus: 'series'
-    },
+    name: key, type: 'bar', stack: 'total',
+    emphasis: { focus: 'series' },
     data: otaFrequencyData.map(item => item[key] || 0),
     color: colors[key],
   }));
 
   return {
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
-    },
-    legend: {
-      data: legendData,
-      bottom: 0,
-      type: 'scroll'
-    },
-    grid: {
-      left: "3%",
-      right: "4%",
-      bottom: "10%",
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: "category",
-        data: otaFrequencyData.map((item) => item.name),
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-        axisLabel: {
-          formatter: '{value}次'
-        }
-      },
-    ],
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+    legend: { data: legendData, bottom: 0, type: 'scroll' },
+    grid: { left: "3%", right: "4%", bottom: "10%", containLabel: true },
+    xAxis: [{ type: "category", data: otaFrequencyData.map((item) => item.name) }],
+    yAxis: [{ type: "value", axisLabel: { formatter: '{value}次' } }],
     series: series,
   };
 });
@@ -574,12 +403,8 @@ const barOption = computed(() => {
             千里浩瀚架构全景
           </h2>
           <p class="text-lg mb-8">
-            "千里浩瀚"是吉利在2025年3月3日发布的统一智驾解决方案，采用<span
-              class="font-bold text-blue-600"
-          >五级阶梯式架构</span
-          >(H1-H9)，覆盖从10万到百万级车型。
+            "千里浩瀚"是吉利在2025年3月3日发布的统一智驾解决方案，采用<span class="font-bold text-blue-600">五级阶梯式架构</span>(H1-H9)，覆盖从10万到百万级车型。
           </p>
-
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <div
                 v-for="(arch, index) in architectureData"
@@ -756,35 +581,17 @@ const barOption = computed(() => {
             <div class="flex flex-wrap gap-2 mb-6">
               <button
                   @click="clearSelectedArchitecture"
-                  :class="[
-                  'px-4 py-2 rounded-full text-sm transition-all',
-                  selectedArchitecture.length === 0
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-                ]"
-              >
-                全部显示
-              </button>
+                  :class="['px-4 py-2 rounded-full text-sm transition-all', selectedArchitecture.length === 0 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+              >全部显示</button>
               <button
                   v-for="arch in architectureData"
                   :key="arch.id"
                   @click="toggleSelectedArchitecture(arch.id)"
-                  :class="[
-                  'px-4 py-2 rounded-full text-sm transition-all',
-                  selectedArchitecture.includes(arch.id)
-                    ? `${arch.color} text-white shadow-md`
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-                ]"
-              >
-                {{ arch.id }}
-              </button>
+                  :class="['px-4 py-2 rounded-full text-sm transition-all', selectedArchitecture.includes(arch.id) ? `${arch.color} text-white shadow-md` : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
+              >{{ arch.id }}</button>
             </div>
             <div class="h-[400px]">
-              <v-chart
-                  class="w-full h-full"
-                  :option="radarOption"
-                  autoresize
-              />
+              <v-chart class="w-full h-full" :option="radarOption" autoresize />
             </div>
           </div>
 
@@ -823,59 +630,24 @@ const barOption = computed(() => {
             <button
                 v-for="arch in architectureData"
                 :key="arch.id"
-                :class="[
-                'py-3 px-4 rounded-lg text-center font-medium text-sm transition-all',
-                expandedArchitecture === arch.id
-                  ? `${arch.color} text-white shadow-md`
-                  : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-300',
-              ]"
+                :class="['py-3 px-4 rounded-lg text-center font-medium text-sm transition-all', expandedArchitecture === arch.id ? `${arch.color} text-white shadow-md` : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-300']"
                 @click="toggleArchitecture(arch.id)"
-            >
-              {{ arch.id }}
-            </button>
+            >{{ arch.id }}</button>
           </div>
-
           <div class="space-y-12">
             <template v-for="arch in architectureData" :key="arch.id">
               <div v-show="expandedArchitecture === arch.id" class="overflow-hidden">
                 <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
                   <h3 class="text-2xl font-bold mb-6 flex items-center">
-                    <span
-                        :class="[
-                        'inline-flex items-center justify-center w-10 h-10 rounded-full mr-3 text-white',
-                        arch.color,
-                      ]"
-                    >
-                      {{ arch.id }}
-                    </span>
+                    <span :class="['inline-flex items-center justify-center w-10 h-10 rounded-full mr-3 text-white', arch.color]">{{ arch.id }}</span>
                     {{ arch.name }}
                   </h3>
                   <div class="relative">
-                    <div
-                        class="absolute left-0 md:left-1/2 h-full w-0.5 bg-blue-700 transform md:translate-x-[-0.5px]"
-                    ></div>
-
-                    <div
-                        v-for="(event, index) in otaHistoryData[arch.id]"
-                        :key="index"
-                        :class="[
-                        'relative flex flex-col md:flex-row mb-10 last:mb-0',
-                        index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse',
-                      ]"
-                    >
-                      <div :class="[
-                        'md:w-1/2 md:py-2 mb-6 md:mb-0',
-                        index % 2 === 0 ? 'md:pr-10' : 'md:pl-10'
-                      ]">
-                        <div
-                            :class="[
-                            'p-5 rounded-xl',
-                            index % 2 === 0 ? 'bg-blue-50' : 'bg-indigo-50',
-                          ]"
-                        >
-                          <span class="inline-block px-3 py-1 bg-blue-600 text-white text-xs rounded-full mb-3">{{
-                              event.date
-                            }}</span>
+                    <div class="absolute left-0 md:left-1/2 h-full w-0.5 bg-blue-700 transform md:translate-x-[-0.5px]"></div>
+                    <div v-for="(event, index) in otaHistoryData[arch.id]" :key="index" :class="['relative flex flex-col md:flex-row mb-10 last:mb-0', index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse']">
+                      <div :class="['md:w-1/2 md:py-2 mb-6 md:mb-0', index % 2 === 0 ? 'md:pr-10' : 'md:pl-10']">
+                        <div :class="['p-5 rounded-xl', index % 2 === 0 ? 'bg-blue-50' : 'bg-indigo-50']">
+                          <span class="inline-block px-3 py-1 bg-blue-600 text-white text-xs rounded-full mb-3">{{ event.date }}</span>
                           <h4 class="text-xl font-bold mb-2">{{ event.title }}</h4>
                           <p class="text-gray-600 mb-4">{{ event.description }}</p>
                           <div class="space-y-2">
@@ -886,19 +658,13 @@ const barOption = computed(() => {
                           </div>
                         </div>
                       </div>
-                      <div
-                          class="absolute left-0 md:left-1/2 transform md:translate-x-[-8px] w-4 h-4 rounded-full bg-blue-700 shadow-md"
-                      ></div>
-                      <div :class="[
-                        'md:w-1/2',
-                         index % 2 === 0 ? 'md:pl-10' : 'md:pr-10'
-                      ]"></div>
+                      <div class="absolute left-0 md:left-1/2 transform md:translate-x-[-8px] w-4 h-4 rounded-full bg-blue-700 shadow-md"></div>
+                      <div :class="['md:w-1/2', index % 2 === 0 ? 'md:pl-10' : 'md:pr-10']"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </template>
-
             <div v-if="!expandedArchitecture" class="text-center py-12 text-gray-500">
               <p class="text-lg">请选择上方的架构查看详细OTA升级历史</p>
             </div>
@@ -1066,11 +832,7 @@ const barOption = computed(() => {
             </div>
             <div class="p-6 md:p-8">
               <div class="h-[400px] relative">
-                <v-chart
-                    class="w-full h-full"
-                    :option="barOption"
-                    autoresize
-                />
+                <v-chart class="w-full h-full" :option="barOption" autoresize />
                 <div class="mt-4 text-xs text-gray-500 italic">
                   数据来源：吉利官方公布的OTA更新计划及历史数据整理
                 </div>
@@ -1131,21 +893,13 @@ const barOption = computed(() => {
           </div>
 
           <div class="space-y-8">
-            <div
-                v-for="(periodData, index) in futurePlans"
-                :key="index"
-                class="bg-white rounded-xl shadow-lg overflow-hidden"
-            >
+            <div v-for="(periodData, index) in futurePlans" :key="index" class="bg-white rounded-xl shadow-lg overflow-hidden">
               <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4">
                 <h3 class="text-xl font-bold text-white">{{ periodData.period }}</h3>
               </div>
               <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div
-                      v-for="(plan, planIndex) in periodData.plans"
-                      :key="planIndex"
-                      class="bg-gray-50 p-5 rounded-lg"
-                  >
+                  <div v-for="(plan, planIndex) in periodData.plans" :key="planIndex" class="bg-gray-50 p-5 rounded-lg">
                     <h4 class="text-lg font-semibold mb-2">{{ plan.title }}</h4>
                     <p class="text-gray-600">{{ plan.desc }}</p>
                   </div>
@@ -1171,15 +925,9 @@ const barOption = computed(() => {
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <div
-                v-for="(trend, index) in evolutionTrends"
-                :key="index"
-                class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-600"
-            >
+            <div v-for="(trend, index) in evolutionTrends" :key="index" class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-600">
               <div class="flex items-center mb-4">
-                <div
-                    class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-4"
-                >
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-4">
                   <component :is="trend.icon" :size="24" />
                 </div>
                 <h3 class="text-xl font-bold">{{ trend.title }}</h3>
@@ -1197,33 +945,17 @@ const barOption = computed(() => {
 
           <p class="text-sm opacity-80">注：功能上线时间因技术验证和法规审批可能调整，实际体验以官方推送为准。</p>
         </section>
+
       </Transition>
     </main>
 
-    <div
-        class="fixed z-30"
-        :style="filterStyle"
-    >
-      <div
-          ref="tabsContainer"
-          class="floating-filter-container"
-      >
-        <div class="active-tab-indicator" :style="indicatorStyle"></div>
+    <FloatingTabSelector
+        v-model="activeTab"
+        :tabs="analysisTabs"
+        footer-id="page-footer"
+    />
 
-        <button
-            v-for="tab in analysisTabs"
-            :key="tab.id"
-            :ref="el => setTabRef(el, tab.id)"
-            @click="activeTab = tab.id"
-            class="tab-link"
-            :class="{ 'active': activeTab === tab.id }"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
-    </div>
-
-    <footer ref="footerRef" class="bg-gray-900 text-white py-12 mt-16">
+    <footer id="page-footer" class="bg-gray-900 text-white py-12 mt-16">
       <div class="container mx-auto px-4">
         <div class="text-center">
           <h2 class="text-2xl font-bold mb-4">吉利千里浩瀚智驾解决方案</h2>
@@ -1236,59 +968,13 @@ const barOption = computed(() => {
 </template>
 
 <style scoped>
-/* 字体和 'no-scrollbar' 样式保持不变
-*/
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
 }
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* v-if 切换的淡入淡出动画
-*/
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter-from,
-.fade-leave-to {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
-}
-
-/* =========== (改动) 悬浮筛选器容器 ===========
-*/
-.floating-filter-container {
-  @apply relative overflow-hidden flex flex-col sm:flex-row sm:items-center bg-gray-100/80 backdrop-blur-md rounded-lg sm:rounded-full shadow-lg p-1.5 transition-all duration-300;
-}
-
-/* =========== (新增) 动画滑块样式 ===========
-*/
-.active-tab-indicator {
-  @apply absolute top-0 left-0 bg-white rounded-lg sm:rounded-full shadow-md transition-transform duration-300 ease-in-out;
-}
-
-/* =========== (改动) 筛选器按钮样式 ===========
-*/
-.tab-link {
-  /* (改动) 添加 relative, z-10, bg-transparent */
-  @apply relative z-10 flex items-center justify-center sm:justify-start px-5 py-2 rounded-lg sm:rounded-full text-base font-semibold text-gray-700 transition-colors duration-300 whitespace-nowrap bg-transparent;
-}
-
-.tab-link.active {
-  /* (改动) 只改变字体颜色，背景由滑块提供 */
-  @apply text-blue-600;
 }
 </style>
