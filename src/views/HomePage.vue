@@ -6,6 +6,7 @@ import RegulationsCard from '../components/cards/RegulationsCard.vue';
 import OverseasMapCard from '../components/cards/OverseasMapCard.vue';
 import NewReleaseCard from '../components/cards/NewReleaseCard.vue';
 import InsightReportCard from '../components/cards/InsightReportCard.vue'; // 1. 导入新卡片
+import Footer from '../components/Footer.vue';
 </script>
 
 <template>
@@ -16,6 +17,8 @@ import InsightReportCard from '../components/cards/InsightReportCard.vue'; // 1.
       <NewReleaseCard />
       <RegulationsCard />
       <OverseasMapCard />
-      <InsightReportCard /> </div>
+      <InsightReportCard />
+    </div>
+    <Footer />
   </main>
 </template>

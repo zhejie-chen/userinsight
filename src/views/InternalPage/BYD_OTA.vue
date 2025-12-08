@@ -12,6 +12,8 @@ import {
   Calendar,
   RefreshCw,
   Star,
+  Zap,
+  Check,
 } from "lucide-vue-next";
 
 // --- 状态定义 ---
@@ -444,6 +446,16 @@ const tabs = [
                               针对施工路段、散落障碍物等场景，提前识别并选择绕行或减速刹停方案。
                             </p>
                           </div>
+                          <div
+                              class="p-3 rounded-lg bg-white border border-blue-200"
+                          >
+                            <h5 class="font-medium text-blue-700 mb-1">
+                              大车智慧礼让
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              超越大车时自动向远离大车方向避让，提升安全性。
+                            </p>
+                          </div>
                         </div>
                       </div>
 
@@ -659,6 +671,16 @@ const tabs = [
                               支持自由选择泊入方式，车头泊入后可车尾泊出，解决后备箱开启问题
                             </p>
                           </div>
+                          <div
+                              class="p-4 rounded-lg bg-white border border-green-200"
+                          >
+                            <h5 class="font-medium text-green-700 mb-2">
+                              窄车位自动收后视镜
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              窄车位泊入时自动折叠后视镜，泊出后自动展开，降低刮蹭风险
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div
@@ -694,6 +716,16 @@ const tabs = [
                               根据实时车流智能调节车速，避免断崖式限速，提升通行效率
                             </p>
                           </div>
+                          <div
+                              class="p-4 rounded-lg bg-white border border-red-200"
+                          >
+                            <h5 class="font-medium text-red-700 mb-2">
+                              AEB性能提升
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              将AEB自动紧急制动激活速度上限提升至130km/h，感知更灵敏
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -714,6 +746,45 @@ const tabs = [
                       <p class="text-gray-700">
                         比亚迪承诺：在中国市场，对所有天神之眼车辆在智能泊车场景下的安全及损失全面兜底，无论车辆是否在保，不问是否首任车主。
                       </p>
+                    </div>
+
+                    <div class="my-8">
+                        <div class="md:flex md:space-x-6 space-y-6 md:space-y-0">
+                            <div class="flex-1 p-6 rounded-xl bg-white border border-blue-100 shadow-sm transition-all hover:-translate-y-1">
+                                <h4 class="text-lg font-semibold text-blue-800 mb-4">升级策略分析：小步快跑</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                            <span class="text-xs font-bold text-blue-600">1</span>
+                                        </div>
+                                        <p class="text-gray-700">采用"高频次、小步快跑"的迭代策略，保持每月至少一次大版本更新</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                            <span class="text-xs font-bold text-blue-600">2</span>
+                                        </div>
+                                        <p class="text-gray-700">优先解决用户高频痛点（如泊车、AEB误触发），再逐步释放高阶功能</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex-1 p-6 rounded-xl bg-white border border-indigo-100 shadow-sm transition-all hover:-translate-y-1">
+                                <h4 class="text-lg font-semibold text-indigo-800 mb-4">全系标配的生态价值</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                            <Star class="h-3 w-3 text-blue-600" />
+                                        </div>
+                                        <p class="text-gray-700">通过海量装车（预计2025年超200万辆）获取海量数据，反哺算法训练</p>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                            <Star class="h-3 w-3 text-blue-600" />
+                                        </div>
+                                        <p class="text-gray-700">入门级车型（如海鸥）虽然价格较低，但同样在首批升级范围内</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <div
@@ -832,6 +903,16 @@ const tabs = [
                               下车泊车时车外语音播报提醒，遇到行人会提示"正在泊车，请让一下"
                             </p>
                           </div>
+                          <div
+                              class="p-4 rounded-lg bg-white border border-red-200"
+                          >
+                            <h5 class="font-medium text-green-700 mb-2">
+                              荣耀车联支持
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              新增荣耀车联，适配Magic系列机型，支持导航和应用流转
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div
@@ -864,6 +945,16 @@ const tabs = [
                             </h5>
                             <p class="text-sm text-gray-600">
                               途经点数量上限从3个增加至15个，支持排序和编辑
+                            </p>
+                          </div>
+                          <div
+                              class="p-4 rounded-lg bg-white border border-orange-200"
+                          >
+                            <h5 class="font-medium text-green-700 mb-2">
+                              AI全场景音色
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              新增9种智能语音播报音色，包括机甲先锋、高冷御姐等
                             </p>
                           </div>
                         </div>
@@ -913,6 +1004,18 @@ const tabs = [
                         <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
                         <span class="text-gray-700">红绿灯启停控制</span>
                       </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">复杂路口通行</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">自动超车功能</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">博弈变道能力</span>
+                      </li>
                     </ul>
                   </div>
                   <div
@@ -942,6 +1045,18 @@ const tabs = [
                       <li class="flex items-start">
                         <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
                         <span class="text-gray-700">无保护左转</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">环岛通行能力</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">自动绕行障碍物</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">交通参与者识别</span>
                       </li>
                     </ul>
                   </div>
@@ -973,6 +1088,18 @@ const tabs = [
                         <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
                         <span class="text-gray-700">算力平台升级</span>
                       </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">多传感器融合</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">V2X车路协同</span>
+                      </li>
+                      <li class="flex items-start">
+                        <Star class="h-4 w-4 text-yellow-400 mt-1 mr-2" />
+                        <span class="text-gray-700">端到端控制</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -999,8 +1126,28 @@ const tabs = [
                   </div>
                   <div class="space-y-4 text-gray-700">
                     <p class="leading-relaxed">
-                      比亚迪为天神之眼C预埋的重要功能，有望缩小与天神之眼B的功能差距。适用于上下班通勤等高频出行路线场景。
+                      比亚迪为天神之眼C预埋的重要功能，有望缩小与天神之眼B的功能差距。适用于上下班通勤等高频出行路线场景。该功能可让车辆在城市固定线路实现自动加减速、避障、红绿灯识别等类似城市NOA的功能，完成红绿灯启停、复杂路口通行、自动超车、全场景绕行礼让、博弈变道等操作。
                     </p>
+                    <p class="leading-relaxed mt-4">
+                      用户可通过创建路线功能，将上下班的路程保存到车机系统中，在后续使用时一键开启领航。系统会按照预设路线进行智能驾驶，包括自动通过红绿灯、进入相应车道、自主变道、提前减速通过坑洼路段等。
+                    </p>
+                  </div>
+                  <div class="mt-8 grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
+                        <p class="text-blue-700 font-medium text-sm">红绿灯启停</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
+                        <p class="text-blue-700 font-medium text-sm">复杂路口通行</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
+                        <p class="text-blue-700 font-medium text-sm">自动超车</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
+                        <p class="text-blue-700 font-medium text-sm">绕行礼让</p>
+                    </div>
+                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
+                        <p class="text-blue-700 font-medium text-sm">博弈变道</p>
+                    </div>
                   </div>
                   <div class="mt-8 flex items-center justify-between">
                     <div class="flex items-center">
@@ -1010,6 +1157,153 @@ const tabs = [
                       </p>
                     </div>
                   </div>
+
+              <div class="mb-12">
+                <div class="flex items-center mb-6">
+                  <div class="h-8 w-1 bg-blue-600 mr-3 rounded-full"></div>
+                  <h3 class="text-2xl md:text-3xl font-bold">中长期发展方向</h3>
+                </div>
+                <p class="text-lg mb-8 leading-relaxed text-gray-700">
+                  基于比亚迪天神之眼智能驾驶平台的发展轨迹，可以推测未来的功能下放趋势与技术演进方向：
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div
+                    class="p-6 rounded-2xl bg-gradient-to-br from-white to-blue-50 border border-blue-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div class="flex items-center mb-5">
+                      <div class="p-3 rounded-lg bg-blue-100 mr-4">
+                        <Eye class="h-7 w-7 text-blue-600" />
+                      </div>
+                      <h4 class="text-xl font-semibold text-blue-800">
+                        感知能力提升
+                      </h4>
+                    </div>
+                    <ul class="space-y-4">
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-blue-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          多传感器融合优化：进一步优化摄像头、毫米波雷达和超声波雷达的融合算法
+                        </p>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-blue-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          激光雷达技术下放：随着激光雷达成本的下降，激光雷达技术逐步下放至天神之眼C平台
+                        </p>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-blue-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          天神之眼B和C的功能差异将进一步缩小，主要差异可能集中在硬件冗余和算力上
+                        </p>
+                      </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-blue-100"></div>
+                  </div>
+                  <div
+                    class="p-6 rounded-2xl bg-gradient-to-br from-white to-indigo-50 border border-indigo-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div class="flex items-center mb-5">
+                      <div class="p-3 rounded-lg bg-indigo-100 mr-4">
+                        <Cpu class="h-7 w-7 text-indigo-600" />
+                      </div>
+                      <h4 class="text-xl font-semibold text-indigo-800">
+                        算法与AI能力进化
+                      </h4>
+                    </div>
+                    <ul class="space-y-4">
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-indigo-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          大模型能力增强：持续提升端到端大模型的能力，使其能够处理更复杂的驾驶场景和边缘案例
+                        </p>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-indigo-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          个性化学习：引入更多个性化学习机制，使系统能够根据不同驾驶员的习惯和偏好调整驾驶风格
+                        </p>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-indigo-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          V2X技术融合：基于V2X技术的协同驾驶功能将成为新的差异化方向
+                        </p>
+                      </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-indigo-100"></div>
+                  </div>
+                  <div
+                    class="p-6 rounded-2xl bg-gradient-to-br from-white to-green-50 border border-green-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  >
+                    <div class="flex items-center mb-5">
+                      <div class="p-3 rounded-lg bg-green-100 mr-4">
+                        <Zap class="h-7 w-7 text-green-600" />
+                      </div>
+                      <h4 class="text-xl font-semibold text-green-800">
+                        生态系统扩展
+                      </h4>
+                    </div>
+                    <ul class="space-y-4">
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-green-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          跨平台互联：与更多智能家居、智能交通系统实现无缝对接
+                        </p>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-green-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          开发者平台开放：开放部分API接口，允许第三方开发者开发相关应用和功能
+                        </p>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
+                        >
+                          <Check class="h-3 w-3 text-green-600" />
+                        </div>
+                        <p class="text-gray-700">
+                          安全体系升级：引入更高级的安全防护机制，确保智能驾驶系统的安全性和可靠性
+                        </p>
+                      </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-green-100"></div>
+                  </div>
+                </div>
+              </div>
                 </div>
               </div>
             </div>
