@@ -3,6 +3,7 @@ import { onMounted, onUnmounted } from 'vue';
 import { getAllCarsForTimeline } from '@/services/api/cars.js';
 import html2canvas from 'html2canvas';
 import BackToHomeLogo from '../components/BackToHomeLogo.vue';
+import Footer from "@/components/Footer.vue";
 
 // [核心修复] 以下所有JS代码均已恢复至你最初的、能正常工作的版本。
 

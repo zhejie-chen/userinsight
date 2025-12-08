@@ -7,6 +7,7 @@ import ConferenceReportCard from '@/components/common/ConferenceReportCard.vue';
 import DetailModal from '@/components/common/DetailModal.vue';
 // 3. 导入新的 API
 import { getInsightReports, getInsightReportImages } from '@/services/api/reports.js';
+import Footer from "@/components/Footer.vue";
 
 // 4. 定义从路由接收的 prop
 const props = defineProps({
@@ -345,7 +346,7 @@ function onLeave(el, done) {
         :conference="selectedConference"
         @close="closeConferenceModal"
     />
-
+    <Footer />
   </div>
 </template>
 

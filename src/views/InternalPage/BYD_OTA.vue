@@ -1,4 +1,6 @@
-<script setup>
+file_path = 'zhejie-chen/userinsight/userinsight-2fe0921abbe24ef102679a7df2950e57e7197c31/src/views/InternalPage/BYD_OTA.vue'
+
+content = """<script setup>
 import { ref } from "vue";
 import FloatingTabSelector from "@/components/common/FloatingTabSelector.vue";
 import {
@@ -14,7 +16,9 @@ import {
   Star,
   Zap,
   Check,
+  Settings,
 } from "lucide-vue-next";
+import Footer from "@/components/Footer.vue";
 
 // --- 状态定义 ---
 const activeTab = ref("overview");
@@ -453,7 +457,7 @@ const tabs = [
                               大车智慧礼让
                             </h5>
                             <p class="text-sm text-gray-600">
-                              超越大车时自动向远离大车方向避让，提升安全性。
+                              识别相邻车道大型车辆时，自动在车道内偏移15-20cm，增大安全距离。
                             </p>
                           </div>
                         </div>
@@ -494,6 +498,16 @@ const tabs = [
                               用户可远程控制车辆自动泊入/泊出至指定位置。
                             </p>
                           </div>
+                          <div
+                              class="p-3 rounded-lg bg-white border border-green-200"
+                          >
+                            <h5 class="font-medium text-green-700 mb-1">
+                              泊车安全兜底
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              因系统异常导致的泊车碰撞损失由比亚迪承担。
+                            </p>
+                          </div>
                         </div>
                       </div>
 
@@ -509,7 +523,7 @@ const tabs = [
                           <h4 class="text-xl font-semibold">主动安全</h4>
                         </div>
                         <p class="text-gray-600 mb-4">
-                          构建起覆盖行车、泊车全场景的主动安全体系，核心功能聚焦"防碰撞、防失误"。
+                          构建起覆盖行车、泊车全场景的主动安全体系，核心功能聚焦"防碰撞、防失误"两大目标。
                         </p>
                         <div class="space-y-3">
                           <div
@@ -530,6 +544,26 @@ const tabs = [
                             </h5>
                             <p class="text-sm text-gray-600">
                               实现侧后方50米范围内来车监测，变道时存在风险即触发预警。
+                            </p>
+                          </div>
+                          <div
+                              class="p-3 rounded-lg bg-white border border-red-200"
+                          >
+                            <h5 class="font-medium text-red-700 mb-1">
+                              驾驶员状态监测
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              实时识别驾驶员疲劳、分心状态，触发预警提醒。
+                            </p>
+                          </div>
+                          <div
+                              class="p-3 rounded-lg bg-white border border-red-200"
+                          >
+                            <h5 class="font-medium text-red-700 mb-1">
+                              低速碰撞预警
+                            </h5>
+                            <p class="text-sm text-gray-600">
+                              泊车或低速行驶时，监测近距离障碍物，提前触发预警并辅助制动。
                             </p>
                           </div>
                         </div>
@@ -674,11 +708,11 @@ const tabs = [
                           <div
                               class="p-4 rounded-lg bg-white border border-green-200"
                           >
-                            <h5 class="font-medium text-green-700 mb-2">
+                            <h5 class="font-medium text-orange-700 mb-2">
                               窄车位自动收后视镜
                             </h5>
                             <p class="text-sm text-gray-600">
-                              窄车位泊入时自动折叠后视镜，泊出后自动展开，降低刮蹭风险
+                              窄车位泊入时后视镜自动折叠，有效避免剐蹭，提升泊车安全感
                             </p>
                           </div>
                         </div>
@@ -719,11 +753,11 @@ const tabs = [
                           <div
                               class="p-4 rounded-lg bg-white border border-red-200"
                           >
-                            <h5 class="font-medium text-red-700 mb-2">
+                            <h5 class="font-medium text-green-700 mb-2">
                               AEB性能提升
                             </h5>
                             <p class="text-sm text-gray-600">
-                              将AEB自动紧急制动激活速度上限提升至130km/h，感知更灵敏
+                              AEB工作速度提升至100km/h稳定刹停，夜间80km/h可识别两轮车
                             </p>
                           </div>
                         </div>
@@ -748,43 +782,118 @@ const tabs = [
                       </p>
                     </div>
 
-                    <div class="my-8">
-                        <div class="md:flex md:space-x-6 space-y-6 md:space-y-0">
-                            <div class="flex-1 p-6 rounded-xl bg-white border border-blue-100 shadow-sm transition-all hover:-translate-y-1">
-                                <h4 class="text-lg font-semibold text-blue-800 mb-4">升级策略分析：小步快跑</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                            <span class="text-xs font-bold text-blue-600">1</span>
-                                        </div>
-                                        <p class="text-gray-700">采用"高频次、小步快跑"的迭代策略，保持每月至少一次大版本更新</p>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                            <span class="text-xs font-bold text-blue-600">2</span>
-                                        </div>
-                                        <p class="text-gray-700">优先解决用户高频痛点（如泊车、AEB误触发），再逐步释放高阶功能</p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="flex-1 p-6 rounded-xl bg-white border border-indigo-100 shadow-sm transition-all hover:-translate-y-1">
-                                <h4 class="text-lg font-semibold text-indigo-800 mb-4">全系标配的生态价值</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start">
-                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                            <Star class="h-3 w-3 text-blue-600" />
-                                        </div>
-                                        <p class="text-gray-700">通过海量装车（预计2025年超200万辆）获取海量数据，反哺算法训练</p>
-                                    </li>
-                                    <li class="flex items-start">
-                                        <div class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                            <Star class="h-3 w-3 text-blue-600" />
-                                        </div>
-                                        <p class="text-gray-700">入门级车型（如海鸥）虽然价格较低，但同样在首批升级范围内</p>
-                                    </li>
-                                </ul>
-                            </div>
+                    <div
+                        class="mt-8 p-6 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 shadow-sm"
+                    >
+                      <div class="flex items-center mb-6">
+                        <div class="p-3 rounded-lg bg-blue-100 mr-4">
+                          <Settings class="h-6 w-6 text-blue-600" />
                         </div>
+                        <h4 class="text-xl font-bold text-gray-800">
+                          升级策略分析
+                        </h4>
+                      </div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div
+                            class="p-5 rounded-xl bg-white border border-blue-200 shadow-sm hover:scale-[1.02] transition-transform duration-300"
+                        >
+                          <h5 class="text-lg font-semibold text-blue-700 mb-4">
+                            1. 按品牌/系列分批次
+                          </h5>
+                          <ul class="space-y-3">
+                            <li class="flex items-start">
+                              <div
+                                  class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                              >
+                                <span class="text-xs font-bold text-blue-600"
+                                >1</span
+                                >
+                              </div>
+                              <p class="text-gray-700">
+                                首先升级王朝网车型（<span
+                                  class="text-blue-600 font-medium"
+                              >7月9日启动</span
+                              >）
+                              </p>
+                            </li>
+                            <li class="flex items-start">
+                              <div
+                                  class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                              >
+                                <span class="text-xs font-bold text-blue-600"
+                                >2</span
+                                >
+                              </div>
+                              <p class="text-gray-700">
+                                随后升级海洋网车型（<span
+                                  class="text-blue-600 font-medium"
+                              >7月14日启动</span
+                              >）
+                              </p>
+                            </li>
+                            <li class="flex items-start">
+                              <div
+                                  class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                              >
+                                <span class="text-xs font-bold text-blue-600"
+                                >3</span
+                                >
+                              </div>
+                              <p class="text-gray-700">
+                                最后针对热门车型（如宋系列）进行专项升级（<span
+                                  class="text-blue-600 font-medium"
+                              >8月16日</span
+                              >）
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                        <div
+                            class="p-5 rounded-xl bg-white border border-blue-200 shadow-sm hover:scale-[1.02] transition-transform duration-300"
+                        >
+                          <h5 class="text-lg font-semibold text-blue-700 mb-4">
+                            2. 按车型销量优先级
+                          </h5>
+                          <ul class="space-y-3">
+                            <li class="flex items-start">
+                              <div
+                                  class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                              >
+                                <span class="text-xs font-bold text-blue-600"
+                                >★</span
+                                >
+                              </div>
+                              <p class="text-gray-700">
+                                销量较高的宋系列、秦系列优先获得升级
+                              </p>
+                            </li>
+                            <li class="flex items-start">
+                              <div
+                                  class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                              >
+                                <span class="text-xs font-bold text-blue-600"
+                                >★</span
+                                >
+                              </div>
+                              <p class="text-gray-700">
+                                新上市车型（如夏）也获得优先升级待遇
+                              </p>
+                            </li>
+                            <li class="flex items-start">
+                              <div
+                                  class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                              >
+                                <span class="text-xs font-bold text-blue-600"
+                                >★</span
+                                >
+                              </div>
+                              <p class="text-gray-700">
+                                入门级车型（如海鸥）虽然价格较低，但同样在首批升级范围内
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
 
                     <div
@@ -827,7 +936,7 @@ const tabs = [
                               >
                             </div>
                             <p class="text-gray-700 leading-relaxed">
-                              比亚迪王朝网秦宋元汉唐夏6大车系共17款车型开启OTA升级
+                              比亚迪王朝网秦宋元汉唐夏6大车系共17款车型开启OTA升级，天神之眼开启最大规模升级
                             </p>
                           </div>
                         </div>
@@ -852,6 +961,109 @@ const tabs = [
                             </div>
                             <p class="text-gray-700 leading-relaxed">
                               比亚迪海洋网宣布13款车型将迎来全面OTA升级
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                            class="relative mb-8 transition-all hover:-translate-y-1"
+                        >
+                          <div
+                              class="absolute -left-[48px] flex items-center justify-center"
+                          >
+                            <div
+                                class="h-5 w-5 rounded-full bg-blue-400 border-4 border-white shadow-md"
+                            ></div>
+                          </div>
+                          <div
+                              class="bg-white p-5 rounded-xl shadow-md border border-blue-100"
+                          >
+                            <div class="flex items-center mb-2">
+                              <span
+                                  class="text-sm font-medium px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                              >7月16日</span
+                              >
+                            </div>
+                            <p class="text-gray-700 leading-relaxed">
+                              比亚迪海洋网正式推送OTA升级，覆盖泊车、行车、安全三大版块10余项功能
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                            class="relative mb-8 transition-all hover:-translate-y-1"
+                        >
+                          <div
+                              class="absolute -left-[48px] flex items-center justify-center"
+                          >
+                            <div
+                                class="h-5 w-5 rounded-full bg-blue-400 border-4 border-white shadow-md"
+                            ></div>
+                          </div>
+                          <div
+                              class="bg-white p-5 rounded-xl shadow-md border border-blue-100"
+                          >
+                            <div class="flex items-center mb-2">
+                              <span
+                                  class="text-sm font-medium px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                              >7月16日</span
+                              >
+                              <span class="ml-3 text-sm text-gray-500"
+                              >重大突破</span
+                              >
+                            </div>
+                            <p class="text-gray-700 leading-relaxed">
+                              比亚迪宣布"天神之眼"用户突破百万里程碑
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                            class="relative mb-8 transition-all hover:-translate-y-1"
+                        >
+                          <div
+                              class="absolute -left-[48px] flex items-center justify-center"
+                          >
+                            <div
+                                class="h-5 w-5 rounded-full bg-blue-500 border-4 border-white shadow-md"
+                            ></div>
+                          </div>
+                          <div
+                              class="bg-white p-5 rounded-xl shadow-md border border-blue-100"
+                          >
+                            <div class="flex items-center mb-2">
+                              <span
+                                  class="text-sm font-medium px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                              >8月8日</span
+                              >
+                              <span class="ml-3 text-sm text-gray-500"
+                              >项目完成</span
+                              >
+                            </div>
+                            <p class="text-gray-700 leading-relaxed">
+                              比亚迪宣布全部车型OTA推送完毕，首次大规模OTA推送结束
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                            class="relative transition-all hover:-translate-y-1"
+                        >
+                          <div
+                              class="absolute -left-[48px] flex items-center justify-center"
+                          >
+                            <div
+                                class="h-5 w-5 rounded-full bg-blue-400 border-4 border-white shadow-md"
+                            ></div>
+                          </div>
+                          <div
+                              class="bg-white p-5 rounded-xl shadow-md border border-blue-100"
+                          >
+                            <div class="flex items-center mb-2">
+                              <span
+                                  class="text-sm font-medium px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                              >8月16日</span
+                              >
+                            </div>
+                            <p class="text-gray-700 leading-relaxed">
+                              比亚迪针对宋L DM-i和宋Pro
+                              DM-i搭载天神之眼的车型补充推送OTA升级
                             </p>
                           </div>
                         </div>
@@ -1116,7 +1328,9 @@ const tabs = [
                 <div
                     class="p-8 rounded-2xl bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-50 border border-blue-200 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
-                  <div class="flex flex-col md:flex-row md:items-center gap-6 mb-6">
+                  <div
+                      class="flex flex-col md:flex-row md:items-center gap-6 mb-6"
+                  >
                     <h4
                         class="text-2xl font-bold text-blue-800 mb-2"
                         style="font-size: 22px"
@@ -1133,42 +1347,68 @@ const tabs = [
                     </p>
                   </div>
                   <div class="mt-8 grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
-                        <p class="text-blue-700 font-medium text-sm">红绿灯启停</p>
+                    <div
+                        class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm"
+                    >
+                      <p class="text-blue-700 font-medium text-sm">
+                        红绿灯启停
+                      </p>
                     </div>
-                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
-                        <p class="text-blue-700 font-medium text-sm">复杂路口通行</p>
+                    <div
+                        class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm"
+                    >
+                      <p class="text-blue-700 font-medium text-sm">
+                        复杂路口通行
+                      </p>
                     </div>
-                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
-                        <p class="text-blue-700 font-medium text-sm">自动超车</p>
+                    <div
+                        class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm"
+                    >
+                      <p class="text-blue-700 font-medium text-sm">
+                        自动超车
+                      </p>
                     </div>
-                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
-                        <p class="text-blue-700 font-medium text-sm">绕行礼让</p>
+                    <div
+                        class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm"
+                    >
+                      <p class="text-blue-700 font-medium text-sm">
+                        绕行礼让
+                      </p>
                     </div>
-                    <div class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm">
-                        <p class="text-blue-700 font-medium text-sm">博弈变道</p>
+                    <div
+                        class="p-3 rounded-lg bg-white/80 border border-blue-100 text-center shadow-sm"
+                    >
+                      <p class="text-blue-700 font-medium text-sm">
+                        博弈变道
+                      </p>
                     </div>
                   </div>
                   <div class="mt-8 flex items-center justify-between">
                     <div class="flex items-center">
-                      <div class="h-2 w-2 rounded-full bg-blue-600 mr-2"></div>
+                      <div
+                          class="h-2 w-2 rounded-full bg-blue-600 mr-2"
+                      ></div>
                       <p class="text-sm text-blue-600">
                         预计推送时间：2025年12月
                       </p>
                     </div>
                   </div>
+                </div>
+              </div>
 
               <div class="mb-12">
                 <div class="flex items-center mb-6">
                   <div class="h-8 w-1 bg-blue-600 mr-3 rounded-full"></div>
-                  <h3 class="text-2xl md:text-3xl font-bold">中长期发展方向</h3>
+                  <h3 class="text-2xl md:text-3xl font-bold">
+                    中长期发展方向
+                  </h3>
                 </div>
                 <p class="text-lg mb-8 leading-relaxed text-gray-700">
                   基于比亚迪天神之眼智能驾驶平台的发展轨迹，可以推测未来的功能下放趋势与技术演进方向：
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div
-                    class="p-6 rounded-2xl bg-gradient-to-br from-white to-blue-50 border border-blue-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                      class="p-6 rounded-2xl bg-gradient-to-br from-white to-blue-50 border border-blue-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                   >
                     <div class="flex items-center mb-5">
                       <div class="p-3 rounded-lg bg-blue-100 mr-4">
@@ -1181,7 +1421,7 @@ const tabs = [
                     <ul class="space-y-4">
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-blue-600" />
                         </div>
@@ -1191,7 +1431,7 @@ const tabs = [
                       </li>
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-blue-600" />
                         </div>
@@ -1201,7 +1441,7 @@ const tabs = [
                       </li>
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-blue-600" />
                         </div>
@@ -1213,7 +1453,7 @@ const tabs = [
                     <div class="mt-6 pt-4 border-t border-blue-100"></div>
                   </div>
                   <div
-                    class="p-6 rounded-2xl bg-gradient-to-br from-white to-indigo-50 border border-indigo-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                      class="p-6 rounded-2xl bg-gradient-to-br from-white to-indigo-50 border border-indigo-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                   >
                     <div class="flex items-center mb-5">
                       <div class="p-3 rounded-lg bg-indigo-100 mr-4">
@@ -1226,7 +1466,7 @@ const tabs = [
                     <ul class="space-y-4">
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-indigo-600" />
                         </div>
@@ -1236,7 +1476,7 @@ const tabs = [
                       </li>
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-indigo-600" />
                         </div>
@@ -1246,7 +1486,7 @@ const tabs = [
                       </li>
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-indigo-600" />
                         </div>
@@ -1258,7 +1498,7 @@ const tabs = [
                     <div class="mt-6 pt-4 border-t border-indigo-100"></div>
                   </div>
                   <div
-                    class="p-6 rounded-2xl bg-gradient-to-br from-white to-green-50 border border-green-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                      class="p-6 rounded-2xl bg-gradient-to-br from-white to-green-50 border border-green-100 shadow-md h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                   >
                     <div class="flex items-center mb-5">
                       <div class="p-3 rounded-lg bg-green-100 mr-4">
@@ -1271,7 +1511,7 @@ const tabs = [
                     <ul class="space-y-4">
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-green-600" />
                         </div>
@@ -1281,7 +1521,7 @@ const tabs = [
                       </li>
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-green-600" />
                         </div>
@@ -1291,7 +1531,7 @@ const tabs = [
                       </li>
                       <li class="flex items-start">
                         <div
-                          class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
+                            class="mt-1 mr-3 h-5 w-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
                         >
                           <Check class="h-3 w-3 text-green-600" />
                         </div>
@@ -1302,8 +1542,6 @@ const tabs = [
                     </ul>
                     <div class="mt-6 pt-4 border-t border-green-100"></div>
                   </div>
-                </div>
-              </div>
                 </div>
               </div>
             </div>
@@ -1317,7 +1555,7 @@ const tabs = [
         :tabs="tabs"
         footer-id="page-footer"
     />
-
+    <Footer />
     <footer
         id="page-footer"
         class="mt-20 py-10 bg-gray-100 border-t border-gray-200"
@@ -1347,3 +1585,6 @@ const tabs = [
   opacity: 0;
 }
 </style>
+"""
+
+fs.write(file_path, content)

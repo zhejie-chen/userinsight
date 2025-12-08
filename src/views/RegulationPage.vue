@@ -102,21 +102,26 @@ function handleCountryChange(event) {
     return;
   }
 
-  // [目录修复] 当切换国家时，重置父容器的flex居中样式，以保证目录能垂直排列
+  // [关键修复] 切换国家时，确保容器是 block 布局，以便 PDF 页面从上到下排列
   if (pdfContainer.value) {
-    pdfContainer.value.style.display = 'block'; // 改回 block
-    pdfContainer.value.style.alignItems = '';
-    pdfContainer.value.style.justifyContent = '';
+    pdfContainer.value.style.display = 'block';
   }
   if (sidebarContent.value) {
-    sidebarContent.value.style.display = 'block'; // 改回 block
-    sidebarContent.value.style.alignItems = '';
-    sidebarContent.value.style.justifyContent = '';
+    sidebarContent.value.style.display = 'block';
   }
 
   showLoading();
   currentCountry = country;
   if (comparisonBtnContainer.value) comparisonBtnContainer.value.style.display = 'block';
+
+  // 目录加载中的状态
+  if (sidebarContent.value) {
+    sidebarContent.value.innerHTML = `
+      <div class="bento-center-wrapper">
+        <div class="apple-loader"></div>
+        <p class="bento-text-secondary mt-3">正在获取目录...</p>
+      </div>`;
+  }
 
   Promise.all([loadTOC(country), getPDFUrl(country)])
       .then(([toc, pdfUrl]) => {
@@ -124,7 +129,12 @@ function handleCountryChange(event) {
         if (pdfUrl) {
           loadPDF(pdfUrl).finally(hideLoading);
         } else {
-          if (pdfContainer.value) pdfContainer.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-exclamation-triangle"></i></div><h3 class="text-xl font-medium mb-2">未找到PDF文件</h3></div>`;
+          // PDF加载失败的状态
+          if (pdfContainer.value) pdfContainer.value.innerHTML = `
+            <div class="bento-center-wrapper">
+                <div class="bento-icon-box error"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3 class="bento-title">未找到PDF文件</h3>
+            </div>`;
           hideLoading();
         }
       });
@@ -136,11 +146,8 @@ async function openComparisonModal() {
     return;
   }
   isModalActive.value = true;
-
   await nextTick();
-
   renderComparisonTable(currentCountry);
-
   document.querySelectorAll('#comparison-modal .filter-btn').forEach(button => {
     button.addEventListener('click', handleFilterClick);
   });
@@ -152,7 +159,6 @@ function closeComparisonModal() {
     button.removeEventListener('click', handleFilterClick);
   });
   closeBtn.value?.removeEventListener('click', closeComparisonModal);
-
   isModalActive.value = false;
 }
 
@@ -162,7 +168,6 @@ function handleFilterClick(event) {
   activeFilter = button.dataset.filter;
   filterButtons.forEach(btn => btn.classList.remove('active'));
   button.classList.add('active');
-
   if (currentCountry) {
     renderComparisonTable(currentCountry);
   }
@@ -173,20 +178,24 @@ function initPDFViewer() {
   if (pdfDoc) { pdfDoc.destroy(); pdfDoc = null; }
   if (countrySelector.value) countrySelector.value.value = 'default';
 
+  // [初始状态] 使用 bento-center-wrapper 内部居中，父容器设为 block 即可 (flex 也可以，但 block 更安全)
   if (pdfContainer.value) {
-    pdfContainer.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-file-pdf"></i></div><h3 class="text-xl font-medium mb-2">请在左侧下拉栏中选择对标国家</h3><p class="text-gray-500 mb-4">选择后将加载对应国家的PDF对比文档</p></div>`;
-    // [目录修复] 当显示placeholder时，恢复flex居中
-    pdfContainer.value.style.display = 'flex';
-    pdfContainer.value.style.alignItems = 'center';
-    pdfContainer.value.style.justifyContent = 'center';
+    pdfContainer.value.style.display = 'block';
+    pdfContainer.value.innerHTML = `
+        <div class="bento-center-wrapper">
+            <div class="bento-icon-box"><i class="fas fa-book-reader"></i></div>
+            <h3 class="bento-title">用户手册对标</h3>
+            <p class="bento-text-secondary">请在左侧选择国家以加载文档</p>
+        </div>`;
   }
 
   if (sidebarContent.value) {
-    sidebarContent.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-book"></i></div><h3 class="text-lg font-medium mb-2">请先选择国家</h3><p class="text-gray-500">选择后将显示对应目录</p></div>`;
-    // [目录修复] 当显示placeholder时，恢复flex居中
-    sidebarContent.value.style.display = 'flex';
-    sidebarContent.value.style.alignItems = 'center';
-    sidebarContent.value.style.justifyContent = 'center';
+    sidebarContent.value.style.display = 'block';
+    sidebarContent.value.innerHTML = `
+        <div class="bento-center-wrapper">
+            <div class="bento-icon-box small"><i class="fas fa-folder-open"></i></div>
+            <p class="bento-text-secondary">请选择国家查看目录</p>
+        </div>`;
   }
 
   if (comparisonBtnContainer.value) comparisonBtnContainer.value.style.display = 'none';
@@ -214,11 +223,11 @@ function renderTOC(toc) {
   if (!sidebarContent.value) return;
   sidebarContent.value.innerHTML = '';
   if (toc.length === 0) {
-    sidebarContent.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-folder-open"></i></div><h3 class="text-lg font-medium mb-2">暂无目录数据</h3></div>`;
-    // 如果没有目录数据，也要保持居中
-    sidebarContent.value.style.display = 'flex';
-    sidebarContent.value.style.alignItems = 'center';
-    sidebarContent.value.style.justifyContent = 'center';
+    sidebarContent.value.innerHTML = `
+        <div class="bento-center-wrapper">
+            <div class="bento-icon-box small"><i class="fas fa-inbox"></i></div>
+            <p class="bento-text-secondary">暂无目录数据</p>
+        </div>`;
     return;
   }
 
@@ -357,13 +366,24 @@ async function renderSinglePage(pageNum, container) {
 async function loadPDF(url) {
   try {
     if (pdfDoc) { await pdfDoc.destroy(); pdfDoc = null; }
-    if (pdfContainer.value) pdfContainer.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-spinner fa-spin"></i></div><h3 class="text-xl font-medium mb-2">加载文档中...</h3></div>`;
+    // PDF加载中的状态
+    if (pdfContainer.value) pdfContainer.value.innerHTML = `
+        <div class="bento-center-wrapper">
+            <div class="apple-loader large"></div>
+            <h3 class="bento-title mt-4">正在加载文档...</h3>
+        </div>`;
+
     const loadingTask = pdfjsLib.getDocument(url);
     pdfDoc = await loadingTask.promise;
     await renderPDF();
   } catch (error) {
     console.error('PDF加载失败:', error);
-    if(pdfContainer.value) pdfContainer.value.innerHTML = `<div class="page-placeholder"><div class="placeholder-icon"><i class="fas fa-exclamation-triangle"></i></div><h3 class="text-xl font-medium mb-2">PDF加载失败</h3></div>`;
+    if(pdfContainer.value) pdfContainer.value.innerHTML = `
+        <div class="bento-center-wrapper">
+            <div class="bento-icon-box error"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3 class="bento-title">PDF加载失败</h3>
+            <p class="bento-text-secondary">请检查网络连接后重试</p>
+        </div>`;
   }
 }
 
@@ -386,17 +406,12 @@ function showLoading() { if(loadingIndicator.value) loadingIndicator.value.style
 function hideLoading() { if(loadingIndicator.value) loadingIndicator.value.style.display = 'none'; }
 async function getPDFUrl(country) {
   try {
-    // 步骤 1: 正常获取json文件
     const response = await fetch('/pdf-versions.json');
     const versions = await response.json();
     const relativePath = versions[country]?.file || null;
-
-    // 步骤 2: 如果获取到了相对路径，则构建一个完整的绝对URL
     if (relativePath) {
-      // new URL() 会根据当前页面的源(origin)来安全地拼接URL
       return new URL(relativePath, window.location.origin).href;
     }
-
     return null;
   } catch (error) {
     console.error('获取PDF URL失败:', error);
@@ -487,8 +502,8 @@ function renderComparisonTable(country) {
       <div class="pdf-viewer-container">
         <div id="pdf-container" ref="pdfContainer"></div>
         <div class="loading-indicator" ref="loadingIndicator" style="display: none;">
-          <i class="fas fa-spinner fa-spin"></i>
-          <span>正在加载页面...</span>
+          <div class="apple-loader small"></div>
+          <span>正在跳转...</span>
         </div>
       </div>
     </div>
@@ -535,7 +550,10 @@ function renderComparisonTable(country) {
   height: calc(100vh - 44px);
   overflow: hidden;
 
-  --primary: #2563eb; --primary-dark: #1d4ed8; --light-bg: #f8fafc; --dark-text: #1e293b;
+  --primary: #0071e3; /* Apple Blue */
+  --primary-dark: #0077ed;
+  --light-bg: #f8fafc;
+  --dark-text: #1d1d1f;
   font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   color: var(--dark-text);
   background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
@@ -553,7 +571,6 @@ function renderComparisonTable(country) {
   min-height: 0;
 }
 
-/* [目录修复] 移除CSS中的display:flex，交由JS动态控制 */
 #pdf-container, .sidebar-content {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -571,6 +588,7 @@ function renderComparisonTable(country) {
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  position: relative;
 }
 
 .sidebar-header { padding: 20px; border-bottom: 1px solid #e2e8f0; }
@@ -581,76 +599,111 @@ function renderComparisonTable(country) {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
 }
-.country-selector select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
+.country-selector select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2); }
 .comparison-btn-top-container{ padding: 10px 20px; display: none; }
 .comparison-btn {
-  background: var(--primary); color: white; padding: 10px 12px; border-radius: 8px;
+  background: #f5f5f7; color: var(--primary); padding: 10px 12px; border-radius: 8px;
   border: none; font-weight: 500; cursor: pointer; transition: background 0.2s ease;
   font-size: 14px; display: flex; align-items: center; justify-content: center; width: 100%;
 }
-.comparison-btn:hover { background: var(--primary-dark); }
+.comparison-btn:hover { background: #e8e8ed; }
 .sidebar-content { padding: 5px 16px 16px; }
-#pdf-container { background: #f1f5f9; padding: 20px; }
+#pdf-container { background: #f1f5f9; padding: 20px; box-sizing: border-box; }
 
-/* 移除绝对定位相关样式 */
-.page-placeholder {
-  width: 90%;
-  padding: 20px;
-  box-sizing: border-box;
+/* --- Apple/Bento Style Center Wrapper --- */
+/* 这是关键：只在这里控制居中，不影响父级 Layout */
+:deep(.bento-center-wrapper) {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   text-align: center;
-  color: #64748b;
+  min-height: 400px;
 }
 
-/* 使用 :deep() 穿透 Scoped CSS，确保样式能应用到图标上 */
-:deep(.placeholder-icon i) {
-  font-size: 64px;
-}
-
-.placeholder-icon {
+:deep(.bento-icon-box) {
+  width: 64px; height: 64px;
+  background: #f5f5f7;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
   margin-bottom: 16px;
-  color: #cbd5e1;
+  color: #86868b;
+  font-size: 28px;
 }
+:deep(.bento-icon-box.small) { width: 48px; height: 48px; font-size: 20px; border-radius: 12px; }
+:deep(.bento-icon-box.error) { background: #fef2f2; color: #ef4444; }
+
+:deep(.bento-title) {
+  font-size: 18px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;
+}
+:deep(.bento-text-secondary) {
+  font-size: 14px; color: #86868b;
+}
+:deep(.mt-4) { margin-top: 16px; }
+:deep(.mt-3) { margin-top: 12px; }
+
+/* --- Apple Style Spinner --- */
+:deep(.apple-loader) {
+  width: 32px; height: 32px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #1d1d1f;
+  border-radius: 50%;
+  animation: apple-spin 1s linear infinite;
+}
+:deep(.apple-loader.large) { width: 40px; height: 40px; border-width: 4px; }
+:deep(.apple-loader.small) { width: 18px; height: 18px; border-width: 2px; border-top-color: white; }
+
+@keyframes apple-spin { to { transform: rotate(360deg); } }
+/* ------------------------------------- */
 
 :deep(.toc-section) { margin-bottom: 16px; }
-:deep(.toc-header) { font-weight: 600; padding: 10px 12px; background: #f1f5f9; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 8px; }
+:deep(.toc-header) { font-weight: 600; padding: 10px 12px; background: #f1f5f9; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 8px; font-size: 14px; color: #1d1d1f; }
 :deep(.toc-header:hover) { background: #e2e8f0; }
-:deep(.toc-header .fa-chevron-down) { transition: transform 0.3s ease; }
+:deep(.toc-header .fa-chevron-down) { transition: transform 0.3s ease; font-size: 12px; color: #86868b; }
 :deep(.toc-header.collapsed .fa-chevron-down) { transform: rotate(-90deg); }
 :deep(.toc-children) { padding-left: 24px; max-height: 1000px; overflow: hidden; transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; opacity: 1; }
 :deep(.toc-children.collapsed) { max-height: 0; opacity: 0; }
-:deep(.toc-item) { padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
-:deep(.toc-item:before) { content: "•"; color: var(--primary); font-size: 20px; }
+:deep(.toc-item) { padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #424245; }
+:deep(.toc-item:before) { content: ""; width: 6px; height: 6px; background-color: var(--primary); border-radius: 50%; display: block; }
 :deep(.toc-item:hover) { background: #eff6ff; color: var(--primary); }
 
 :deep(.page-group) { margin-bottom: 24px; display: flex; gap: 20px; }
+/* [修复关键] 改回 flex: 1，强制页面占满容器宽度 */
 :deep(.single-page) { flex: 1; background: white; min-width: 0; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border-radius: 8px; overflow: hidden; }
 :deep(.single-page canvas) { width: 100%; height: auto; display: block; }
 
-.loading-indicator { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 8px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px; font-size: 14px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 10; }
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-.modal-content { background: white; border-radius: 16px; width: 95%; max-width: 1400px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
-.modal-header { padding: 16px 24px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; }
-.modal-title { font-size: 1.25rem; font-weight: 600; }
-.close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+.loading-indicator {
+  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); color: white;
+  padding: 8px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px;
+  font-size: 14px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 10;
+}
+
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(4px); }
+.modal-content { background: white; border-radius: 16px; width: 95%; max-width: 1400px; height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+.modal-header { padding: 16px 24px; background: #f5f5f7; color: #1d1d1f; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e5e5; }
+.modal-title { font-size: 1.1rem; font-weight: 600; }
+.close-btn { background: rgba(0,0,0,0.05); border: none; color: #86868b; font-size: 1rem; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;}
+.close-btn:hover { background: rgba(0,0,0,0.1); color: #1d1d1f; }
 .modal-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-.modal-filters { padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+.modal-filters { padding: 12px 16px; background: white; border-bottom: 1px solid #e2e8f0; }
 .filters-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.filters-title { font-weight: 600; }
+.filters-title { font-weight: 600; font-size: 14px; }
 .filter-container { display: flex; gap: 8px; flex-wrap: wrap; }
-.filter-btn { background: white; color: var(--dark-text); padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
-.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.filter-btn { background: #f5f5f7; color: #424245; padding: 6px 14px; border: none; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+.filter-btn.active { background: #1d1d1f; color: white; }
 .table-container { flex: 1; overflow: auto; }
 :deep(.comparison-table) { width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed; }
-:deep(.comparison-table th) { background: #f1f5f9; padding: 12px 16px; text-align: left; font-weight: 600; position: sticky; top: 0; z-index: 1; }
-:deep(.comparison-table td) { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; vertical-align: top; word-break: break-word; }
-:deep(.comparison-table tr:hover td) { background: #f8fafc; }
-:deep(.page-link) { color: var(--primary); cursor: pointer; text-decoration: underline; }
+:deep(.comparison-table th) { background: #f9f9f9; padding: 12px 16px; text-align: left; font-weight: 600; position: sticky; top: 0; z-index: 1; color: #86868b; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #e5e5e5; }
+:deep(.comparison-table td) { padding: 12px 16px; border-bottom: 1px solid #f5f5f7; vertical-align: top; word-break: break-word; color: #1d1d1f; }
+:deep(.comparison-table tr:hover td) { background: #f5f5f7; }
+:deep(.page-link) { color: var(--primary); cursor: pointer; text-decoration: none; font-weight: 500; }
+:deep(.page-link:hover) { text-decoration: underline; }
 :deep(.checkmark) { color: #10b981; text-align: center; }
-:deep(.action-btn) { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 4px 8px; cursor: pointer; }
+:deep(.action-btn) { background: #f5f5f7; color: var(--primary); border: none; border-radius: 14px; padding: 4px 12px; cursor: pointer; font-size: 12px; font-weight: 500; }
+:deep(.action-btn:hover) { background: var(--primary); color: white; }
 
 .mobile-alert {
   display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -660,6 +713,6 @@ function renderComparisonTable(country) {
 }
 .mobile-alert-content {
   max-width: 500px; padding: 40px; background: white;
-  border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 </style>

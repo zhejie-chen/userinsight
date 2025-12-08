@@ -25,6 +25,7 @@ import {
   Zap,
   Award,
 } from "lucide-vue-next";
+import Footer from "@/components/Footer.vue";
 
 // --- 2. ECharts 初始化 ---
 use([
@@ -954,7 +955,7 @@ const barOption = computed(() => {
         :tabs="analysisTabs"
         footer-id="page-footer"
     />
-
+    <Footer />
     <footer id="page-footer" class="bg-gray-900 text-white py-12 mt-16">
       <div class="container mx-auto px-4">
         <div class="text-center">

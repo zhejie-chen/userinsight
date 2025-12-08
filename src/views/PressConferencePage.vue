@@ -178,7 +178,7 @@
         @close="closeCalendarModal"
         @navigateToEvent="onCalendarNavigate"
     />
-
+    <Footer />
   </main>
 </template>
 
@@ -190,6 +190,7 @@ import ConferenceCalendarModal from '@/components/common/ConferenceCalendarModal
 // *** 重构点: 导入新组件 ***
 import ConferenceReportCard from '@/components/common/ConferenceReportCard.vue';
 import { getTimelineEvents, getConferenceReports, getReportImages } from '@/services/api/conferences.js';
+import Footer from "@/components/Footer.vue";
 
 const router = useRouter(); // <-- 2. 初始化 router
 
