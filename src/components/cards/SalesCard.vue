@@ -40,10 +40,10 @@ onMounted(() => {
 
       <div class="layered-column-perspective">
         <div ref="layeredCardContainer" class="layered-column-container">
-          <div class="layered-item" data-src="../../../public/img/homepage-cover/3thcard-germany.webp"></div>
-          <div class="layered-item" data-src="../../../public/img/homepage-cover/3thcard-thailand.webp"></div>
-          <div class="layered-item" data-src="../../../public/img/homepage-cover/3thcard-brazil.webp"></div>
-          <div class="layered-item" data-src="../../../public/img/homepage-cover/3thcard-cover.webp"></div>
+          <div class="layered-item" data-src="/img/homepage-cover/3thcard-germany.webp"></div>
+          <div class="layered-item" data-src="/img/homepage-cover/3thcard-thailand.webp"></div>
+          <div class="layered-item" data-src="/img/homepage-cover/3thcard-brazil.webp"></div>
+          <div class="layered-item" data-src="/img/homepage-cover/3thcard-cover.webp"></div>
         </div>
       </div>
 

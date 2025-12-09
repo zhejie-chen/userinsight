@@ -3,18 +3,18 @@
   我们保留了 imagePool 和 getColumnImages 的所有逻辑。
 */
 const imagePool = [
-  '../../../public/img/homepage-cover/Automobile_industry_insight_report-1.webp',
-  '../../../public/img/homepage-cover/german%20weekly%20report-2cover.webp',
-  '../../../public/img/homepage-cover/german%20weekly%20report-3cover.webp',
-  '../../../public/img/homepage-cover/german%20weekly%20report-4cover.webp',
-  '../../../public/img/homepage-cover/german%20weekly%20report-5cover.webp',
-  '../../../public/img/homepage-cover/overseas_sales_report_July.webp',
-  '../../../public/img/homepage-cover/xiaomi_carlife-cover.webp',
-  '../../../public/img/homepage-cover/thailand%20weekly%20report-2cover.webp',
-  '../../../public/img/homepage-cover/thailand%20weekly%20report-3cover.webp',
-  '../../../public/img/homepage-cover/thailand%20weekly%20report-4cover.webp',
-  '../../../public/img/homepage-cover/thailand%20weekly%20report-5cover.webp',
-  '../../../public/img/homepage-cover/overseas_sales_report_Sep-cover.webp',
+  '/img/homepage-cover/Automobile_industry_insight_report-1.webp',
+  '/img/homepage-cover/german%20weekly%20report-2cover.webp',
+  '/img/homepage-cover/german%20weekly%20report-3cover.webp',
+  '/img/homepage-cover/german%20weekly%20report-4cover.webp',
+  '/img/homepage-cover/german%20weekly%20report-5cover.webp',
+  '/img/homepage-cover/overseas_sales_report_July.webp',
+  '/img/homepage-cover/xiaomi_carlife-cover.webp',
+  '/img/homepage-cover/thailand%20weekly%20report-2cover.webp',
+  '/img/homepage-cover/thailand%20weekly%20report-3cover.webp',
+  '/img/homepage-cover/thailand%20weekly%20report-4cover.webp',
+  '/img/homepage-cover/thailand%20weekly%20report-5cover.webp',
+  '/img/homepage-cover/overseas_sales_report_Sep-cover.webp',
 ];
 
 const getColumnImages = (count) => {
