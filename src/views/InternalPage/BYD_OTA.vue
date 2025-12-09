@@ -1555,7 +1555,6 @@ const tabs = [
         :tabs="tabs"
         footer-id="page-footer"
     />
-    <Footer />
     <footer
         id="page-footer"
         class="mt-20 py-10 bg-gray-100 border-t border-gray-200"
@@ -1571,6 +1570,7 @@ const tabs = [
         </div>
         <p class="text-sm text-gray-600">数据更新时间: 2025-11-20</p>
       </div>
+      <Footer />
     </footer>
   </div>
 </template>
