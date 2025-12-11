@@ -112,8 +112,8 @@ function processCarData(data) {
     processedData.push({
       brand: brandInfo.displayName, month, name: item['车型'],
       price: formatPrice(item['售价-人民币']),
-      localPrice: formatLocalPrice(item['售价'], item['国家/地区']),
-      type: carType, country: item['国家/地区'], isNew, isExpected
+      localPrice: formatLocalPrice(item['售价'], item['国家']),
+      type: carType, country: item['国家'], isNew, isExpected
     });
   });
   return processedData;
