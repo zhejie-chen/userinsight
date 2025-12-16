@@ -16,7 +16,7 @@ import { Search } from 'lucide-vue-next';
           </h2>
 
           <p class="text-lg text-gray-700 mb-10 max-w-3xl mx-auto">
-            已更新52国，每月20日更新上月数据，数据源于Marklines
+            已更新52国，每月20日更新上月数据
           </p>
 
           <div class="flex justify-center mb-12">
