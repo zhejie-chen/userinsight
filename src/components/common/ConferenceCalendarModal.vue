@@ -293,7 +293,7 @@ const weekdays = ['一', '二', '三', '四', '五', '六', '日'];
 const maxVisibleEvents = 2;
 
 const minDate = new Date(2025, 5, 1);
-const maxDate = new Date(2025, 11, 1);
+const maxDate = new Date(2026, 11, 1);
 
 const filterOptions = ['全部', '新车', '新款', '其他'];
 const selectedType = ref(filterOptions[0]);
