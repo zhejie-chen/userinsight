@@ -1,30 +1,85 @@
 // src/services/api/cars.js
 
-import { supabase } from '../supabase'; // 导入 supabase 客户端实例
+import { supabase } from '../supabase';
 
-/**
- * 1. 为 NewReleasePage (时间线页面) 获取数据
- * 获取所有拥有“上市时间”的车辆数据。
- */
 export async function getAllCarsForTimeline() {
-    const { data, error } = await supabase
-        .from('cars')
-        .select('"国家", "公司", "品牌", "车型", "能源形式", "厢型", "上市情况", "上市时间", "售价", "售价-人民币", "汇率", "售价直达", "结束时间", "24年销量", "改款"')
-        .not('上市时间', 'is', null);
+    try {
+        const [carsResponse, ratesResponse] = await Promise.all([
+            supabase
+                .from('car_launches')
+                .select(`
+                    country,
+                    company,
+                    brand,
+                    model_name,
+                    body_type,
+                    launch_status,
+                    launch_date,
+                    price_local,
+                    currency_code,
+                    version_name
+                `)
+                .gte('confidence_score', 60) // 【新增】过滤掉置信度低于 60 的数据
+                .not('launch_date', 'is', null)
+                .order('launch_date', { ascending: false }),
+            
+            supabase
+                .from('exchange_rates')
+                .select('currency_code, rate_based_on_cny')
+        ]);
 
-    if (error) {
+        if (carsResponse.error) throw carsResponse.error;
+        if (ratesResponse.error) throw ratesResponse.error;
+
+        const rawCars = carsResponse.data || [];
+        const rawRates = ratesResponse.data || [];
+
+        const rateMap = {};
+        rawRates.forEach(r => {
+            if (r.currency_code && r.rate_based_on_cny) {
+                rateMap[r.currency_code] = Number(r.rate_based_on_cny);
+            }
+        });
+
+        const processedData = rawCars.map(item => {
+            let rmbPrice = null;
+            if (item.price_local && item.currency_code) {
+                const rate = rateMap[item.currency_code];
+                if (rate) {
+                    rmbPrice = (Number(item.price_local) / rate).toFixed(0);
+                } else {
+                    console.warn(`未找到货币 ${item.currency_code} 的汇率，无法计算人民币价格`);
+                }
+            }
+
+            let cleanCompany = item.company || item.brand;
+            if (cleanCompany && cleanCompany.length > 2 && cleanCompany.endsWith('汽车')) {
+                 cleanCompany = cleanCompany.replace(/汽车$/, '');
+            }
+
+            return {
+                "国家": item.country,
+                "公司": cleanCompany, 
+                "品牌": item.brand,
+                "车型": item.model_name,
+                "厢型": item.body_type,      
+                "上市时间": item.launch_date, 
+                "售价": item.price_local,    
+                "汇率": item.currency_code,
+                "上市情况": item.launch_status,
+                "售价-人民币": rmbPrice 
+            };
+        });
+
+        return processedData;
+
+    } catch (error) {
         console.error('获取时间线数据失败:', error);
-        throw error; // 抛出错误，让调用方处理
+        throw error;
     }
-    return data;
 }
 
-/**
- * 2. 为 OverseasMapPage (地图页面) 获取数据并进行处理
- * 获取所有车辆数据，并处理成地图所需的数据结构。
- */
 export async function getAllCarsForMap() {
-    // 国家中英文映射表
     const countryNameMap = {
         '德国': 'Germany', '挪威': 'Norway', '荷兰': 'Netherlands',
         '英国': 'United Kingdom', '墨西哥': 'Mexico', '巴西': 'Brazil',
@@ -36,10 +91,9 @@ export async function getAllCarsForMap() {
 
     if (error) {
         console.error('获取地图数据失败:', error);
-        throw error; // 抛出错误
+        throw error;
     }
 
-    // --- 数据处理逻辑 ---
     const brandData = {};
     const countryData = {};
 
@@ -48,24 +102,14 @@ export async function getAllCarsForMap() {
         const countryZH = car['国家'];
         const countryEN = countryNameMap[countryZH] || countryZH;
 
-        // 构建 brandData
         if (brand && countryEN) {
-            if (!brandData[brand]) {
-                brandData[brand] = [];
-            }
-            if (!brandData[brand].includes(countryEN)) {
-                brandData[brand].push(countryEN);
-            }
+            if (!brandData[brand]) brandData[brand] = [];
+            if (!brandData[brand].includes(countryEN)) brandData[brand].push(countryEN);
         }
 
-        // 构建 countryData
         if (countryEN && brand) {
-            if (!countryData[countryEN]) {
-                countryData[countryEN] = { brands: {} };
-            }
-            if (!countryData[countryEN].brands[brand]) {
-                countryData[countryEN].brands[brand] = { models: {} };
-            }
+            if (!countryData[countryEN]) countryData[countryEN] = { brands: {} };
+            if (!countryData[countryEN].brands[brand]) countryData[countryEN].brands[brand] = { models: {} };
             countryData[countryEN].brands[brand].models[car['车型']] = {
                 sales: car['24年销量'],
                 localPrice: car['售价'],
@@ -76,46 +120,4 @@ export async function getAllCarsForMap() {
     }
 
     return { brandData, countryData };
-}
-
-/**
- * 3. (示例) 将来可以添加的“增删改查”函数
- */
-
-// 新增一辆车
-export async function addCar(carData) {
-    const { data, error } = await supabase
-        .from('cars')
-        .insert([carData]);
-    if (error) {
-        console.error('新增车辆失败:', error);
-        throw error;
-    }
-    return data;
-}
-
-// 根据ID更新车辆信息
-export async function updateCarById(id, updatedData) {
-    const { data, error } = await supabase
-        .from('cars')
-        .update(updatedData)
-        .eq('id', id); // 假设你的表有一个'id'列
-    if (error) {
-        console.error('更新车辆失败:', error);
-        throw error;
-    }
-    return data;
-}
-
-// 根据ID删除车辆
-export async function deleteCarById(id) {
-    const { data, error } = await supabase
-        .from('cars')
-        .delete()
-        .eq('id', id);
-    if (error) {
-        console.error('删除车辆失败:', error);
-        throw error;
-    }
-    return data;
 }

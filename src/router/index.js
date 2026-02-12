@@ -59,7 +59,23 @@ const router = createRouter({
             name: 'Geely_OTA',
             component: () => import('../views/InternalPage/Geely_OTA.vue'),
             // meta: { hideHeader: true } // 这个页面有自己的头部，隐藏全局头部
-        }
+        },
+        {
+            path: '/bev', // 您可以自定义这个路径，例如 /brand/wenjie 或 /internal/wenjie
+            name: 'BEVCarDetail',
+            component: () => import('../views/InternalPage/BEVCar_Detail.vue'),
+            // 注意：这里不要添加 meta: { hideHeader: true }，因为您需要显示统一的顶部导航条
+        },
+        {
+            path: '/brand-analysis',
+            name: 'BrandAnalysisHome',
+            component: () => import('../views/InternalPage/BrandAnalysis/BrandHome.vue')
+        },
+        {
+            path: '/brand-analysis/wenjie',
+            name: 'WenjieDetail',
+            component: () => import('../views/InternalPage/BrandAnalysis/WenjieDetail.vue')
+        },
     ],
     // 滚动行为：切换路由时滚动到顶部
     scrollBehavior(to, from, savedPosition) {
