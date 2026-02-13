@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   Milestone
 } from 'lucide-vue-next';
+import Footer from '../../../components/Footer.vue';
 
 const router = useRouter();
 const brand = computed(() => brandData.find(b => b.id === 'wenjie'));
@@ -863,7 +864,7 @@ const userPainPoints = [
           © 2026 新能源汽车品牌车型战略分析报告 | 数据更新至 2025年底
         </p>
       </div>
-      <Footer />
+      <Footer></Footer>
     </footer>
   </div>
 </template>

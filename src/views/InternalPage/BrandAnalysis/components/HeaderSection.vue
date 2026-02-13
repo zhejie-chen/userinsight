@@ -48,7 +48,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="absolute bottom-0 left-0 right-0">
+    <div class="absolute bottom-0 left-0 right-0 translate-y-[1px]">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" class="w-full">
         <path
           fill="#f8fafc" 
