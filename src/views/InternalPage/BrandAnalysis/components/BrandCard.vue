@@ -10,13 +10,25 @@ const props = defineProps({
 const showStarBrands = ['xpeng', 'leapmotor', 'voyah'];
 const hasStar = computed(() => showStarBrands.includes(props.brand.id));
 const isSpecialBg = computed(() => ['wenjie', 'nio', 'voyah', 'xpeng', 'leapmotor'].includes(props.brand.id));
+
+// --- 核心修改：计算跳转路径 ---
+const linkPath = computed(() => {
+  // 定义拥有独立详情页的品牌ID列表
+  const brandsWithDetailPages = ['wenjie', 'nio', 'voyah', 'xpeng', 'leapmotor'];
+  
+  if (brandsWithDetailPages.includes(props.brand.id)) {
+    return `/brand-analysis/${props.brand.id}`;
+  }
+  // 其他品牌跳转到通用报告页
+  return `/report/${props.brand.id}`;
+});
 </script>
 
 <template>
   <div 
     class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] h-full flex flex-col group cursor-pointer"
   >
-    <router-link :to="`/report/${brand.id}`" class="block h-full flex flex-col">
+    <router-link :to="linkPath" class="block h-full flex flex-col">
       <div class="relative p-6 flex-1 flex flex-col">
         
         <div v-if="hasStar" class="absolute top-3 right-3 z-10">

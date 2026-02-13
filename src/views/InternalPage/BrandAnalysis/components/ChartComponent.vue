@@ -31,11 +31,11 @@ const getBarColor = (index) => {
 <template>
   <div class="w-full h-full relative">
     
-    <div class="flex justify-around h-full items-end pb-6 px-2">
+    <div class="flex justify-around h-full items-end px-2">
       <div 
         v-for="(bar, index) in bars" 
         :key="index"
-        class="relative flex flex-col justify-end items-center group w-1/3 h-full cursor-pointer rounded-lg transition-colors duration-200"
+        class="relative flex flex-col justify-end items-center group w-1/3 h-full cursor-pointer rounded-lg transition-colors duration-200 pb-6"
         :class="hoveredIndex === index ? 'bg-slate-100' : ''"
         @mouseenter="hoveredIndex = index"
         @mouseleave="hoveredIndex = null"
@@ -57,10 +57,10 @@ const getBarColor = (index) => {
           }"
         ></div>
         
-        <span class="absolute bottom-0 text-xs text-gray-500 mb-1">{{ bar.label }}</span>
+        <span class="absolute bottom-1 text-xs text-gray-500 font-medium">{{ bar.label }}</span>
       </div>
     </div>
     
-    <div class="w-full h-px bg-slate-200 absolute bottom-6 left-0"></div>
+    <div class="w-full h-px bg-slate-200 absolute bottom-6 left-0 pointer-events-none"></div>
   </div>
 </template>

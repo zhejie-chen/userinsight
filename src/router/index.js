@@ -76,6 +76,26 @@ const router = createRouter({
             name: 'WenjieDetail',
             component: () => import('../views/InternalPage/BrandAnalysis/WenjieDetail.vue')
         },
+        {
+            path: '/brand-analysis/nio',
+            name: 'NioDetail',
+            component: () => import('../views/InternalPage/BrandAnalysis/NioDetail.vue')
+        },
+        {
+            path: '/brand-analysis/voyah',
+            name: 'VoyahDetail',
+            component: () => import('../views/InternalPage/BrandAnalysis/VoyahDetail.vue')
+        },
+        {
+            path: '/brand-analysis/xpeng',
+            name: 'XpengDetail',
+            component: () => import('../views/InternalPage/BrandAnalysis/XpengDetail.vue')
+        },
+        {
+            path: '/brand-analysis/leapmotor',
+            name: 'LeapmotorDetail',
+            component: () => import('../views/InternalPage/BrandAnalysis/LeapmotorDetail.vue')
+        },
     ],
     // 滚动行为：切换路由时滚动到顶部
     scrollBehavior(to, from, savedPosition) {

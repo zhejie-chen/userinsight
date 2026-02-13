@@ -27,7 +27,7 @@ onMounted(() => {
   <div class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-800 font-sans pt-12">
     <HeaderSection />
 
-    <section class="container mx-auto px-4 py-16" id="brand-analysis">
+    <section class="container mx-auto px-4 py-16">
       
       <div 
         class="max-w-4xl mx-auto mb-16 bg-white p-8 rounded-2xl shadow-md transition-all duration-700 transform"
@@ -42,7 +42,8 @@ onMounted(() => {
       </div>
 
       <h2 
-        class="text-3xl md:text-4xl font-bold mb-12 text-center transition-all duration-700 delay-300"
+        id="brand-analysis"
+        class="text-3xl md:text-4xl font-bold mb-12 text-center transition-all duration-700 delay-300 scroll-mt-24"
         :class="showIntro ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
       >
         案例研究
