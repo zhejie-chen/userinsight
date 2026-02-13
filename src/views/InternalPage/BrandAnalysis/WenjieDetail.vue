@@ -60,6 +60,7 @@ const pricingData = [
 const userPainPoints = [
   {
     painPoint: '空间不足',
+    upgradeTitle: '空间升级',
     userFeedback: '后备箱与储物空间不足，难以满足多场景家用需求',
     solution: [
       '投入超5亿元升级车身结构',
@@ -71,6 +72,7 @@ const userPainPoints = [
   },
   {
     painPoint: '舒适性不足',
+    upgradeTitle: '底盘优化',
     userFeedback: '悬挂偏硬，长途乘坐体验差',
     solution: [
       '前后双FSD可变阻尼减震器',
@@ -81,6 +83,7 @@ const userPainPoints = [
   },
   {
     painPoint: '价格偏高',
+    upgradeTitle: '内饰升级与价格下调',
     userFeedback: '价格与产品力不匹配，性价比低',
     solution: [
       '全新设计语言，内饰品质升级',
@@ -259,10 +262,10 @@ const userPainPoints = [
               class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-100"
             >
               <div class="bg-orange-50 px-6 py-3 flex items-center border-b border-orange-100">
-                <div class="bg-orange-100 h-8 w-8 rounded-full flex items-center justify-center mr-3">
+                <div class="bg-orange-100 h-8 w-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
                   <span class="text-orange-600 font-bold text-sm">{{ index + 1 }}</span>
                 </div>
-                <h4 class="text-lg font-semibold">{{ item.painPoint }} 👉 升级对策</h4>
+                <h4 class="text-lg font-semibold">{{ item.painPoint }} 👉 {{ item.upgradeTitle }}</h4>
               </div>
               <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
