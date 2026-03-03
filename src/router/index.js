@@ -107,4 +107,14 @@ const router = createRouter({
     }
 })
 
+// === 新增：百度统计的路由监听 ===
+router.afterEach((to, from) => {
+  if (window._hmt) {
+    if (to.path) {
+      // 每次路由变化时，向百度统计发送页面访问记录
+      window._hmt.push(['_trackPageview', to.fullPath]);
+    }
+  }
+});
+
 export default router
